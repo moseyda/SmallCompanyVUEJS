@@ -1,202 +1,239 @@
 <template>
-	<aside :class="`${is_expanded ? 'is-expanded' : ''}`">
-		<div class="logo">
-			<img :src="logoURL" alt="Vue" /> 
+	<aside :class="['sidebar', { 'is-expanded': isSidebarExpanded, 'is-mobile-open': isMobileMenuOpen }]">
+		<div class="brand">
+			<div class="brand-icon">
+				<img :src="logoURL" alt="Vue" />
+			</div>
+			<div class="brand-text" v-if="isSidebarExpanded">
+				<p class="eyebrow">SmallCompany</p>
+				<h2>Launch Console</h2>
+			</div>
 		</div>
 
-		<div class="menu-toggle-wrap">
-			<button class="menu-toggle" @click="ToggleMenu">
-				<span class="material-icons">keyboard_double_arrow_right</span>
-			</button>
-		</div>
+		<button class="menu-toggle" @click="toggleSidebar" :aria-expanded="isSidebarExpanded">
+			<span>{{ isSidebarExpanded ? 'Collapse' : 'Expand' }}</span>
+		</button>
 
-		<h3>Menu</h3>
-		<div class="menu">
-			<router-link to="/" class="button">
-				<span class="material-icons">home</span>
-				<span class="text">Home</span>
-			</router-link>
-			<router-link to="/about" class="button">
-				<span class="material-icons">description</span>
-				<span class="text">About</span>
-			</router-link>
-			<router-link to="/team" class="button">
-				<span class="material-icons">group</span>
-				<span class="text">Team</span>
-			</router-link>
-			<router-link to="/contact" class="button">
-				<span class="material-icons">email</span>
-				<span class="text">Contact</span>
-			</router-link>
-		</div>
+		<nav class="menu">
+			<div class="menu-group" v-for="group in navGroups" :key="group.title">
+				<h3 v-if="isSidebarExpanded">{{ group.title }}</h3>
+				<router-link
+					v-for="item in group.items"
+					:key="item.path"
+					:to="item.path"
+					class="button"
+					@click="closeMobileMenu"
+				>
+					<span class="icon">{{ item.icon }}</span>
+					<span class="text" v-if="isSidebarExpanded">{{ item.label }}</span>
+				</router-link>
+			</div>
+		</nav>
 
-		<div class="flex"></div>
-		
-		<div class="menu">
-			<router-link to="/settings" class="button">
-				<span class="material-icons">settings</span>
-				<span class="text">Settings</span>
-			</router-link>
+		<div class="sidebar-footer" v-if="isSidebarExpanded">
+			<p>v2.0 Modern</p>
+			<p>Realtime Workspace</p>
 		</div>
 	</aside>
+
+	<button class="mobile-trigger" @click="toggleMobileMenu" aria-label="Toggle menu">Menu</button>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import logoURL from '../assets/vue.svg'
+import { useUiStore } from '../stores/ui'
 
-const is_expanded = ref(localStorage.getItem("is_expanded") === "true")
+const navGroups = [
+	{
+		title: 'Workspace',
+		items: [
+			{ path: '/', label: 'Overview', icon: '01' },
+			{ path: '/work', label: 'Work', icon: '02' },
+			{ path: '/services', label: 'Services', icon: '03' },
+			{ path: '/insights', label: 'Insights', icon: '04' }
+		]
+	},
+	{
+		title: 'Company',
+		items: [
+			{ path: '/about', label: 'About', icon: '05' },
+			{ path: '/team', label: 'Team', icon: '06' },
+			{ path: '/contact', label: 'Contact', icon: '07' },
+			{ path: '/settings', label: 'Settings', icon: '08' }
+		]
+	}
+]
 
-const ToggleMenu = () => {
-	is_expanded.value = !is_expanded.value
-	localStorage.setItem("is_expanded", is_expanded.value)
-}
+const uiStore = useUiStore()
+const { isSidebarExpanded, isMobileMenuOpen } = storeToRefs(uiStore)
+const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 </script>
 
 <style lang="scss" scoped>
-aside {
+.sidebar {
 	display: flex;
 	flex-direction: column;
-
-	background-color: var(--dark);
-	color: var(--light);
-
-	width: calc(2rem + 32px);
+	position: sticky;
+	top: 0;
+	height: 100vh;
+	width: 84px;
 	overflow: hidden;
-	min-height: 100vh;
-	padding: 1rem;
-
-	transition: 0.2s ease-in-out;
-
-	.flex {
-		flex: 1 1 0%;
-	}
-
-	.logo {
-		margin-bottom: 1rem;
-
-		img {
-			width: 2rem;
-		}
-	}
-
-	.menu-toggle-wrap {
-		display: flex;
-		justify-content: flex-end;
-		margin-bottom: 1rem;
-
-		position: relative;
-		top: 0;
-		transition: 0.2s ease-in-out;
-
-		.menu-toggle {
-			transition: 0.2s ease-in-out;
-			.material-icons {
-				font-size: 2rem;
-				color: var(--light);
-				transition: 0.2s ease-out;
-			}
-			
-			&:hover {
-				.material-icons {
-					color: var(--primary);
-					transform: translateX(0.5rem);
-				}
-			}
-		}
-	}
-
-	h3, .button .text {
-		opacity: 0;
-		transition: opacity 0.3s ease-in-out;
-	}
-
-	h3 {
-		color: var(--grey);
-		font-size: 0.875rem;
-		margin-bottom: 0.5rem;
-		text-transform: uppercase;
-	}
-
-	.menu {
-		margin: 0 -1rem;
-
-		.button {
-			display: flex;
-			align-items: center;
-			text-decoration: none;
-
-			transition: 0.2s ease-in-out;
-			padding: 0.5rem 1rem;
-
-			.material-icons {
-				font-size: 2rem;
-				color: var(--light);
-				transition: 0.2s ease-in-out;
-			}
-			.text {
-				color: var(--light);
-				transition: 0.2s ease-in-out;
-			}
-
-			&:hover {
-				background-color: var(--dark-alt);
-
-				.material-icons, .text {
-					color: var(--primary);
-				}
-			}
-
-			&.router-link-exact-active {
-				background-color: var(--dark-alt);
-				border-right: 5px solid var(--primary);
-
-				.material-icons, .text {
-					color: var(--primary);
-				}
-			}
-		}
-	}
-
-	.footer {
-		opacity: 0;
-		transition: opacity 0.3s ease-in-out;
-
-		p {
-			font-size: 0.875rem;
-			color: var(--grey);
-		}
-	}
+	padding: 1rem 0.85rem;
+	background: linear-gradient(180deg, rgba(9, 24, 39, 0.97), rgba(11, 30, 46, 0.95));
+	color: #e9f2ff;
+	border-right: 1px solid rgba(143, 178, 214, 0.2);
+	transition: width 0.25s ease;
 
 	&.is-expanded {
 		width: var(--sidebar-width);
+	}
 
-		.menu-toggle-wrap {
-			top: -3rem;
-			
-			.menu-toggle {
-				transform: rotate(-180deg);
-			}
-		}
+	&.is-mobile-open {
+		transform: translateX(0);
+	}
+}
 
-		h3, .button .text {
-			opacity: 1;
-		}
+.brand {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+	margin-bottom: 1rem;
+}
 
-		.button {
-			.material-icons {
-				margin-right: 1rem;
-			}
-		}
+.brand-icon {
+	min-width: 46px;
+	width: 46px;
+	height: 46px;
+	border-radius: 14px;
+	background: linear-gradient(140deg, rgba(15, 191, 165, 0.95), rgba(94, 168, 255, 0.9));
+	display: grid;
+	place-items: center;
 
-		.footer {
-			opacity: 0;
+	img {
+		width: 1.5rem;
+	}
+}
+
+.brand-text {
+	.eyebrow {
+		font-size: 0.73rem;
+		color: #9bb0cc;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	h2 {
+		font-size: 1.1rem;
+		font-weight: 600;
+	}
+}
+
+.menu-toggle {
+	border: 1px solid rgba(140, 175, 214, 0.3);
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.06);
+	color: #d6e6fd;
+	padding: 0.45rem 0.7rem;
+	font-size: 0.8rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+	cursor: pointer;
+}
+
+.menu {
+	display: grid;
+	gap: 1rem;
+	overflow: auto;
+	padding-right: 0.2rem;
+
+	.menu-group {
+		display: grid;
+		gap: 0.4rem;
+
+		h3 {
+			font-size: 0.74rem;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: #87a1bf;
+			margin-bottom: 0.2rem;
 		}
 	}
 
-	@media (max-width: 1024px) {
-		position: absolute;
-		z-index: 99;
+	.button {
+		display: flex;
+		align-items: center;
+		gap: 0.7rem;
+		padding: 0.6rem;
+		border-radius: 12px;
+		border: 1px solid transparent;
+		transition: background-color 0.22s ease, border-color 0.22s ease;
+
+		.icon {
+			width: 34px;
+			height: 34px;
+			border-radius: 10px;
+			display: grid;
+			place-items: center;
+			font-weight: 700;
+			font-size: 0.8rem;
+			background: rgba(255, 255, 255, 0.08);
+			color: #e7f4ff;
+		}
+
+		.text {
+			font-size: 0.95rem;
+			font-weight: 500;
+		}
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.08);
+			border-color: rgba(167, 203, 242, 0.3);
+		}
+
+		&.router-link-exact-active {
+			background: linear-gradient(130deg, rgba(0, 167, 142, 0.32), rgba(92, 168, 255, 0.22));
+			border-color: rgba(145, 205, 255, 0.55);
+		}
+	}
+}
+
+.sidebar-footer {
+	margin-top: auto;
+	padding-top: 1rem;
+	font-size: 0.78rem;
+	color: #a7bad3;
+	display: grid;
+	gap: 0.22rem;
+}
+
+.mobile-trigger {
+	display: none;
+}
+
+
+@media (max-width: 860px) {
+	.sidebar {
+		position: fixed;
+		z-index: 25;
+		transform: translateX(-102%);
+		width: var(--sidebar-width);
+		box-shadow: var(--shadow-strong);
+	}
+
+	.mobile-trigger {
+		display: inline-flex;
+		position: fixed;
+		top: 0.9rem;
+		left: 0.9rem;
+		z-index: 35;
+		padding: 0.55rem 0.85rem;
+		border-radius: 999px;
+		border: 1px solid rgba(86, 118, 151, 0.35);
+		background: rgba(255, 255, 255, 0.82);
+		backdrop-filter: blur(8px);
+		color: var(--ink-950);
+		font-weight: 700;
 	}
 }
 </style>
