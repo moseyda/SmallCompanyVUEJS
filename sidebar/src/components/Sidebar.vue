@@ -24,7 +24,7 @@
 					class="button"
 					@click="closeMobileMenu"
 				>
-					<span class="icon">{{ item.icon }}</span>
+					<span class="icon material-icons">{{ item.icon }}</span>
 					<span class="text" v-if="isSidebarExpanded">{{ item.label }}</span>
 				</router-link>
 			</div>
@@ -48,19 +48,19 @@ const navGroups = [
 	{
 		title: 'Workspace',
 		items: [
-			{ path: '/', label: 'Overview', icon: '01' },
-			{ path: '/work', label: 'Work', icon: '02' },
-			{ path: '/services', label: 'Services', icon: '03' },
-			{ path: '/insights', label: 'Insights', icon: '04' }
+			{ path: '/', label: 'Overview', icon: 'home' },
+			{ path: '/work', label: 'Work', icon: 'work_outline' },
+			{ path: '/services', label: 'Services', icon: 'construction' },
+			{ path: '/insights', label: 'Insights', icon: 'insights' }
 		]
 	},
 	{
 		title: 'Company',
 		items: [
-			{ path: '/about', label: 'About', icon: '05' },
-			{ path: '/team', label: 'Team', icon: '06' },
-			{ path: '/contact', label: 'Contact', icon: '07' },
-			{ path: '/settings', label: 'Settings', icon: '08' }
+			{ path: '/about', label: 'About', icon: 'description' },
+			{ path: '/team', label: 'Team', icon: 'groups' },
+			{ path: '/contact', label: 'Contact', icon: 'mail_outline' },
+			{ path: '/settings', label: 'Settings', icon: 'settings' }
 		]
 	}
 ]
@@ -175,8 +175,7 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 			border-radius: 10px;
 			display: grid;
 			place-items: center;
-			font-weight: 700;
-			font-size: 0.8rem;
+			font-size: 1.15rem;
 			background: rgba(255, 255, 255, 0.08);
 			color: #e7f4ff;
 		}
