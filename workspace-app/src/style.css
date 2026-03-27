@@ -35,6 +35,7 @@
   --btn-secondary-bg-start: #ffe8cc;
   --btn-secondary-bg-end: #ffd8bf;
   --btn-secondary-border: rgba(149, 111, 83, 0.25);
+  --space-scale: 1;
 
   --sidebar-bg-start: rgba(9, 24, 39, 0.97);
   --sidebar-bg-end: rgba(11, 30, 46, 0.95);
@@ -51,6 +52,10 @@
 
   --sidebar-width: 292px;
   --content-max: 1180px;
+}
+
+:root[data-density='compact'] {
+  --space-scale: 0.88;
 }
 
 :root[data-theme='dark'] {
@@ -183,14 +188,14 @@ textarea {
 
 .app-main {
   flex: 1 1 auto;
-  padding: 1.3rem;
+  padding: calc(1.3rem * var(--space-scale));
 }
 
 .page-wrap {
   max-width: var(--content-max);
   margin: 0 auto;
   display: grid;
-  gap: 1.25rem;
+  gap: calc(1.25rem * var(--space-scale));
   animation: reveal-page 0.7s ease;
 }
 
@@ -203,7 +208,7 @@ textarea {
 }
 
 .panel {
-  padding: clamp(1rem, 2.5vw, 2rem);
+  padding: clamp(calc(0.92rem * var(--space-scale)), 2.5vw, calc(1.92rem * var(--space-scale)));
 }
 
 .section-title {
@@ -234,14 +239,14 @@ textarea {
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.9rem;
+  gap: calc(0.9rem * var(--space-scale));
 }
 
 .kpi-card {
   background: linear-gradient(180deg, var(--surface-soft), var(--surface-subtle));
   border: 1px solid var(--line-soft);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: calc(1rem * var(--space-scale));
 }
 
 .kpi-label {
@@ -263,20 +268,20 @@ textarea {
 
 .grid-two {
   display: grid;
-  gap: 0.9rem;
+  gap: calc(0.9rem * var(--space-scale));
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .card-list {
   display: grid;
-  gap: 0.8rem;
+  gap: calc(0.8rem * var(--space-scale));
 }
 
 .card-item {
   border-radius: var(--radius-md);
   background: var(--surface-strong);
   border: 1px solid var(--line-soft);
-  padding: 1rem;
+  padding: calc(1rem * var(--space-scale));
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
@@ -292,7 +297,7 @@ textarea {
   gap: 0.4rem;
   border: none;
   border-radius: 999px;
-  padding: 0.7rem 1.2rem;
+  padding: calc(0.7rem * var(--space-scale)) calc(1.2rem * var(--space-scale));
   cursor: pointer;
   font-weight: 650;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -360,6 +365,15 @@ textarea {
   50% {
     transform: translateY(-16px) scale(1.06);
   }
+}
+
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
 }
 
 @media (max-width: 1080px) {

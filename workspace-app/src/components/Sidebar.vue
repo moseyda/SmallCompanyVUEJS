@@ -62,6 +62,56 @@ class="theme-option"
 <span class="material-icons">dark_mode</span>
 <span>Dark</span>
 </button>
+
+<button
+type="button"
+class="theme-option"
+:class="{ active: theme === 'system' }"
+@click="setTheme('system')"
+>
+<span class="material-icons">settings_suggest</span>
+<span>System</span>
+</button>
+
+<p class="preferences-title section-title">Density</p>
+<button
+type="button"
+class="theme-option"
+:class="{ active: density === 'comfortable' }"
+@click="setDensity('comfortable')"
+>
+<span class="material-icons">view_stream</span>
+<span>Comfortable</span>
+</button>
+<button
+type="button"
+class="theme-option"
+:class="{ active: density === 'compact' }"
+@click="setDensity('compact')"
+>
+<span class="material-icons">view_headline</span>
+<span>Compact</span>
+</button>
+
+<p class="preferences-title section-title">Motion</p>
+<button
+type="button"
+class="theme-option"
+:class="{ active: motion === 'full' }"
+@click="setMotion('full')"
+>
+<span class="material-icons">animation</span>
+<span>Full motion</span>
+</button>
+<button
+type="button"
+class="theme-option"
+:class="{ active: motion === 'reduced' }"
+@click="setMotion('reduced')"
+>
+<span class="material-icons">motion_photos_off</span>
+<span>Reduced motion</span>
+</button>
 </div>
 </div>
 </div>
@@ -97,8 +147,8 @@ items: [
 ]
 
 const uiStore = useUiStore()
-const { isSidebarExpanded, isMobileMenuOpen, theme } = storeToRefs(uiStore)
-const { toggleSidebar, toggleMobileMenu, closeMobileMenu, setTheme } = uiStore
+const { isSidebarExpanded, isMobileMenuOpen, theme, density, motion } = storeToRefs(uiStore)
+const { toggleSidebar, toggleMobileMenu, closeMobileMenu, setTheme, setDensity, setMotion } = uiStore
 </script>
 
 <style lang="scss" scoped>
@@ -304,7 +354,7 @@ background: color-mix(in srgb, var(--sidebar-icon-bg) 78%, var(--surface-strong)
 position: absolute;
 left: 0;
 bottom: calc(100% + 0.55rem);
-min-width: 165px;
+min-width: 205px;
 padding: 0.65rem;
 border-radius: 12px;
 border: 1px solid var(--line-soft);
@@ -323,6 +373,12 @@ text-transform: uppercase;
 letter-spacing: 0.06em;
 color: var(--sidebar-panel-muted);
 margin-bottom: 0.45rem;
+}
+
+.section-title {
+margin-top: 0.65rem;
+padding-top: 0.6rem;
+border-top: 1px solid var(--line-soft);
 }
 
 .theme-option {
