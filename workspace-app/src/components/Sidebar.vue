@@ -105,13 +105,11 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 	min-width: 46px;
 	width: 46px;
 	height: 46px;
-	border-radius: 14px;
-	background: linear-gradient(140deg, rgba(15, 191, 165, 0.95), rgba(94, 168, 255, 0.9));
 	display: grid;
 	place-items: center;
 
 	img {
-		width: 1.5rem;
+		width: 1.7rem;
 	}
 }
 
