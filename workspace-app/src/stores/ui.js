@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 export const useUiStore = defineStore('ui', {
   state: () => ({
     isSidebarExpanded: localStorage.getItem('is_expanded') !== 'false',
-    isMobileMenuOpen: false
+    isMobileMenuOpen: false,
+    theme: localStorage.getItem('theme') === 'dark' ? 'dark' : 'light'
   }),
   actions: {
     toggleSidebar() {
@@ -15,6 +16,14 @@ export const useUiStore = defineStore('ui', {
     },
     closeMobileMenu() {
       this.isMobileMenuOpen = false
+    },
+    initTheme() {
+      document.documentElement.setAttribute('data-theme', this.theme)
+    },
+    setTheme(theme) {
+      this.theme = theme === 'dark' ? 'dark' : 'light'
+      localStorage.setItem('theme', this.theme)
+      document.documentElement.setAttribute('data-theme', this.theme)
     }
   }
 })
