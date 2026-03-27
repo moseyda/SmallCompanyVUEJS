@@ -62,37 +62,43 @@ export const workspaceData = {
       name: 'Mina Alvarez',
       role: 'Product Director',
       focus: 'Strategy',
-      bio: 'Shapes roadmap bets around customer impact and long-term platform quality.'
+      bio: 'Shapes roadmap bets around customer impact and long-term platform quality.',
+      photo: '/team/mark.jpg'
     },
     {
       name: 'Theo Morgan',
       role: 'Lead Frontend Engineer',
       focus: 'Engineering',
-      bio: 'Builds resilient Vue systems with rich interaction design and performance discipline.'
+      bio: 'Builds resilient Vue systems with rich interaction design and performance discipline.',
+      photo: '/team/person2.jpg'
     },
     {
       name: 'Priya Das',
       role: 'Design Systems Lead',
       focus: 'Design',
-      bio: 'Crafts expressive interfaces and scalable UI foundations for rapid product evolution.'
+      bio: 'Crafts expressive interfaces and scalable UI foundations for rapid product evolution.',
+      photo: '/team/person3.jpg'
     },
     {
       name: 'Jordan Kim',
       role: 'Data Product Analyst',
       focus: 'Data',
-      bio: 'Turns product telemetry into focused decisions and experiment playbooks.'
+      bio: 'Turns product telemetry into focused decisions and experiment playbooks.',
+      photo: '/team/person4.jpg'
     },
     {
       name: 'Amari Bell',
       role: 'Delivery Manager',
       focus: 'Operations',
-      bio: 'Keeps complex programs on track through transparent communication and strong planning.'
+      bio: 'Keeps complex programs on track through transparent communication and strong planning.',
+      photo: '/team/person5.jpg'
     },
     {
       name: 'Lila Rahman',
       role: 'Client Partner',
       focus: 'Strategy',
-      bio: 'Aligns teams and leadership stakeholders around clear milestones and business outcomes.'
+      bio: 'Aligns teams and leadership stakeholders around clear milestones and business outcomes.',
+      photo: '/team/person6.jpg'
     }
   ],
   milestones: [

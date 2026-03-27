@@ -20,6 +20,7 @@
 
 		<section class="team-grid">
 			<article class="card-item" v-for="member in filteredMembers" :key="member.name">
+				<img class="avatar" :src="member.photo" :alt="member.name" />
 				<p class="focus">{{ member.focus }}</p>
 				<h2>{{ member.name }}</h2>
 				<p class="role">{{ member.role }}</p>
@@ -69,6 +70,15 @@ h1 {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
 	gap: 0.9rem;
+}
+
+.avatar {
+	width: 100%;
+	height: 230px;
+	object-fit: cover;
+	border-radius: 12px;
+	margin-bottom: 0.75rem;
+	border: 1px solid rgba(87, 114, 141, 0.22);
 }
 
 .focus {

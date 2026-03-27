@@ -19,13 +19,15 @@ describe('Team view', () => {
             name: 'Mina Alvarez',
             role: 'Product Director',
             focus: 'Strategy',
-            bio: 'Shapes roadmap bets.'
+            bio: 'Shapes roadmap bets.',
+            photo: '/team/mark.jpg'
           },
           {
             name: 'Theo Morgan',
             role: 'Lead Frontend Engineer',
             focus: 'Engineering',
-            bio: 'Builds resilient Vue systems.'
+            bio: 'Builds resilient Vue systems.',
+            photo: '/team/person2.jpg'
           }
         ]
       })
