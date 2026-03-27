@@ -31,6 +31,10 @@
   --line-strong: rgba(130, 164, 199, 0.32);
   --danger-600: #9d3227;
   --meter-track: rgba(57, 82, 109, 0.2);
+  --btn-secondary-text: #132033;
+  --btn-secondary-bg-start: #ffe8cc;
+  --btn-secondary-bg-end: #ffd8bf;
+  --btn-secondary-border: rgba(149, 111, 83, 0.25);
 
   --sidebar-bg-start: rgba(9, 24, 39, 0.97);
   --sidebar-bg-end: rgba(11, 30, 46, 0.95);
@@ -69,6 +73,10 @@
   --line-strong: rgba(150, 184, 222, 0.38);
   --danger-600: #ff8f80;
   --meter-track: rgba(127, 156, 190, 0.28);
+  --btn-secondary-text: #132033;
+  --btn-secondary-bg-start: #ffe8cc;
+  --btn-secondary-bg-end: #ffd8bf;
+  --btn-secondary-border: rgba(174, 138, 111, 0.32);
 
   --sidebar-bg-start: rgba(8, 17, 29, 0.98);
   --sidebar-bg-end: rgba(10, 24, 39, 0.96);
@@ -301,8 +309,9 @@ textarea {
 }
 
 .btn-secondary {
-  color: var(--ink-950);
-  background: linear-gradient(125deg, #ffe8cc, #ffd8bf);
+  color: var(--btn-secondary-text);
+  background: linear-gradient(125deg, var(--btn-secondary-bg-start), var(--btn-secondary-bg-end));
+  border: 1px solid var(--btn-secondary-border);
 }
 
 .input-field,
