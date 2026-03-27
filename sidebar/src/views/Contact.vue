@@ -1,188 +1,118 @@
 <template>
-	<main id="contact-page">
-		<section class="hero">
-			<h1>Contact Us</h1>
-			<p>We’d love to hear from you! Reach out to us using the form below or visit our office.</p>
+	<div class="page-wrap">
+		<section class="glass panel">
+			<h1>Let’s Build the Next Release Together</h1>
+			<p class="lead">
+				Share your goals, current bottlenecks, and timeline. We usually respond within one business day.
+			</p>
 		</section>
 
-		<section class="contact-content">
-			<div class="form-section">
-				<h2>Get in Touch</h2>
-				<form @submit.prevent="submitForm">
-					<div class="input-group">
-						<label for="name">Name</label>
-						<input type="text" id="name" v-model="form.name" required />
-					</div>
+		<section class="contact-layout">
+			<article class="glass panel">
+				<h2 class="section-title">Project Inquiry</h2>
+				<form class="field-stack" @submit.prevent="submitForm">
+					<label class="field-label" for="name">Name</label>
+					<input class="input-field" id="name" type="text" v-model="form.name" required />
 
-					<div class="input-group">
-						<label for="email">Email</label>
-						<input type="email" id="email" v-model="form.email" required />
-					</div>
+					<label class="field-label" for="email">Work Email</label>
+					<input class="input-field" id="email" type="email" v-model="form.email" required />
 
-					<div class="input-group">
-						<label for="message">Message</label>
-						<textarea id="message" v-model="form.message" required></textarea>
-					</div>
+					<label class="field-label" for="scope">Project Scope</label>
+					<select class="select-field" id="scope" v-model="form.scope">
+						<option>Product Build</option>
+						<option>Modernization</option>
+						<option>Data and Insights</option>
+						<option>Team Extension</option>
+					</select>
 
-					<button type="submit">Send Message</button>
+					<label class="field-label" for="message">What are you trying to unlock?</label>
+					<textarea class="textarea-field" id="message" v-model="form.message" required></textarea>
+
+					<button class="btn btn-primary" type="submit">Send Brief</button>
 				</form>
-			</div>
+			</article>
 
-			<div class="info-section">
-				<h2>Contact Information</h2>
-				<p><strong>Email:</strong> contact@yourcompany.com</p>
-				<p><strong>Phone:</strong> +1 234 567 890</p>
-				<p><strong>Address:</strong> 123 Vue Street, Web City, CodeLand</p>
-
-				<div class="map">
-					<iframe
-						width="100%"
-						height="275"
-						style="border:0; border-radius: 10px;"
-						loading="lazy"
-						allowfullscreen
-						referrerpolicy="no-referrer-when-downgrade"
-						src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d369.1188693597663!2d-0.11931967150985479!3d51.51090668236304!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604ca37f60e13%3A0xc7563fe433ad32a4!2s87%20Savoy%20St%2C%20London%20WC2R%200AG!5e0!3m2!1sar!2suk!4v1738883786198!5m2!1sar!2suk">
-					</iframe>
+			<article class="glass panel info-stack">
+				<h2 class="section-title">Studios</h2>
+				<div class="card-list">
+					<div class="card-item" v-for="office in offices" :key="office.city">
+						<h3>{{ office.city }}</h3>
+						<p>{{ office.address }}</p>
+						<p class="muted">{{ office.focus }}</p>
+					</div>
 				</div>
-			</div>
+				<div class="meta">
+					<p><strong>Email:</strong> hello@smallcompany.io</p>
+					<p><strong>Phone:</strong> +1 (415) 555-0138</p>
+				</div>
+			</article>
 		</section>
-	</main>
+	</div>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { onMounted, reactive } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useWorkspaceStore } from '../stores/workspace'
+
+const workspaceStore = useWorkspaceStore()
+const { offices } = storeToRefs(workspaceStore)
 
 const form = reactive({
 	name: '',
 	email: '',
+	scope: 'Product Build',
 	message: ''
-});
+})
 
-const submitForm = () => {
-	alert(`Thank you, ${form.name}! Your message has been sent.`);
-	form.name = '';
-	form.email = '';
-	form.message = '';
-};
+onMounted(() => {
+	workspaceStore.fetchOffices()
+})
+
+const submitForm = async () => {
+	try {
+		await workspaceStore.submitInquiry(form)
+		alert(`Thanks ${form.name}, we received your brief and will follow up shortly.`)
+		form.name = ''
+		form.email = ''
+		form.scope = 'Product Build'
+		form.message = ''
+	} catch {
+		alert('Unable to submit inquiry at the moment. Please try again.')
+	}
+}
 </script>
 
 <style scoped>
-#contact-page {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-	padding: 4rem 2rem;
-	color: var(--dark);
-}
-
-.hero {
-	margin-bottom: 3rem;
-}
-
 h1 {
-	font-size: 2.8rem;
-	margin-bottom: 0.5rem;
+	font-size: clamp(1.7rem, 3.8vw, 2.8rem);
+	margin-bottom: 0.7rem;
 }
 
-p {
-	font-size: 1.2rem;
-	color: var(--grey);
-	max-width: 800px;
-	margin: 0 auto;
+.contact-layout {
+	display: grid;
+	grid-template-columns: 1.2fr 1fr;
+	gap: 0.9rem;
 }
 
-.contact-content {
-	display: flex;
-	gap: 3rem;
-	justify-content: center;
-	align-items: flex-start;
-	max-width: 1100px;
-	width: 100%;
-	flex-wrap: wrap;
+.info-stack {
+	align-self: start;
 }
 
-.form-section {
-	flex: 1;
-    min-height: 500px;
-	background: white;
-	padding: 2rem;
-	border-radius: 12px;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.muted {
+	margin-top: 0.25rem;
+	color: var(--ink-600);
 }
 
-.input-group {
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 1rem;
-}
-
-label {
-	font-size: 1.1rem;
-	margin-bottom: 0.5rem;
-}
-
-input, textarea {
-	width: 100%;
-	padding: 0.8rem;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	font-size: 1rem;
-}
-
-textarea {
-	height: 120px;
-	resize: none;
-}
-
-button {
-	width: 100%;
-	padding: 0.8rem;
-	background: var(--primary);
-	color: white;
-	font-size: 1.2rem;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	transition: background 0.3s;
-}
-
-button:hover {
-	background: var(--primary-dark);
-}
-
-.info-section {
-	flex: 1;
-    min-height: 500px;
-	background: var(--light-grey);
-	padding: 2rem;
-	border-radius: 12px;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	text-align: left;
-}
-
-.info-section h2 {
-	margin-bottom: 1rem;
-}
-
-.info-section p {
-	margin-bottom: 0.5rem;
-}
-
-.map {
-	margin-top: 1rem;
+.meta {
+	margin-top: 0.9rem;
+	display: grid;
+	gap: 0.35rem;
 }
 
 @media (max-width: 768px) {
-	.contact-content {
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.form-section, .info-section {
-		width: 100%;
-		text-align: center;
+	.contact-layout {
+		grid-template-columns: 1fr;
 	}
 }
 </style>

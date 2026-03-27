@@ -1,130 +1,139 @@
 <template>
-	<main id="about-page">
-		<section class="hero">
-			<h1>About Us</h1>
-			<p>We are passionate about building modern web applications with Vue.js.</p>
-		</section>
-
-		<section class="about-content">
-			<div class="text">
-				<h2>Who We Are</h2>
-				<p>
-					We are a team of developers, designers, and thinkers who love creating 
-					beautiful, functional, and high-performance web applications.
-				</p>
-				<p>
-					Our goal is to make web development fun, efficient, and accessible to everyone. 
-					Using the latest technologies, we strive to build user-friendly experiences 
-					that stand out.
-				</p>
-			</div>
-			<div class="image">
-				<img src="../assets/about-image.jpg" alt="Team working together">
-			</div>
-		</section>
-
-		<section class="mission">
-			<h2>Our Mission</h2>
-			<p>
-				To empower developers and businesses by providing high-quality, scalable, 
-				and intuitive web solutions using Vue.js and modern technologies.
+	<div class="page-wrap">
+		<section class="glass panel">
+			<p class="eyebrow">About SmallCompany</p>
+			<h1>We design ambitious digital systems for teams that move fast.</h1>
+			<p class="lead">
+				Our approach combines strategy, design, engineering, and analytics in one integrated
+				delivery model. The result is less friction, better products, and clearer momentum.
 			</p>
 		</section>
-	</main>
+
+		<section class="grid-two">
+			<article class="glass panel">
+				<h2 class="section-title">How We Work</h2>
+				<div class="card-list">
+					<div class="card-item" v-for="pillar in pillars" :key="pillar.title">
+						<h3>{{ pillar.title }}</h3>
+						<p class="detail">{{ pillar.detail }}</p>
+					</div>
+				</div>
+			</article>
+
+			<article class="glass panel">
+				<h2 class="section-title">Core Principles</h2>
+				<ul class="principles">
+					<li v-for="principle in principles" :key="principle">{{ principle }}</li>
+				</ul>
+			</article>
+		</section>
+
+		<section class="glass panel">
+			<h2 class="section-title">Growth Timeline</h2>
+			<div class="timeline">
+				<article class="phase" v-for="phase in milestones" :key="phase.quarter">
+					<p class="quarter">{{ phase.quarter }}</p>
+					<h3>{{ phase.title }}</h3>
+					<p>{{ phase.note }}</p>
+				</article>
+			</div>
+		</section>
+	</div>
 </template>
 
-<style scoped>
-#about-page {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-	padding: 4rem 2rem;
-	color: var(--dark);
-}
+<script setup>
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useWorkspaceStore } from '../stores/workspace'
 
-.hero {
-	margin-bottom: 3rem;
+const workspaceStore = useWorkspaceStore()
+const { milestones } = storeToRefs(workspaceStore)
+
+onMounted(() => {
+	workspaceStore.fetchMilestones()
+})
+
+const pillars = [
+	{ title: 'Product-led planning', detail: 'Roadmaps aligned to measurable business outcomes and customer value.' },
+	{ title: 'Integrated squads', detail: 'Designers, engineers, and strategists work in one shared delivery cadence.' },
+	{ title: 'Continuous insight loops', detail: 'Telemetry and feedback directly shape every release decision.' }
+]
+
+const principles = [
+	'Resolve complexity before scaling implementation.',
+	'Design for velocity without sacrificing maintainability.',
+	'Make product health visible to every stakeholder.',
+	'Favor practical systems over trend-driven architecture.'
+]
+</script>
+
+<style scoped>
+.eyebrow {
+	font-size: 0.8rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--ink-600);
+	margin-bottom: 0.4rem;
 }
 
 h1 {
-	font-size: 2.8rem;
-	margin-bottom: 0.5rem;
+	font-size: clamp(1.6rem, 3.6vw, 2.8rem);
+	margin-bottom: 0.8rem;
 }
 
-p {
-	font-size: 1.2rem;
-	color: var(--grey);
-	max-width: 800px;
-	margin: 0 auto;
+.detail {
+	margin-top: 0.45rem;
+	color: var(--ink-600);
 }
 
-.about-content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 2rem;
-	margin-top: 3rem;
-	flex-wrap: wrap;
-	max-width: 1100px;
+.principles {
+	list-style: none;
+	display: grid;
+	gap: 0.7rem;
 }
 
-.text {
-	flex: 1;
-	text-align: left;
-}
-
-.text h2 {
-	font-size: 2rem;
-	margin-bottom: 1rem;
-}
-
-.text p {
-	margin-bottom: 1rem;
-}
-
-.image {
-	flex: 1;
-	display: flex;
-	justify-content: center;
-}
-
-.image img {
-	max-width: 100%;
-	height: auto;
+.principles li {
+	padding: 0.8rem;
 	border-radius: 12px;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	background: rgba(255, 255, 255, 0.74);
+	border: 1px solid rgba(85, 111, 138, 0.2);
 }
 
-.mission {
-	margin-top: 4rem;
-	background: var(--primary);
-	color: white;
-	padding: 3rem;
-	width: 100%;
-	max-width: 900px;
-	border-radius: 12px;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.timeline {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 0.8rem;
 }
 
-.mission h2 {
-	margin-bottom: 1rem;
-	font-size: 2rem;
+.phase {
+	padding: 0.85rem;
+	border-radius: 14px;
+	background: rgba(255, 255, 255, 0.8);
+	border: 1px solid rgba(83, 109, 136, 0.24);
 }
 
-.mission p {
-	font-size: 1.2rem;
-	color: white;
+.quarter {
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+	color: var(--brand-teal);
 }
 
-@media (max-width: 768px) {
-	.about-content {
-		flex-direction: column;
-		text-align: center;
+.phase h3 {
+	margin: 0.35rem 0;
+}
+
+
+@media (max-width: 960px) {
+	.timeline {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
+}
 
-	.text {
-		text-align: center;
+@media (max-width: 640px) {
+	.timeline {
+		grid-template-columns: 1fr;
 	}
 }
 </style>

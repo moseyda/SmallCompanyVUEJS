@@ -1,153 +1,112 @@
 <template>
-	<main id="team-page">
-		<h1>Meet the Team</h1>
-		<p>Our amazing team of passionate developers and designers.</p>
-
-		<section class="team-cards">
-			<div class="card" v-for="(member, index) in teamMembers" :key="index">
-				<img :src="member.photo" :alt="member.name" class="team-photo" />
-				<div class="card-content">
-					<h3>{{ member.name }}</h3>
-					<p class="role">{{ member.role }}</p>
-					<p>{{ member.summary }}</p>
-				</div>
+	<div class="page-wrap">
+		<section class="glass panel">
+			<h1>The Team Behind the Scale-Up</h1>
+			<p class="lead">
+				Multi-disciplinary specialists operating in tight loops to ship confident releases.
+			</p>
+			<div class="filter-row">
+				<button
+					v-for="option in filters"
+					:key="option"
+					class="btn"
+					:class="activeFilter === option ? 'btn-primary' : 'btn-secondary'"
+					@click="activeFilter = option"
+				>
+					{{ option }}
+				</button>
 			</div>
 		</section>
-	</main>
+
+		<section class="team-grid">
+			<article class="card-item" v-for="member in filteredMembers" :key="member.name">
+				<p class="focus">{{ member.focus }}</p>
+				<h2>{{ member.name }}</h2>
+				<p class="role">{{ member.role }}</p>
+				<p class="bio">{{ member.bio }}</p>
+			</article>
+		</section>
+	</div>
 </template>
 
 <script setup>
-const teamMembers = [
-	{
-		name: "Mark Johnson",
-		role: "Frontend Developer",
-		summary: "Mark is a passionate frontend developer with a focus on UX and performance.",
-		photo: "src/assets/mark.jpg"
-	},
-	{
-		name: "Bob Smith",
-		role: "Backend Developer",
-		summary: "Bob specialises in server-side technologies and database management.",
-		photo: "src/assets/person2.jpg"
-	},
-	{
-		name: "Charlie Brown",
-		role: "Designer",
-		summary: "Charlie brings the vision to life with stunning UI/UX designs.",
-		photo: "src/assets/person3.jpg"
-	},
-	{
-		name: "Alice White",
-		role: "Project Manager",
-		summary: "Alice ensures smooth project execution and team collaboration.",
-		photo: "src/assets/person4.jpg"
-	},
-	{
-		name: "Dan Green",
-		role: "Developer",
-		summary: "Dan excels in full-stack development with a focus on modern JavaScript frameworks.",
-		photo: "src/assets/person5.jpg"
-	},
-	{
-		name: "Frank Miller",
-		role: "QA Engineer",
-		summary: "Frank ensures quality by testing and improving the functionality of our apps.",
-		photo: "src/assets/person6.jpg"
-	},
-	{
-		name: "Joseph Lee",
-		role: "Marketing",
-		summary: "Joseph handles the marketing side, ensuring the world knows about our products.",
-		photo: "src/assets/person7.jpg"
-	},
-	{
-		name: "Harry Adams",
-		role: "Support Specialist",
-		summary: "Harry provides customer support and helps with troubleshooting.",
-		photo: "src/assets/person8.jpg"
+import { computed, onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useWorkspaceStore } from '../stores/workspace'
+
+const filters = ['All', 'Engineering', 'Design', 'Strategy', 'Data', 'Operations']
+const activeFilter = ref('All')
+const workspaceStore = useWorkspaceStore()
+const { teamMembers } = storeToRefs(workspaceStore)
+
+onMounted(() => {
+	workspaceStore.fetchTeamMembers()
+})
+
+const filteredMembers = computed(() => {
+	if (activeFilter.value === 'All') {
+		return teamMembers
 	}
-];
+
+	return teamMembers.filter((member) => member.focus === activeFilter.value)
+})
 </script>
 
 <style scoped>
-#team-page {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-	padding: 4rem 2rem;
-	color: var(--dark);
-}
-
 h1 {
-	font-size: 2.5rem;
-	margin-bottom: 1rem;
+	font-size: clamp(1.6rem, 3.4vw, 2.7rem);
+	margin-bottom: 0.6rem;
 }
 
-p {
-	font-size: 1.2rem;
-	color: var(--grey);
-	margin-bottom: 2rem;
+.filter-row {
+	margin-top: 1rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
 }
 
-.team-cards {
+.team-grid {
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 2rem;
-	width: 100%;
-	max-width: 1200px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.9rem;
 }
 
-.card {
-	background-color: white;
-	border-radius: 10px;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	overflow: hidden;
-	text-align: center;
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
-	cursor: pointer;
+.focus {
+	width: fit-content;
+	padding: 0.2rem 0.5rem;
+	border-radius: 999px;
+	font-size: 0.74rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	background: rgba(0, 167, 142, 0.12);
+	color: var(--brand-teal);
 }
 
-.card:hover {
-	transform: translateY(-5px);
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.team-photo {
-	width: 100%;
-	height: 200px;
-	object-fit: cover;
-	border-bottom: 1px solid #eee;
-}
-
-.card-content {
-	padding: 1.5rem;
-}
-
-h3 {
-	font-size: 1.5rem;
-	margin: 1rem 0;
+h2 {
+	font-size: 1.25rem;
+	margin-top: 0.7rem;
 }
 
 .role {
-	font-size: 1.1rem;
-	color: var(--primary);
-	margin-bottom: 1rem;
+	margin-top: 0.35rem;
+	font-weight: 650;
+	color: var(--ink-800);
 }
 
-p {
-	font-size: 1rem;
-	color: var(--grey);
+.bio {
+	margin-top: 0.5rem;
+	color: var(--ink-600);
 }
 
 @media (max-width: 1024px) {
-	.team-cards {
+	.team-grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
 }
 
 @media (max-width: 768px) {
-	.team-cards {
+	.team-grid {
 		grid-template-columns: 1fr;
 	}
 }
