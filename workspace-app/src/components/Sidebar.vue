@@ -174,8 +174,9 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 .menu {
 	display: grid;
 	gap: 1rem;
-	overflow: auto;
-	padding-right: 0.2rem;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-right: 0;
 
 	.menu-group {
 		display: grid;
@@ -193,6 +194,7 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 	.button {
 		display: flex;
 		align-items: center;
+		width: 100%;
 		gap: 0.7rem;
 		padding: 0.6rem;
 		border-radius: 12px;
@@ -224,6 +226,14 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 			background: linear-gradient(130deg, rgba(0, 167, 142, 0.32), rgba(92, 168, 255, 0.22));
 			border-color: rgba(145, 205, 255, 0.55);
 		}
+	}
+}
+
+.sidebar:not(.is-expanded) {
+	.menu .button {
+		justify-content: center;
+		padding: 0.55rem 0.35rem;
+		gap: 0;
 	}
 }
 
