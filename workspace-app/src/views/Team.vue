@@ -78,7 +78,7 @@ h1 {
 	object-fit: cover;
 	border-radius: 12px;
 	margin-bottom: 0.75rem;
-	border: 1px solid rgba(87, 114, 141, 0.22);
+	border: 1px solid var(--line-soft);
 }
 
 .focus {
@@ -89,7 +89,7 @@ h1 {
 	font-weight: 700;
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
-	background: rgba(0, 167, 142, 0.12);
+	background: color-mix(in srgb, var(--brand-teal) 18%, transparent);
 	color: var(--brand-teal);
 }
 

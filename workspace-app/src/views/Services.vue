@@ -67,8 +67,8 @@ h2 {
 .list li {
   padding: 0.55rem;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.62);
-  border: 1px solid rgba(92, 115, 141, 0.2);
+  background: var(--surface-subtle);
+  border: 1px solid var(--line-soft);
 }
 
 .cta {

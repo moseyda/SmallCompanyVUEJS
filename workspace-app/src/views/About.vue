@@ -95,8 +95,8 @@ h1 {
 .principles li {
 	padding: 0.8rem;
 	border-radius: 12px;
-	background: rgba(255, 255, 255, 0.74);
-	border: 1px solid rgba(85, 111, 138, 0.2);
+	background: var(--surface-soft);
+	border: 1px solid var(--line-soft);
 }
 
 .timeline {
@@ -108,8 +108,8 @@ h1 {
 .phase {
 	padding: 0.85rem;
 	border-radius: 14px;
-	background: rgba(255, 255, 255, 0.8);
-	border: 1px solid rgba(83, 109, 136, 0.24);
+	background: var(--surface-soft);
+	border: 1px solid var(--line-soft);
 }
 
 .quarter {

@@ -62,8 +62,8 @@ h1 {
 
 .signal-item {
   border-radius: var(--radius-md);
-  border: 1px solid rgba(73, 99, 128, 0.24);
-  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid var(--line-soft);
+  background: var(--surface-soft);
   padding: 0.8rem;
 }
 
@@ -83,7 +83,7 @@ h1 {
   width: 100%;
   height: 9px;
   border-radius: 999px;
-  background: rgba(57, 82, 109, 0.2);
+  background: var(--meter-track);
   overflow: hidden;
 }
 

@@ -96,7 +96,7 @@ h1 {
 }
 
 .status.error {
-  color: #9d3227;
+  color: var(--danger-600);
 }
 
 @media (max-width: 860px) {
