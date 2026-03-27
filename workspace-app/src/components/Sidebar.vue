@@ -10,8 +10,8 @@
 			</div>
 		</div>
 
-		<button class="menu-toggle" @click="toggleSidebar" :aria-expanded="isSidebarExpanded">
-			<span>{{ isSidebarExpanded ? 'Collapse' : 'Expand' }}</span>
+		<button class="menu-toggle" @click="toggleSidebar" :aria-expanded="isSidebarExpanded" aria-label="Toggle sidebar">
+			<span class="material-icons" :class="{ 'is-expanded': isSidebarExpanded }">keyboard_double_arrow_right</span>
 		</button>
 
 		<nav class="menu">
@@ -130,15 +130,34 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 }
 
 .menu-toggle {
+	display: grid;
+	place-items: center;
+	width: 42px;
+	height: 42px;
 	border: 1px solid rgba(140, 175, 214, 0.3);
-	border-radius: 999px;
+	border-radius: 12px;
 	background: rgba(255, 255, 255, 0.06);
 	color: #d6e6fd;
-	padding: 0.45rem 0.7rem;
-	font-size: 0.8rem;
-	font-weight: 600;
+	padding: 0;
 	margin-bottom: 1rem;
 	cursor: pointer;
+	transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+
+	.material-icons {
+		font-size: 1.35rem;
+		line-height: 1;
+		transition: transform 0.22s ease;
+
+		&.is-expanded {
+			transform: rotate(180deg);
+		}
+	}
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.12);
+		border-color: rgba(167, 203, 242, 0.5);
+		transform: translateY(-1px);
+	}
 }
 
 .menu {
