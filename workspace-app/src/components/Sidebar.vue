@@ -10,7 +10,7 @@
 			</div>
 		</div>
 
-		<button class="menu-toggle" @click="toggleSidebar" :aria-expanded="isSidebarExpanded" aria-label="Toggle sidebar">
+		<button class="menu-toggle" @click="toggleSidebar" :aria-expanded="isSidebarExpanded" :title="isSidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'" aria-label="Toggle sidebar">
 			<span class="material-icons" :class="{ 'is-expanded': isSidebarExpanded }">keyboard_double_arrow_right</span>
 		</button>
 
@@ -131,23 +131,26 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 
 .menu-toggle {
 	position: absolute;
-	top: 1.2rem;
-	right: -0.85rem;
+	top: 50%;
+	right: -0.95rem;
+	transform: translateY(-50%);
 	z-index: 5;
 	display: grid;
 	place-items: center;
-	width: 34px;
-	height: 42px;
-	border: 1px solid rgba(140, 175, 214, 0.3);
-	border-radius: 10px;
-	background: rgba(255, 255, 255, 0.06);
+	width: 36px;
+	height: 62px;
+	border: 1px solid rgba(140, 175, 214, 0.45);
+	border-left: none;
+	border-radius: 0 14px 14px 0;
+	background: linear-gradient(180deg, rgba(18, 40, 62, 0.98), rgba(24, 53, 82, 0.98));
 	color: #d6e6fd;
 	padding: 0;
 	cursor: pointer;
-	transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+	box-shadow: 0 10px 24px rgba(3, 11, 20, 0.33);
+	transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 
 	.material-icons {
-		font-size: 1.35rem;
+		font-size: 1.2rem;
 		line-height: 1;
 		transition: transform 0.22s ease;
 
@@ -157,9 +160,14 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 	}
 
 	&:hover {
-		background: rgba(255, 255, 255, 0.12);
-		border-color: rgba(167, 203, 242, 0.5);
-		transform: translateX(2px);
+		border-color: rgba(167, 203, 242, 0.75);
+		box-shadow: 0 12px 28px rgba(3, 11, 20, 0.4);
+		transform: translateY(-50%) translateX(2px);
+	}
+
+	&:focus-visible {
+		outline: 2px solid rgba(92, 168, 255, 0.9);
+		outline-offset: 2px;
 	}
 }
 
