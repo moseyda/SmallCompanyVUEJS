@@ -76,7 +76,7 @@ API runs on `http://localhost:8787`.
 ## Project Structure
 
 ```text
-sidebar/
+workspace-app/
 	server/             # Local Express API
 	src/
 		api/              # Frontend API client
