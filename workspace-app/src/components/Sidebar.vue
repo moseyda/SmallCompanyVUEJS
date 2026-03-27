@@ -130,16 +130,19 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 }
 
 .menu-toggle {
+	position: absolute;
+	top: 1.2rem;
+	right: -0.85rem;
+	z-index: 5;
 	display: grid;
 	place-items: center;
-	width: 42px;
+	width: 34px;
 	height: 42px;
 	border: 1px solid rgba(140, 175, 214, 0.3);
-	border-radius: 12px;
+	border-radius: 10px;
 	background: rgba(255, 255, 255, 0.06);
 	color: #d6e6fd;
 	padding: 0;
-	margin-bottom: 1rem;
 	cursor: pointer;
 	transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 
@@ -156,7 +159,7 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 	&:hover {
 		background: rgba(255, 255, 255, 0.12);
 		border-color: rgba(167, 203, 242, 0.5);
-		transform: translateY(-1px);
+		transform: translateX(2px);
 	}
 }
 
@@ -252,6 +255,10 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu } = uiStore
 		backdrop-filter: blur(8px);
 		color: var(--ink-950);
 		font-weight: 700;
+	}
+
+	.menu-toggle {
+		display: none;
 	}
 }
 </style>
