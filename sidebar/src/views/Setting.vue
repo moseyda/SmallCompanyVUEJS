@@ -1,131 +1,108 @@
 <template>
-    <main id="settings-page">
-      <section class="hero">
-        <h1>Settings</h1>
-        <p>Manage your account preferences and customise your experience.</p>
-      </section>
-  
-      <section class="settings-container">
-        <div class="setting">
-          <h2>Profile Settings</h2>
-          <label for="name">Name:</label>
-          <input id="name" type="text" placeholder="Your Name" />
-          <label for="email">Email:</label>
-          <input id="email" type="email" placeholder="your@email.com" />
-          <button>Save Changes</button>
+  <div class="page-wrap">
+    <section class="glass panel">
+      <h1>Workspace Settings</h1>
+      <p class="lead">Tune your profile, notifications, and operating defaults for the team.</p>
+    </section>
+
+    <section class="settings-grid">
+      <article class="glass panel">
+        <h2 class="section-title">Profile</h2>
+        <div class="field-stack">
+          <label class="field-label" for="name">Display Name</label>
+          <input class="input-field" id="name" type="text" v-model="profile.name" data-test="display-name" />
+
+          <label class="field-label" for="email">Email</label>
+          <input class="input-field" id="email" type="email" v-model="profile.email" />
+
+          <button class="btn btn-primary" @click="saveSettings" :disabled="isLoading">Save Profile</button>
         </div>
-  
-        <div class="setting">
-          <h2>Account Security</h2>
-          <div class="button-group">
-            <button>Change Password</button>
-            <button>Enable Two-Factor Authentication</button>
-            <button>Manage Devices</button>
-          </div>
-        </div>
-  
-        <div class="setting">
-          <h2>Appearance</h2>
-          <label for="theme">Theme:</label>
-          <select id="theme">
-            <option>Light</option>
-            <option>Dark</option>
-            <option>System Default</option>
+      </article>
+
+      <article class="glass panel">
+        <h2 class="section-title">Preferences</h2>
+        <div class="field-stack">
+          <label class="field-label" for="cadence">Planning Cadence</label>
+          <select class="select-field" id="cadence" v-model="profile.cadence">
+            <option>Weekly</option>
+            <option>Bi-weekly</option>
+            <option>Monthly</option>
           </select>
-        </div>
-  
-        <div class="setting">
-          <h2>Notifications</h2>
-          <label>
-            <input type="checkbox" /> Email Notifications
+
+          <label class="switch-row">
+            <input type="checkbox" v-model="profile.notifyEmail" />
+            <span>Email updates</span>
           </label>
-          <label>
-            <input type="checkbox" /> Push Notifications
+
+          <label class="switch-row">
+            <input type="checkbox" v-model="profile.notifyPush" />
+            <span>Push alerts for launch blockers</span>
           </label>
-          <label>
-            <input type="checkbox" /> SMS Notifications
+
+          <label class="switch-row">
+            <input type="checkbox" v-model="profile.shareSummary" />
+            <span>Share weekly digest with leadership</span>
           </label>
         </div>
-  
-        <div class="setting">
-          <h2>Privacy & Data</h2>
-          <div class="button-group">
-            <button>Manage Privacy Settings</button>
-            <button>Download Your Data</button>
-            <button>Delete Account</button>
-          </div>
-        </div>
-      </section>
-    </main>
-  </template>
-  
-  <style scoped>
-  #settings-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 4rem 2rem;
-    color: var(--dark);
+      </article>
+    </section>
+
+    <p v-if="error" class="status error">{{ error }}</p>
+    <p v-if="saveState === 'saved'" class="status">Settings synced with API.</p>
+  </div>
+</template>
+
+<script setup>
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useSettingsStore } from '../stores/settings'
+
+const settingsStore = useSettingsStore()
+const { profile, isLoading, error, saveState } = storeToRefs(settingsStore)
+const { fetchSettings, saveSettings } = settingsStore
+
+onMounted(() => {
+  fetchSettings()
+})
+</script>
+
+<style scoped>
+h1 {
+  font-size: clamp(1.65rem, 3.4vw, 2.65rem);
+  margin-bottom: 0.7rem;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.switch-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ink-800);
+}
+
+.switch-row input {
+  width: 16px;
+  height: 16px;
+}
+
+.status {
+  font-weight: 650;
+  color: var(--ink-800);
+}
+
+.status.error {
+  color: #9d3227;
+}
+
+@media (max-width: 860px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .hero {
-    margin-bottom: 3rem;
-  }
-  
-  .settings-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    max-width: 600px;
-    width: 100%;
-  }
-  
-  .setting {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: left;
-  }
-  
-  .setting h2 {
-    margin-bottom: 1rem;
-  }
-  
-  label {
-    display: block;
-    margin: 0.5rem 0;
-    font-weight: 500;
-  }
-  
-  input, select {
-    width: 100%;
-    padding: 0.7rem;
-    margin-bottom: 1rem;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    font-size: 1rem;
-  }
-  
-  .button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  button {
-    padding: 0.7rem 1.5rem;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  button:hover {
-    background: var(--primary-dark);
-  }
-  </style>
+}
+</style>
   
