@@ -43,10 +43,10 @@ onMounted(() => {
 
 const visibleProjects = computed(() => {
   if (activeStatus.value === 'All') {
-    return projects
+    return projects.value
   }
 
-  return projects.filter((project) => project.status === activeStatus.value)
+  return projects.value.filter((project) => project.status === activeStatus.value)
 })
 </script>
 

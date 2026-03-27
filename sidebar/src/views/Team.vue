@@ -45,10 +45,10 @@ onMounted(() => {
 
 const filteredMembers = computed(() => {
 	if (activeFilter.value === 'All') {
-		return teamMembers
+		return teamMembers.value
 	}
 
-	return teamMembers.filter((member) => member.focus === activeFilter.value)
+	return teamMembers.value.filter((member) => member.focus === activeFilter.value)
 })
 </script>
 
