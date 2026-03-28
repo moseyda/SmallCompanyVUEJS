@@ -51,7 +51,7 @@ This document outlines optional features and improvements for future development
 
 ### Alert Configuration
 - **Features**:
-  - Customizable alert thresholds
+  - Customisable alert thresholds
   - Per-project alert rules
   - Team-based notification routing
   - Alert escalation policies
@@ -165,9 +165,9 @@ This document outlines optional features and improvements for future development
 - **Infrastructure**:
   - Isolated environments per organization
   - Cross-team project sharing (controlled)
-  - Organization-level compliance policies
+  - Organisation-level compliance policies
   - Bulk operations and management
-  - Organization analytics
+  - Organisation analytics
 
 ---
 
@@ -211,10 +211,10 @@ This document outlines optional features and improvements for future development
 
 ## Phase 12: Performance & Scale
 
-### Database Optimization
+### Database Optimisation
 - **Improvements**:
   - Database indexing strategy
-  - Query optimization
+  - Query optimisation
   - Caching layer (Redis)
   - Data archival for old scans
   - Query result pagination
@@ -232,7 +232,7 @@ This document outlines optional features and improvements for future development
   - Scan execution time tracking
   - Per-project performance baselines
   - Performance degradation alerts
-  - Optimization recommendations
+  - Optimisation recommendations
   - Capacity planning insights
 
 ---
@@ -261,7 +261,7 @@ This document outlines optional features and improvements for future development
 ### AI-Powered Analysis
 - **Capabilities**:
   - Anomaly detection for unusual vulnerabilities
-  - Risk prioritization based on usage patterns
+  - Risk prioritisation based on usage patterns
   - Automated fix implementation
   - False positive filtering
   - Vulnerability correlation
@@ -292,7 +292,7 @@ This document outlines optional features and improvements for future development
   - Team training and certification
   - Integration consulting
   - Custom rule development
-  - Process optimization
+  - Process optimisation
 
 ### Support Tiers
 - **Levels**:
@@ -383,9 +383,8 @@ This document outlines optional features and improvements for future development
 ## Notes
 
 - Each phase should be preceded by market research and user feedback
-- Estimate development time for each phase (typically 4-12 weeks)
 - Consider resource allocation and team capacity
-- Prioritize based on customer feedback and market demand
+- Prioritise based on customer feedback and market demand
 - Regular review and adjustment of roadmap based on progress
 - Maintain backward compatibility where possible
 - Document all new features thoroughly
@@ -393,5 +392,3 @@ This document outlines optional features and improvements for future development
 ---
 
 *Last Updated: 2026-03-28*
-*Document Owner: Product Team*
-*Next Review Date: Q2 2026*
