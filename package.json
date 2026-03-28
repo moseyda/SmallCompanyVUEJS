@@ -1,0 +1,15 @@
+{
+  "name": "smallcompany-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix workspace-app\"",
+    "dev:frontend": "npm run dev --prefix workspace-app",
+    "dev:backend": "npm run dev --prefix backend",
+    "test": "npm run test --prefix workspace-app",
+    "build": "npm run build --prefix workspace-app"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

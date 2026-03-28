@@ -1,0 +1,4 @@
+node_modules/
+backend/node_modules/
+workspace-app/node_modules/
+workspace-app/dist/

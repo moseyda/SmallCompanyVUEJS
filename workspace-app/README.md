@@ -1,13 +1,13 @@
 # SmallCompany Workspace
 
-Modern Vue 3 workspace app with a local Express API, Pinia state management, and Vitest test coverage.
+Modern Vue 3 workspace app with a separate Express backend, Pinia state management, and Vitest test coverage.
 
 ## Overview
 
 This project includes:
 
 - A modern multi-page Vue application powered by Vite.
-- A local backend API for workspace data, settings sync, and inquiry submission.
+- A separate backend API for workspace data, settings sync, and enquiry submission.
 - Centralized frontend state with Pinia for cross-page consistency.
 - Component-level and route smoke tests using Vitest.
 
@@ -17,7 +17,6 @@ This project includes:
 - Vue Router
 - Pinia
 - Vite
-- Express
 - Vitest + Vue Test Utils
 
 ## Getting Started
@@ -25,25 +24,32 @@ This project includes:
 ### 1) Install dependencies
 
 ```bash
+cd ..
 npm install
+npm install --prefix backend
+npm install --prefix workspace-app
 ```
 
 ### 2) Run frontend only
 
 ```bash
+cd workspace-app
+npm install
 npm run dev
 ```
 
 ### 3) Run backend API only
 
 ```bash
-npm run api
+cd ../backend
+npm run dev
 ```
 
 ### 4) Run frontend + backend together
 
 ```bash
-npm run dev:full
+cd ..
+npm run dev
 ```
 
 Frontend runs on `http://localhost:5173`.
@@ -52,9 +58,15 @@ API runs on `http://localhost:8787`.
 
 ## Scripts
 
+From repository root:
+
+- `npm run dev`: Start both frontend and backend.
+- `npm run dev:frontend`: Start frontend only.
+- `npm run dev:backend`: Start backend only.
+
+From `workspace-app/`:
+
 - `npm run dev`: Start Vite dev server.
-- `npm run api`: Start local Express API.
-- `npm run dev:full`: Start both frontend and backend.
 - `npm run build`: Build production assets.
 - `npm run preview`: Preview production build.
 - `npm test`: Run tests once.
@@ -76,8 +88,8 @@ API runs on `http://localhost:8787`.
 ## Project Structure
 
 ```text
-workspace-app/
-	server/             # Local Express API
+backend/              # Express API
+workspace-app/        # Frontend app
 	src/
 		api/              # Frontend API client
 		stores/           # Pinia stores

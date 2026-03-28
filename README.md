@@ -1,37 +1,34 @@
 # SmallCompanyVUEJS Repository
 
-This repository currently contains two app folders:
+This repository is structured as a small monorepo with separate frontend and backend folders:
 
-- `workspace-app/`: Primary and current application workspace (actively maintained).
-- `sidebar/`: Legacy/parallel folder kept intentionally for compatibility and reference.
+- `workspace-app/`: Vue 3 + Vite frontend application.
+- `backend/`: Express API service.
 
-## Recommended App
+## Quick Start
 
-Use `workspace-app/` for all active development.
-
-## Quick Start (workspace-app)
+From the repository root:
 
 ```bash
-cd workspace-app
 npm install
-npm run dev:full
+npm install --prefix backend
+npm install --prefix workspace-app
+npm run dev
 ```
 
 Frontend: `http://localhost:5173`
 
 API: `http://localhost:8787`
 
-## Useful Scripts
+## Scripts (Repository Root)
 
-From inside `workspace-app/`:
-
-- `npm run dev`: Start Vite frontend.
-- `npm run api`: Start local Express API.
-- `npm run dev:full`: Run frontend + API together.
-- `npm test`: Run test suite.
-- `npm run build`: Create production build.
+- `npm run dev`: Run backend and frontend together.
+- `npm run dev:backend`: Run backend only.
+- `npm run dev:frontend`: Run frontend only.
+- `npm run test`: Run frontend tests.
+- `npm run build`: Build frontend assets.
 
 ## Notes
 
-- The repository keeps both folders by request.
-- New features and fixes should target `workspace-app/` unless explicitly stated otherwise.
+- Backend and frontend are intentionally separated so architecture and deployment can evolve independently.
+- Feature, fix, and documentation changes should be committed as separate units.
