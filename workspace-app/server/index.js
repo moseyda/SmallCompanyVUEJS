@@ -70,7 +70,7 @@ app.post('/api/inquiries', withLatency((req, res) => {
   const { name, email, scope, message } = req.body ?? {}
 
   if (!name || !email || !scope || !message) {
-    res.status(400).json({ error: 'Missing required inquiry fields.' })
+    res.status(400).json({ error: 'Missing required enquiry fields.' })
     return
   }
 

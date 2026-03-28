@@ -16,7 +16,7 @@
     </section>
 
     <section class="glass panel cta">
-      <h2>Need a custom program?</h2>
+      <h2>Need a custom programme?</h2>
       <p>We can blend these models into one roadmap tailored to your delivery constraints.</p>
       <router-link class="btn btn-primary" to="/contact">Request a discovery call</router-link>
     </section>

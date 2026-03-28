@@ -9,7 +9,7 @@
 
 		<section class="contact-layout">
 			<article class="glass panel">
-				<h2 class="section-title">Project Inquiry</h2>
+				<h2 class="section-title">Project Enquiry</h2>
 				<form class="field-stack" @submit.prevent="submitForm">
 					<label class="field-label" for="name">Name</label>
 					<input class="input-field" id="name" type="text" v-model="form.name" required />
@@ -20,7 +20,7 @@
 					<label class="field-label" for="scope">Project Scope</label>
 					<select class="select-field" id="scope" v-model="form.scope">
 						<option>Product Build</option>
-						<option>Modernization</option>
+						<option>Modernisation</option>
 						<option>Data and Insights</option>
 						<option>Team Extension</option>
 					</select>
@@ -78,7 +78,7 @@ const submitForm = async () => {
 		form.scope = 'Product Build'
 		form.message = ''
 	} catch {
-		alert('Unable to submit inquiry at the moment. Please try again.')
+		alert('Unable to submit enquiry at the moment. Please try again.')
 	}
 }
 </script>

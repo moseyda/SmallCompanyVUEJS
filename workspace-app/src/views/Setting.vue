@@ -25,7 +25,7 @@
           <label class="field-label" for="cadence">Planning Cadence</label>
           <select class="select-field" id="cadence" v-model="profile.cadence">
             <option>Weekly</option>
-            <option>Bi-weekly</option>
+            <option>Fortnightly</option>
             <option>Monthly</option>
           </select>
 

@@ -16,7 +16,7 @@ describe('Services view', () => {
       json: async () => ({
         services: [
           {
-            name: 'Modernization Architecture',
+            name: 'Modernisation Architecture',
             description: 'Legacy migration plans.',
             bullets: ['Service decomposition']
           }
@@ -38,7 +38,7 @@ describe('Services view', () => {
     await flushPromises()
 
     expect(wrapper.text()).toContain('Service Models')
-    expect(wrapper.text()).toContain('Modernization Architecture')
+    expect(wrapper.text()).toContain('Modernisation Architecture')
     expect(global.fetch).toHaveBeenCalledWith('/api/services', expect.any(Object))
   })
 })

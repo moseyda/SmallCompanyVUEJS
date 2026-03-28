@@ -4,7 +4,7 @@ import { api } from '../api/client'
 const defaults = {
   name: 'Project Lead',
   email: 'lead@smallcompany.io',
-  cadence: 'Bi-weekly',
+  cadence: 'Fortnightly',
   notifyEmail: true,
   notifyPush: true,
   shareSummary: false

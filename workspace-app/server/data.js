@@ -47,14 +47,14 @@ export const workspaceData = {
       bullets: ['Weekly strategy reviews', 'Design + engineering pairing', 'Continuous QA automation']
     },
     {
-      name: 'Modernization Architecture',
+      name: 'Modernisation Architecture',
       description: 'Legacy migration plans focused on measurable outcomes and low-risk transitions.',
       bullets: ['Service decomposition', 'Performance profiling', 'Reliability scorecards']
     },
     {
       name: 'Data and Insight Layer',
       description: 'Operational metrics connected to real user outcomes for better product decisions.',
-      bullets: ['Warehouse modeling', 'Dashboard implementation', 'Experiment tracking']
+      bullets: ['Warehouse modelling', 'Dashboard implementation', 'Experiment tracking']
     }
   ],
   teamMembers: [
@@ -104,7 +104,7 @@ export const workspaceData = {
   milestones: [
     { quarter: 'Q1', title: 'Platform Audit', note: 'Mapped risks, tech debt, and user friction points.' },
     { quarter: 'Q2', title: 'Core Rebuild', note: 'Introduced modular architecture and automated quality checks.' },
-    { quarter: 'Q3', title: 'Market Expansion', note: 'Localized key experiences for three new regional markets.' },
+    { quarter: 'Q3', title: 'Market Expansion', note: 'Localised key experiences for three new regional markets.' },
     { quarter: 'Q4', title: 'AI-Assisted Ops', note: 'Launched recommendation tools for support and logistics teams.' }
   ],
   insightSignals: [
@@ -140,7 +140,7 @@ export const workspaceData = {
 export const defaultSettings = {
   name: 'Project Lead',
   email: 'lead@smallcompany.io',
-  cadence: 'Bi-weekly',
+  cadence: 'Fortnightly',
   notifyEmail: true,
   notifyPush: true,
   shareSummary: false

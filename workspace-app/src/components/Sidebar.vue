@@ -39,7 +39,7 @@ class="button"
 <div class="sidebar-bottom">
 <div class="sidebar-footer" v-if="isSidebarExpanded">
 <p>v2.0 Modern</p>
-<p>Realtime Workspace</p>
+<p>Real-time Workspace</p>
 </div>
 
 <div class="preferences">
