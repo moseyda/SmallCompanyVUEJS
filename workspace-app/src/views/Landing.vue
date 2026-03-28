@@ -297,7 +297,9 @@ const scrollToPricing = () => {
 }
 
 .landing {
-  width: 100%;
+  width: calc(100% + 2 * calc(1.3rem * var(--space-scale)));
+  min-height: 100vh;
+  margin: calc(-1.3rem * var(--space-scale));
   background: linear-gradient(135deg, #f0f9ff 0%, #f9fafb 50%, #fef3c7 100%);
   color: #1f2937;
   overflow-x: hidden;
