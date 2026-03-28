@@ -182,46 +182,4 @@ h2 {
 		grid-template-columns: 1fr;
 	}
 }
-	border: 1px solid var(--line-soft);
-}
-
-.focus {
-	width: fit-content;
-	padding: 0.2rem 0.5rem;
-	border-radius: 999px;
-	font-size: 0.74rem;
-	font-weight: 700;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	background: color-mix(in srgb, var(--brand-teal) 18%, transparent);
-	color: var(--brand-teal);
-}
-
-h2 {
-	font-size: 1.25rem;
-	margin-top: 0.7rem;
-}
-
-.role {
-	margin-top: 0.35rem;
-	font-weight: 650;
-	color: var(--ink-800);
-}
-
-.bio {
-	margin-top: 0.5rem;
-	color: var(--ink-600);
-}
-
-@media (max-width: 1024px) {
-	.team-grid {
-		grid-template-columns: repeat(2, 1fr);
-	}
-}
-
-@media (max-width: 768px) {
-	.team-grid {
-		grid-template-columns: 1fr;
-	}
-}
 </style>
