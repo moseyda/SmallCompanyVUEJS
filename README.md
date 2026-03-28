@@ -25,11 +25,12 @@ API: `http://localhost:8787`
 - `npm run dev`: Run backend and frontend together.
 - `npm run dev:backend`: Run backend only.
 - `npm run dev:frontend`: Run frontend only.
-- `npm run test`: Run frontend tests.
+- `npm run test`: Run backend and frontend tests.
 - `npm run build`: Build frontend assets.
 
 ## Notes
 
 - Backend and frontend are intentionally separated so architecture and deployment can evolve independently.
 - Settings access is now guarded behind sign-in via the shared auth foundation.
+- Backend now enforces authentication on settings API routes.
 - Feature, fix, and documentation changes should be committed as separate units.

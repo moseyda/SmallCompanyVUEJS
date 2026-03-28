@@ -1,3 +1,12 @@
+class ApiError extends Error {
+  constructor(message, status) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+    this.isUnauthorized = status === 401
+  }
+}
+
 const request = async (path, options = {}) => {
   const response = await fetch(path, {
     headers: {
@@ -9,7 +18,7 @@ const request = async (path, options = {}) => {
 
   if (!response.ok) {
     const payload = await response.json().catch(() => ({}))
-    throw new Error(payload.error || `API request failed: ${response.status}`)
+    throw new ApiError(payload.error || `API request failed: ${response.status}`, response.status)
   }
 
   return response.json()

@@ -85,8 +85,8 @@ From `workspace-app/`:
 - `GET /api/auth/session`
 - `POST /api/auth/login`
 - `POST /api/auth/logout`
-- `GET /api/settings`
-- `PUT /api/settings`
+- `GET /api/settings` (requires sign-in)
+- `PUT /api/settings` (requires sign-in)
 - `POST /api/inquiries`
 
 ## Demo Sign-In
@@ -113,11 +113,13 @@ workspace-app/        # Frontend app
 Run the full test suite:
 
 ```bash
+cd ..
 npm test
 ```
 
 Current coverage includes:
 
+- Backend authorisation middleware tests for settings routes.
 - Route smoke tests for expanded routes.
 - Component tests for API-backed views.
 

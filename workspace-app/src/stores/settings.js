@@ -35,7 +35,9 @@ export const useSettingsStore = defineStore('settings', {
         }
         this.loaded = true
       } catch (error) {
-        this.error = error?.message || 'Unable to load settings'
+        this.error = error?.isUnauthorized
+          ? 'Sign-in required to load settings.'
+          : (error?.message || 'Unable to load settings')
       }
 
       this.isLoading = false
@@ -53,7 +55,9 @@ export const useSettingsStore = defineStore('settings', {
         }
         this.saveState = 'saved'
       } catch (error) {
-        this.error = error?.message || 'Unable to save settings'
+        this.error = error?.isUnauthorized
+          ? 'Sign-in required to save settings.'
+          : (error?.message || 'Unable to save settings')
         this.saveState = 'error'
       }
 

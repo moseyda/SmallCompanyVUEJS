@@ -5,9 +5,14 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "supertest": "^7.1.4",
+    "vitest": "^4.1.2"
   }
 }

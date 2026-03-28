@@ -33,7 +33,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       this.isLoading = false
     },
     failRequest(error) {
-      this.error = error?.message || 'Unknown API error'
+      this.error = error?.isUnauthorized ? 'Sign-in required.' : (error?.message || 'Unknown API error')
       this.isLoading = false
     },
     async fetchOverview(force = false) {
