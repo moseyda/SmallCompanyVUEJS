@@ -1,21 +1,21 @@
 <template>
   <div class="page-wrap">
     <section class="glass panel">
-      <h1>Operational Insights</h1>
-      <p class="lead">A quick pulse on product confidence, adoption, and service reliability.</p>
+      <h1>Security & Code Quality Insights</h1>
+      <p class="lead">Real-time metrics on code quality, security posture, and remediation progress.</p>
     </section>
 
     <section class="grid-two">
       <article class="glass panel">
-        <h2 class="section-title">Signal Scores</h2>
+        <h2 class="section-title">Quality Metrics</h2>
         <div class="signal-list">
           <div class="signal-item" v-for="signal in insightSignals" :key="signal.label">
             <div class="signal-head">
               <h3>{{ signal.label }}</h3>
-              <strong>{{ signal.value }}%</strong>
+              <strong :class="getSignalClass(signal)">{{ signal.value }}</strong>
             </div>
-            <div class="meter-track">
-              <span class="meter-fill" :style="{ width: signal.value + '%' }"></span>
+            <div v-if="isNumericSignal(signal)" class="meter-track">
+              <span class="meter-fill" :style="{ width: extractNumericValue(signal) + '%' }"></span>
             </div>
             <p class="detail">{{ signal.detail }}</p>
           </div>
@@ -23,7 +23,7 @@
       </article>
 
       <article class="glass panel">
-        <h2 class="section-title">Action Queue</h2>
+        <h2 class="section-title">Security Actions</h2>
         <div class="card-list">
           <div class="card-item" v-for="action in actions" :key="action.title">
             <h3>{{ action.title }}</h3>
@@ -47,6 +47,25 @@ const { insightSignals, actions } = storeToRefs(workspaceStore)
 onMounted(() => {
   workspaceStore.fetchInsights()
 })
+
+const extractNumericValue = (signal) => {
+  if (typeof signal.value === 'number') {
+    return Math.min(signal.value, 100)
+  }
+  const match = signal.value.match(/\d+/)
+  return match ? Math.min(parseInt(match[0]), 100) : 0
+}
+
+const isNumericSignal = (signal) => {
+  return typeof signal.value === 'number' || /^\d+/.test(signal.value)
+}
+
+const getSignalClass = (signal) => {
+  const value = extractNumericValue(signal)
+  if (value >= 80) return 'signal-value good'
+  if (value >= 60) return 'signal-value moderate'
+  return 'signal-value warning'
+}
 </script>
 
 <style scoped>
@@ -76,6 +95,23 @@ h1 {
 
 .signal-head h3 {
   font-size: 1rem;
+}
+
+.signal-value {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.signal-value.good {
+  color: #16a34a;
+}
+
+.signal-value.moderate {
+  color: #d97706;
+}
+
+.signal-value.warning {
+  color: #dc2626;
 }
 
 .meter-track {

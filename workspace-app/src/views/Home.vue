@@ -2,22 +2,22 @@
 	<div class="page-wrap">
 		<section class="glass panel hero">
 			<div>
-				<p class="eyebrow">Digital Product Studio</p>
-				<h1>Building standout products with speed, craft, and clarity.</h1>
+				<p class="eyebrow">Code Quality & Security Scanner</p>
+				<h1>Automated scanning for vulnerabilities, code quality, and compliance.</h1>
 				<p class="lead">
-					SmallCompany now runs as a full launch console: delivery visibility, pipeline health,
-					service operations, and strategic planning in one workspace.
+					ScannerHub monitors your codebase 24/7, detecting security issues and quality problems before they reach production. 
+					Integrate with your CI/CD pipeline for automated protection.
 				</p>
 				<div class="hero-actions">
-					<router-link class="btn btn-primary" to="/work">Explore Workstream</router-link>
-					<router-link class="btn btn-secondary" to="/services">View Service Models</router-link>
+					<router-link class="btn btn-primary" to="/work">View Scan Results</router-link>
+					<router-link class="btn btn-secondary" to="/services">Manage Rulesets</router-link>
 				</div>
 			</div>
 			<div class="badge-row">
-				<span class="badge">Vue 3 + Vite</span>
-				<span class="badge">Modular Routing</span>
-				<span class="badge">Data-Driven Views</span>
-				<span class="badge">Responsive Layouts</span>
+				<span class="badge">OWASP Scanning</span>
+				<span class="badge">Real-time Detection</span>
+				<span class="badge">Auto Remediation</span>
+				<span class="badge">Compliance Ready</span>
 			</div>
 		</section>
 
@@ -33,18 +33,20 @@
 
 		<section class="grid-two">
 			<article class="glass panel">
-				<h2 class="section-title">Priority Project Signals</h2>
+				<h2 class="section-title">Critical Scan Results</h2>
 				<div class="card-list">
 					<div class="card-item" v-for="project in projects.slice(0, 3)" :key="project.name">
 						<h3>{{ project.name }}</h3>
 						<p class="detail">{{ project.summary }}</p>
-						<p class="tag">{{ project.status }} • {{ project.sector }}</p>
+						<p class="tag" :class="project.risk_level.toLowerCase()">
+							{{ project.risk_level }} Risk • {{ project.issues }} Issues
+						</p>
 					</div>
 				</div>
 			</article>
 
 			<article class="glass panel">
-				<h2 class="section-title">Current Expansion Focus</h2>
+				<h2 class="section-title">Security Initiatives</h2>
 				<div class="card-list">
 					<div class="card-item" v-for="initiative in initiatives" :key="initiative.title">
 						<h3>{{ initiative.title }}</h3>
@@ -106,6 +108,22 @@ h1 {
 	font-size: 0.82rem;
 	color: var(--ink-800);
 	font-weight: 650;
+}
+
+.tag.critical {
+	color: #dc2626;
+}
+
+.tag.high {
+	color: #ea580c;
+}
+
+.tag.medium {
+	color: #d97706;
+}
+
+.tag.low {
+	color: #16a34a;
 }
 
 .status-line {

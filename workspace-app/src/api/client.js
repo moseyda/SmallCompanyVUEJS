@@ -29,6 +29,7 @@ export const api = {
   getOverview: () => request('/api/overview'),
   getProjects: () => request('/api/projects'),
   getServices: () => request('/api/services'),
+  getRulesets: () => request('/api/rulesets'),
   getInsights: () => request('/api/insights'),
   getMilestones: () => request('/api/milestones'),
   getTeamMembers: () => request('/api/team-members'),

@@ -113,6 +113,10 @@ export function createApp() {
     res.json({ teamMembers: workspaceData.teamMembers })
   }))
 
+  app.get('/api/rulesets', withLatency((req, res) => {
+    res.json({ rulesets: workspaceData.rulesets })
+  }))
+
   app.get('/api/offices', withLatency((req, res) => {
     res.json({ offices: workspaceData.offices })
   }))

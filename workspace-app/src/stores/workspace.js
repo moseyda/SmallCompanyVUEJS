@@ -7,6 +7,7 @@ export const useWorkspaceStore = defineStore('workspace', {
     initiatives: [],
     projects: [],
     services: [],
+    rulesets: [],
     insightSignals: [],
     actions: [],
     milestones: [],
@@ -18,6 +19,7 @@ export const useWorkspaceStore = defineStore('workspace', {
       overview: false,
       projects: false,
       services: false,
+      rulesets: false,
       insights: false,
       milestones: false,
       teamMembers: false,
@@ -80,6 +82,22 @@ export const useWorkspaceStore = defineStore('workspace', {
         const data = await api.getServices()
         this.services = data.services
         this.loaded.services = true
+      } catch (error) {
+        this.failRequest(error)
+        return
+      }
+      this.endRequest()
+    },
+    async fetchRulesets(force = false) {
+      if (this.loaded.rulesets && !force) {
+        return
+      }
+
+      this.startRequest()
+      try {
+        const data = await api.getRulesets()
+        this.rulesets = data.rulesets
+        this.loaded.rulesets = true
       } catch (error) {
         this.failRequest(error)
         return
