@@ -390,7 +390,7 @@ const scrollToPricing = () => {
 .hero-badge {
   display: inline-block;
   padding: 0.5rem 1rem;
-  background: #dbeafe;
+  background: rgba(219, 234, 254, 0.7);
   color: #1e40af;
   border-radius: 50px;
   font-size: 0.9rem;
@@ -479,7 +479,7 @@ const scrollToPricing = () => {
 }
 
 .visual-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.75);
   border-radius: 12px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -491,8 +491,8 @@ const scrollToPricing = () => {
   display: flex;
   gap: 0.5rem;
   padding: 1rem;
-  background: #f3f4f6;
-  border-bottom: 1px solid #e5e7eb;
+  background: rgba(243, 244, 246, 0.8);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.3);
 }
 
 .visual-dot {
@@ -523,7 +523,7 @@ const scrollToPricing = () => {
 .status-badge {
   display: inline-block;
   padding: 0.5rem 0.75rem;
-  background: #dcfce7;
+  background: rgba(220, 252, 231, 0.7);
   color: #166534;
   border-radius: 4px;
   font-size: 0.85rem;
@@ -603,8 +603,8 @@ const scrollToPricing = () => {
 
 .feature-card {
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(229, 231, 235, 0.3);
   border-radius: 12px;
   transition: all 0.3s;
   text-align: left;
@@ -622,7 +622,7 @@ const scrollToPricing = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #dbeafe;
+  background: rgba(219, 234, 254, 0.6);
   border-radius: 8px;
   margin-bottom: 1rem;
   color: #2563eb;
@@ -683,7 +683,7 @@ const scrollToPricing = () => {
 }
 
 .comparison-icon.check {
-  background: #dcfce7;
+  background: rgba(220, 252, 231, 0.6);
   color: #166534;
 }
 
@@ -712,8 +712,8 @@ const scrollToPricing = () => {
 
 .pricing-card {
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(229, 231, 235, 0.3);
   border-radius: 12px;
   position: relative;
   transition: all 0.3s;
@@ -735,7 +735,7 @@ const scrollToPricing = () => {
   position: absolute;
   top: -12px;
   left: 20px;
-  background: #2563eb;
+  background: rgba(37, 99, 235, 0.9);
   color: white;
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
@@ -835,9 +835,9 @@ const scrollToPricing = () => {
 
 .faq-item {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(229, 231, 235, 0.3);
 }
 
 .faq-item h4 {
