@@ -59,7 +59,7 @@ const form = reactive({
 const submitLogin = async () => {
   try {
     await authStore.login(form.email, form.password)
-    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/settings'
+    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/dashboard'
     router.push(redirect)
   } catch {
     // Errors are handled via store state for user feedback.
