@@ -23,6 +23,16 @@ export const api = {
   getMilestones: () => request('/api/milestones'),
   getTeamMembers: () => request('/api/team-members'),
   getOffices: () => request('/api/offices'),
+  getAuthSession: () => request('/api/auth/session'),
+  login: (credentials) =>
+    request('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(credentials)
+    }),
+  logout: () =>
+    request('/api/auth/logout', {
+      method: 'POST'
+    }),
   getSettings: () => request('/api/settings'),
   updateSettings: (settings) =>
     request('/api/settings', {

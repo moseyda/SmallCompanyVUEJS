@@ -31,4 +31,5 @@ API: `http://localhost:8787`
 ## Notes
 
 - Backend and frontend are intentionally separated so architecture and deployment can evolve independently.
+- Settings access is now guarded behind sign-in via the shared auth foundation.
 - Feature, fix, and documentation changes should be committed as separate units.

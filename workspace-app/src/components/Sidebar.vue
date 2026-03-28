@@ -40,6 +40,29 @@ class="button"
 <div class="sidebar-footer" v-if="isSidebarExpanded">
 <p>v2.0 Modern</p>
 <p>Real-time Workspace</p>
+<p v-if="isAuthenticated">{{ currentUser?.name }}</p>
+</div>
+
+<div class="auth-controls">
+<router-link
+v-if="!isAuthenticated"
+to="/login"
+class="preferences-trigger auth-trigger"
+@click="closeMobileMenu"
+>
+<span class="material-icons">login</span>
+<span v-if="isSidebarExpanded">Sign in</span>
+</router-link>
+
+<button
+v-else
+type="button"
+class="preferences-trigger auth-trigger"
+@click="signOut"
+>
+<span class="material-icons">logout</span>
+<span v-if="isSidebarExpanded">Sign out</span>
+</button>
 </div>
 
 <div class="preferences">
@@ -138,9 +161,11 @@ class="sidebar-hover-tooltip"
 
 <script setup>
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import logoURL from '../assets/vue.svg'
 import { useUiStore } from '../stores/ui'
+import { useAuthStore } from '../stores/auth'
 
 const navGroups = [
 {
@@ -166,6 +191,9 @@ items: [
 const uiStore = useUiStore()
 const { isSidebarExpanded, isMobileMenuOpen, theme, density, motion } = storeToRefs(uiStore)
 const { toggleSidebar, toggleMobileMenu, closeMobileMenu, setTheme, setDensity, setMotion } = uiStore
+const authStore = useAuthStore()
+const { currentUser, isAuthenticated } = storeToRefs(authStore)
+const router = useRouter()
 
 const tooltipLabel = ref('')
 const tooltipX = ref(0)
@@ -203,6 +231,12 @@ isTooltipVisible.value = true
 
 function hideTooltip() {
 isTooltipVisible.value = false
+}
+
+async function signOut() {
+await authStore.logout()
+closeMobileMenu()
+router.push('/login')
 }
 </script>
 
@@ -361,6 +395,10 @@ margin-top: auto;
 display: grid;
 gap: 0.6rem;
 position: relative;
+}
+
+.auth-controls {
+display: grid;
 }
 
 .sidebar-footer {

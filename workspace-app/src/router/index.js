@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import { useAuthStore } from '../stores/auth'
 
 export const routes = [
     {
@@ -45,10 +46,16 @@ export const routes = [
         meta: { title: 'Contact' }
     },
     {
+        path: '/login',
+        name: 'login',
+        component: () => import('../views/Login.vue'),
+        meta: { title: 'Sign In', publicOnly: true }
+    },
+    {
         path: '/settings',
         name: 'settings',
         component: () => import('../views/Setting.vue'),
-        meta: { title: 'Settings' }
+        meta: { title: 'Settings', requiresAuth: true }
     }
 ]
 
@@ -56,6 +63,26 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 })
+
+export function installAuthGuard(router, pinia) {
+    router.beforeEach((to) => {
+        const authStore = useAuthStore(pinia)
+
+        if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+            return {
+                path: '/login',
+                query: { redirect: to.fullPath }
+            }
+        }
+
+        if (to.meta.publicOnly && authStore.isAuthenticated) {
+            const redirect = typeof to.query.redirect === 'string' ? to.query.redirect : '/'
+            return redirect
+        }
+
+        return true
+    })
+}
 
 router.afterEach((to) => {
     document.title = `${to.meta.title || 'SmallCompany'} | SmallCompany`

@@ -3,10 +3,21 @@ import { defaultSettings, workspaceData } from './data.js'
 
 const app = express()
 const port = 8787
+const demoCredentials = {
+  email: 'lead@smallcompany.io',
+  password: 'Passw0rd!'
+}
+const demoUser = {
+  id: 'user_project_lead',
+  name: 'Project Lead',
+  email: demoCredentials.email,
+  role: 'admin'
+}
 
 app.use(express.json())
 
 let workspaceSettings = { ...defaultSettings }
+let currentSessionUser = null
 
 const withLatency = (handler) => (req, res, next) => {
   setTimeout(() => {
@@ -51,6 +62,27 @@ app.get('/api/team-members', withLatency((req, res) => {
 
 app.get('/api/offices', withLatency((req, res) => {
   res.json({ offices: workspaceData.offices })
+}))
+
+app.get('/api/auth/session', withLatency((req, res) => {
+  res.json({ user: currentSessionUser })
+}))
+
+app.post('/api/auth/login', withLatency((req, res) => {
+  const { email, password } = req.body ?? {}
+
+  if (email !== demoCredentials.email || password !== demoCredentials.password) {
+    res.status(401).json({ error: 'Invalid sign-in credentials.' })
+    return
+  }
+
+  currentSessionUser = { ...demoUser }
+  res.status(200).json({ user: currentSessionUser })
+}))
+
+app.post('/api/auth/logout', withLatency((req, res) => {
+  currentSessionUser = null
+  res.status(200).json({ status: 'signed_out' })
 }))
 
 app.get('/api/settings', withLatency((req, res) => {

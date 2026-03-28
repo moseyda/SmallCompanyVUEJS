@@ -8,6 +8,7 @@ This project includes:
 
 - A modern multi-page Vue application powered by Vite.
 - A separate backend API for workspace data, settings sync, and enquiry submission.
+- Route-level authentication with sign-in flow and guarded pages.
 - Centralized frontend state with Pinia for cross-page consistency.
 - Component-level and route smoke tests using Vitest.
 
@@ -81,9 +82,17 @@ From `workspace-app/`:
 - `GET /api/milestones`
 - `GET /api/team-members`
 - `GET /api/offices`
+- `GET /api/auth/session`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
 - `GET /api/settings`
 - `PUT /api/settings`
 - `POST /api/inquiries`
+
+## Demo Sign-In
+
+- Email: `lead@smallcompany.io`
+- Password: `Passw0rd!`
 
 ## Project Structure
 
