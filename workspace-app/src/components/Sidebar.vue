@@ -171,7 +171,7 @@ const navGroups = [
 {
 title: 'Workspace',
 items: [
-{ path: '/', label: 'Overview', icon: 'home' },
+{ path: '/dashboard', label: 'Overview', icon: 'home' },
 { path: '/work', label: 'Work', icon: 'work_outline' },
 { path: '/services', label: 'Services', icon: 'construction' },
 { path: '/insights', label: 'Insights', icon: 'insights' }
