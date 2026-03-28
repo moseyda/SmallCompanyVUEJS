@@ -37,6 +37,8 @@ export const useSettingsStore = defineStore('settings', {
       } catch (error) {
         this.error = error?.isUnauthorized
           ? 'Sign-in required to load settings.'
+          : error?.isForbidden
+            ? 'You do not have permission to view settings.'
           : (error?.message || 'Unable to load settings')
       }
 
@@ -57,6 +59,8 @@ export const useSettingsStore = defineStore('settings', {
       } catch (error) {
         this.error = error?.isUnauthorized
           ? 'Sign-in required to save settings.'
+          : error?.isForbidden
+            ? 'You do not have permission to update settings.'
           : (error?.message || 'Unable to save settings')
         this.saveState = 'error'
       }

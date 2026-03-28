@@ -55,7 +55,7 @@ export const routes = [
         path: '/settings',
         name: 'settings',
         component: () => import('../views/Setting.vue'),
-        meta: { title: 'Settings', requiresAuth: true }
+        meta: { title: 'Settings', requiresAuth: true, requiredPermission: 'settings:read' }
     }
 ]
 
@@ -73,6 +73,10 @@ export function installAuthGuard(router, pinia) {
                 path: '/login',
                 query: { redirect: to.fullPath }
             }
+        }
+
+        if (to.meta.requiredPermission && !authStore.hasPermission(to.meta.requiredPermission)) {
+            return '/'
         }
 
         if (to.meta.publicOnly && authStore.isAuthenticated) {

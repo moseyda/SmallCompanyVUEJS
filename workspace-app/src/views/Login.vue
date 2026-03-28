@@ -32,8 +32,9 @@
 
       <div class="hint">
         <p><strong>Demo credentials</strong></p>
-        <p>Email: lead@smallcompany.io</p>
-        <p>Password: Passw0rd!</p>
+        <p>Admin: lead@smallcompany.io / Passw0rd!</p>
+        <p>Editor: editor@smallcompany.io / Passw0rd!</p>
+        <p>Viewer: viewer@smallcompany.io / Passw0rd!</p>
       </div>
     </section>
   </div>

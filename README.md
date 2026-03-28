@@ -33,4 +33,11 @@ API: `http://localhost:8787`
 - Backend and frontend are intentionally separated so architecture and deployment can evolve independently.
 - Settings access is now guarded behind sign-in via the shared auth foundation.
 - Backend now enforces authentication on settings API routes.
+- Roles are now enforced for settings updates: `admin` and `editor` can edit, `viewer` is read-only.
 - Feature, fix, and documentation changes should be committed as separate units.
+
+## Demo Users
+
+- `lead@smallcompany.io` / `Passw0rd!` (`admin`)
+- `editor@smallcompany.io` / `Passw0rd!` (`editor`)
+- `viewer@smallcompany.io` / `Passw0rd!` (`viewer`)

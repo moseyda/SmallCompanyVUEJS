@@ -3,15 +3,33 @@ import { fileURLToPath } from 'node:url'
 import { defaultSettings, workspaceData } from './data.js'
 
 const port = 8787
-const demoCredentials = {
-  email: 'lead@smallcompany.io',
-  password: 'Passw0rd!'
-}
-const demoUser = {
-  id: 'user_project_lead',
-  name: 'Project Lead',
-  email: demoCredentials.email,
-  role: 'admin'
+const demoUsers = [
+  {
+    id: 'user_project_lead',
+    name: 'Project Lead',
+    email: 'lead@smallcompany.io',
+    password: 'Passw0rd!',
+    role: 'admin'
+  },
+  {
+    id: 'user_product_editor',
+    name: 'Product Editor',
+    email: 'editor@smallcompany.io',
+    password: 'Passw0rd!',
+    role: 'editor'
+  },
+  {
+    id: 'user_project_viewer',
+    name: 'Project Viewer',
+    email: 'viewer@smallcompany.io',
+    password: 'Passw0rd!',
+    role: 'viewer'
+  }
+]
+const permissionsByRole = {
+  admin: ['settings:read', 'settings:write'],
+  editor: ['settings:read', 'settings:write'],
+  viewer: ['settings:read']
 }
 
 const withLatency = (handler) => (req, res, next) => {
@@ -35,8 +53,32 @@ export function createApp() {
       return
     }
 
+    req.user = currentSessionUser
     next()
   }
+
+  const requirePermission = (permission) => (req, res, next) => {
+    if (!currentSessionUser) {
+      res.status(401).json({ error: 'Sign-in required.' })
+      return
+    }
+
+    if (!currentSessionUser.permissions?.includes(permission)) {
+      res.status(403).json({ error: 'Insufficient permissions.' })
+      return
+    }
+
+    req.user = currentSessionUser
+    next()
+  }
+
+  const formatSessionUser = (user) => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    permissions: permissionsByRole[user.role] || []
+  })
 
   app.use(express.json())
 
@@ -81,13 +123,14 @@ export function createApp() {
 
   app.post('/api/auth/login', withLatency((req, res) => {
     const { email, password } = req.body ?? {}
+    const matchedUser = demoUsers.find((user) => user.email === email && user.password === password)
 
-    if (email !== demoCredentials.email || password !== demoCredentials.password) {
+    if (!matchedUser) {
       res.status(401).json({ error: 'Invalid sign-in credentials.' })
       return
     }
 
-    currentSessionUser = { ...demoUser }
+    currentSessionUser = formatSessionUser(matchedUser)
     res.status(200).json({ user: currentSessionUser })
   }))
 
@@ -96,11 +139,11 @@ export function createApp() {
     res.status(200).json({ status: 'signed_out' })
   }))
 
-  app.get('/api/settings', requireAuth, withLatency((req, res) => {
+  app.get('/api/settings', requirePermission('settings:read'), withLatency((req, res) => {
     res.json({ settings: workspaceSettings })
   }))
 
-  app.put('/api/settings', requireAuth, withLatency((req, res) => {
+  app.put('/api/settings', requirePermission('settings:write'), withLatency((req, res) => {
     workspaceSettings = {
       ...workspaceSettings,
       ...req.body

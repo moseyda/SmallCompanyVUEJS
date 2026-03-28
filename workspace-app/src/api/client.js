@@ -4,6 +4,7 @@ class ApiError extends Error {
     this.name = 'ApiError'
     this.status = status
     this.isUnauthorized = status === 401
+    this.isForbidden = status === 403
   }
 }
 

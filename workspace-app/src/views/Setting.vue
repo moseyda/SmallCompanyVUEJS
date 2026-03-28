@@ -10,12 +10,12 @@
         <h2 class="section-title">Profile</h2>
         <div class="field-stack">
           <label class="field-label" for="name">Display Name</label>
-          <input class="input-field" id="name" type="text" v-model="profile.name" data-test="display-name" />
+          <input class="input-field" id="name" type="text" v-model="profile.name" data-test="display-name" :disabled="!canEditSettings" />
 
           <label class="field-label" for="email">Email</label>
-          <input class="input-field" id="email" type="email" v-model="profile.email" />
+          <input class="input-field" id="email" type="email" v-model="profile.email" :disabled="!canEditSettings" />
 
-          <button class="btn btn-primary" @click="saveSettings" :disabled="isLoading">Save Profile</button>
+          <button class="btn btn-primary" @click="saveIfAllowed" :disabled="isLoading || !canEditSettings">Save Profile</button>
         </div>
       </article>
 
@@ -23,30 +23,31 @@
         <h2 class="section-title">Preferences</h2>
         <div class="field-stack">
           <label class="field-label" for="cadence">Planning Cadence</label>
-          <select class="select-field" id="cadence" v-model="profile.cadence">
+          <select class="select-field" id="cadence" v-model="profile.cadence" :disabled="!canEditSettings">
             <option>Weekly</option>
             <option>Fortnightly</option>
             <option>Monthly</option>
           </select>
 
           <label class="switch-row">
-            <input type="checkbox" v-model="profile.notifyEmail" />
+            <input type="checkbox" v-model="profile.notifyEmail" :disabled="!canEditSettings" />
             <span>Email updates</span>
           </label>
 
           <label class="switch-row">
-            <input type="checkbox" v-model="profile.notifyPush" />
+            <input type="checkbox" v-model="profile.notifyPush" :disabled="!canEditSettings" />
             <span>Push alerts for launch blockers</span>
           </label>
 
           <label class="switch-row">
-            <input type="checkbox" v-model="profile.shareSummary" />
+            <input type="checkbox" v-model="profile.shareSummary" :disabled="!canEditSettings" />
             <span>Share weekly digest with leadership</span>
           </label>
         </div>
       </article>
     </section>
 
+    <p v-if="!canEditSettings" class="status">Read-only mode: your role can view but cannot edit settings.</p>
     <p v-if="error" class="status error">{{ error }}</p>
     <p v-if="saveState === 'saved'" class="status">Settings synced with API.</p>
   </div>
@@ -56,10 +57,21 @@
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '../stores/settings'
+import { useAuthStore } from '../stores/auth'
 
 const settingsStore = useSettingsStore()
 const { profile, isLoading, error, saveState } = storeToRefs(settingsStore)
 const { fetchSettings, saveSettings } = settingsStore
+const authStore = useAuthStore()
+const { canEditSettings } = storeToRefs(authStore)
+
+const saveIfAllowed = () => {
+  if (!canEditSettings.value) {
+    return
+  }
+
+  saveSettings()
+}
 
 onMounted(() => {
   fetchSettings()

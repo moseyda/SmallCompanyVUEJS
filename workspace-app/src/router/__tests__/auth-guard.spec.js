@@ -32,7 +32,8 @@ describe('auth route guard', () => {
       id: 'user_project_lead',
       name: 'Project Lead',
       email: 'lead@smallcompany.io',
-      role: 'admin'
+      role: 'admin',
+      permissions: ['settings:read', 'settings:write']
     })
 
     const router = createRouter({

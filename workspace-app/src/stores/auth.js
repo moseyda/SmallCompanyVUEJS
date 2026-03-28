@@ -26,7 +26,13 @@ export const useAuthStore = defineStore('auth', {
     initialized: false
   }),
   getters: {
-    isAuthenticated: (state) => Boolean(state.currentUser)
+    isAuthenticated: (state) => Boolean(state.currentUser),
+    hasPermission: (state) => (permission) => {
+      return Boolean(state.currentUser?.permissions?.includes(permission))
+    },
+    canEditSettings() {
+      return this.hasPermission('settings:write')
+    }
   },
   actions: {
     setUser(user) {

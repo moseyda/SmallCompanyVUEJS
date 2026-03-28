@@ -2,6 +2,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import { mount } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import Setting from '../Setting.vue'
+import { useAuthStore } from '../../stores/auth'
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0))
 
@@ -11,6 +12,15 @@ describe('Setting view', () => {
   })
 
   it('loads and saves settings through the API', async () => {
+    const authStore = useAuthStore()
+    authStore.setUser({
+      id: 'user_project_lead',
+      name: 'Project Lead',
+      email: 'lead@smallcompany.io',
+      role: 'admin',
+      permissions: ['settings:read', 'settings:write']
+    })
+
     const fetchSpy = vi.spyOn(global, 'fetch')
 
     fetchSpy.mockResolvedValueOnce({

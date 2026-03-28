@@ -91,8 +91,15 @@ From `workspace-app/`:
 
 ## Demo Sign-In
 
-- Email: `lead@smallcompany.io`
-- Password: `Passw0rd!`
+- Admin: `lead@smallcompany.io` / `Passw0rd!`
+- Editor: `editor@smallcompany.io` / `Passw0rd!`
+- Viewer: `viewer@smallcompany.io` / `Passw0rd!`
+
+Role capabilities:
+
+- `admin`: view and edit settings
+- `editor`: view and edit settings
+- `viewer`: view settings in read-only mode
 
 ## Project Structure
 
