@@ -22,6 +22,12 @@ v-for="item in group.items"
 :key="item.path"
 :to="item.path"
 class="button"
+:data-tooltip="item.label"
+:aria-label="!isSidebarExpanded ? item.label : undefined"
+@mouseenter="showTooltip($event, item.label)"
+@mouseleave="hideTooltip"
+@focus="showTooltip($event, item.label)"
+@blur="hideTooltip"
 @click="closeMobileMenu"
 >
 <span class="icon material-icons">{{ item.icon }}</span>
@@ -117,10 +123,21 @@ class="theme-option"
 </div>
 </aside>
 
+<transition name="sidebar-tooltip">
+<div
+v-if="isTooltipVisible"
+class="sidebar-hover-tooltip"
+:style="tooltipStyle"
+>
+{{ tooltipLabel }}
+</div>
+</transition>
+
 <button class="mobile-trigger" @click="toggleMobileMenu" aria-label="Toggle menu">Menu</button>
 </template>
 
 <script setup>
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import logoURL from '../assets/vue.svg'
 import { useUiStore } from '../stores/ui'
@@ -149,6 +166,44 @@ items: [
 const uiStore = useUiStore()
 const { isSidebarExpanded, isMobileMenuOpen, theme, density, motion } = storeToRefs(uiStore)
 const { toggleSidebar, toggleMobileMenu, closeMobileMenu, setTheme, setDensity, setMotion } = uiStore
+
+const tooltipLabel = ref('')
+const tooltipX = ref(0)
+const tooltipY = ref(0)
+const isTooltipVisible = ref(false)
+const tooltipStyle = computed(() => ({
+left: `${tooltipX.value}px`,
+top: `${tooltipY.value}px`
+}))
+
+function canShowTooltip() {
+return !isSidebarExpanded.value && window.matchMedia('(hover: hover)').matches
+}
+
+function updateTooltipPosition(event) {
+const target = event.currentTarget
+if (!target || typeof target.getBoundingClientRect !== 'function') {
+return
+}
+
+const rect = target.getBoundingClientRect()
+tooltipX.value = rect.right + 10
+tooltipY.value = rect.top + rect.height / 2
+}
+
+function showTooltip(event, label) {
+if (!canShowTooltip()) {
+return
+}
+
+tooltipLabel.value = label
+updateTooltipPosition(event)
+isTooltipVisible.value = true
+}
+
+function hideTooltip() {
+isTooltipVisible.value = false
+}
 </script>
 
 <style lang="scss" scoped>
@@ -427,6 +482,35 @@ bottom: 0;
 
 .mobile-trigger {
 display: none;
+}
+
+.sidebar-hover-tooltip {
+position: fixed;
+transform: translateY(-50%);
+padding: 0.36rem 0.62rem;
+border-radius: 9px;
+border: 1px solid color-mix(in srgb, var(--line-soft) 74%, white 26%);
+background: color-mix(in srgb, var(--sidebar-panel-bg) 94%, black 6%);
+color: var(--sidebar-panel-text);
+box-shadow: 0 10px 22px rgba(2, 9, 17, 0.34);
+font-size: 0.78rem;
+font-weight: 600;
+letter-spacing: 0.01em;
+line-height: 1;
+white-space: nowrap;
+pointer-events: none;
+z-index: 40;
+}
+
+.sidebar-tooltip-enter-active,
+.sidebar-tooltip-leave-active {
+transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.sidebar-tooltip-enter-from,
+.sidebar-tooltip-leave-to {
+opacity: 0;
+transform: translate(-8px, -50%) scale(0.98);
 }
 
 @media (max-width: 860px) {
