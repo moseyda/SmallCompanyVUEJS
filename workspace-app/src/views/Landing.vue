@@ -298,7 +298,7 @@ const scrollToPricing = () => {
 
 .landing {
   width: 100%;
-  background: #ffffff;
+  background: linear-gradient(135deg, #f0f9ff 0%, #f9fafb 50%, #fef3c7 100%);
   color: #1f2937;
   overflow-x: hidden;
 }
@@ -308,7 +308,7 @@ const scrollToPricing = () => {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.85);
   border-bottom: 1px solid #e5e7eb;
   backdrop-filter: blur(10px);
 }
@@ -374,7 +374,7 @@ const scrollToPricing = () => {
 /* Hero Section */
 .hero-section {
   padding: 6rem 2rem;
-  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  background: transparent;
 }
 
 .hero-container {
@@ -479,7 +479,7 @@ const scrollToPricing = () => {
 }
 
 .visual-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -537,7 +537,7 @@ const scrollToPricing = () => {
   margin: 0 auto;
   text-align: center;
   padding: 2rem 2rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid rgba(229, 231, 235, 0.5);
 }
 
 .trust-label {
@@ -592,7 +592,7 @@ const scrollToPricing = () => {
 /* Features Section */
 .features-section {
   padding: 6rem 2rem;
-  background: white;
+  background: transparent;
 }
 
 .features-grid {
@@ -603,7 +603,7 @@ const scrollToPricing = () => {
 
 .feature-card {
   padding: 2rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   transition: all 0.3s;
@@ -648,7 +648,7 @@ const scrollToPricing = () => {
 /* Comparison Section */
 .comparison-section {
   padding: 4rem 2rem;
-  background: #f9fafb;
+  background: transparent;
 }
 
 .comparison-section h2 {
@@ -701,7 +701,7 @@ const scrollToPricing = () => {
 /* Pricing Section */
 .pricing-section {
   padding: 6rem 2rem;
-  background: white;
+  background: transparent;
 }
 
 .pricing-grid {
@@ -712,7 +712,7 @@ const scrollToPricing = () => {
 
 .pricing-card {
   padding: 2rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   position: relative;
@@ -727,7 +727,7 @@ const scrollToPricing = () => {
 
 .pricing-card.featured {
   border-color: #2563eb;
-  background: #fafbff;
+  background: rgba(250, 251, 255, 0.95);
   border-width: 2px;
 }
 
@@ -816,7 +816,7 @@ const scrollToPricing = () => {
 /* FAQ Section */
 .faq-section {
   padding: 6rem 2rem;
-  background: #f9fafb;
+  background: transparent;
 }
 
 .faq-section h2 {
@@ -835,7 +835,7 @@ const scrollToPricing = () => {
 
 .faq-item {
   padding: 1.5rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   border: 1px solid #e5e7eb;
 }
