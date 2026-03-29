@@ -507,42 +507,6 @@ const formatDate = (date) => {
   transform: translateY(-4px);
 }
 
-.vulnerability-item.priority-critical {
-  border-left: 5px solid #dc2626;
-}
-
-.vulnerability-item.priority-critical:hover {
-  border-left-color: #b91c1c;
-  box-shadow: 0 12px 32px rgba(220, 38, 38, 0.15);
-}
-
-.vulnerability-item.priority-high {
-  border-left: 5px solid #ea580c;
-}
-
-.vulnerability-item.priority-high:hover {
-  border-left-color: #c2410c;
-  box-shadow: 0 12px 32px rgba(234, 88, 12, 0.15);
-}
-
-.vulnerability-item.priority-medium {
-  border-left: 5px solid #eab308;
-}
-
-.vulnerability-item.priority-medium:hover {
-  border-left-color: #ca8a04;
-  box-shadow: 0 12px 32px rgba(234, 179, 8, 0.12);
-}
-
-.vulnerability-item.priority-low {
-  border-left: 5px solid #22c55e;
-}
-
-.vulnerability-item.priority-low:hover {
-  border-left-color: #15803d;
-  box-shadow: 0 12px 32px rgba(34, 197, 94, 0.12);
-}
-
 /* Item Header */
 .item-header {
   display: flex;
