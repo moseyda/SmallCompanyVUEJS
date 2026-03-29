@@ -117,20 +117,11 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background:
-    radial-gradient(circle at 10% 5%, rgba(255, 210, 190, 0.78), transparent 35%),
-    radial-gradient(circle at 90% 20%, rgba(151, 230, 221, 0.85), transparent 33%),
-    radial-gradient(circle at 50% 100%, rgba(170, 212, 255, 0.8), transparent 45%),
-    linear-gradient(130deg, #eef8ff 0%, #f8fdf6 34%, #fff4e9 100%);
-  background-attachment: fixed;
+  background: #fafbfc;
 }
 
 :root[data-theme='dark'] body {
-  background:
-    radial-gradient(circle at 8% 10%, rgba(24, 78, 120, 0.45), transparent 34%),
-    radial-gradient(circle at 90% 18%, rgba(11, 146, 130, 0.34), transparent 36%),
-    radial-gradient(circle at 52% 96%, rgba(120, 73, 153, 0.3), transparent 48%),
-    linear-gradient(130deg, #0a1422 0%, #0f1d2f 45%, #13273d 100%);
+  background: #0d1520;
 }
 
 h1,
@@ -158,32 +149,6 @@ textarea {
   display: flex;
   min-height: 100vh;
   position: relative;
-}
-
-.app-shell::before,
-.app-shell::after {
-  content: "";
-  position: fixed;
-  z-index: -1;
-  width: 40vw;
-  height: 40vw;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.35;
-  animation: drift 14s ease-in-out infinite;
-}
-
-.app-shell::before {
-  background: var(--brand-sky);
-  top: -12vw;
-  right: -10vw;
-}
-
-.app-shell::after {
-  background: var(--brand-coral);
-  bottom: -14vw;
-  left: -12vw;
-  animation-delay: 2.2s;
 }
 
 .app-main {
@@ -354,16 +319,6 @@ textarea {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes drift {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-16px) scale(1.06);
   }
 }
 
