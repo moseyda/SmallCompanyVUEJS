@@ -50,7 +50,7 @@
         </div>
 
         <!-- Comments Section -->
-        <expand-transition>
+        <transition name="expand">
           <div v-if="expandedComments.includes(issue.id)" class="comments-section">
             <div v-if="issue.comments?.length" class="comments-list">
               <div v-for="comment in issue.comments" :key="comment.id" class="comment">
@@ -74,7 +74,7 @@
               </button>
             </div>
           </div>
-        </expand-transition>
+        </transition>
       </div>
     </div>
 
@@ -584,6 +584,36 @@ const resetForm = () => {
     &:hover {
       background: var(--bg-primary);
     }
+  }
+}
+
+.expand-enter-active {
+  animation: expandIn 0.3s ease;
+}
+
+.expand-leave-active {
+  animation: expandOut 0.3s ease;
+}
+
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+@keyframes expandOut {
+  from {
+    opacity: 1;
+    max-height: 1000px;
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
   }
 }
 </style>
