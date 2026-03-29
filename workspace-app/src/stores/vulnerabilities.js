@@ -75,85 +75,14 @@ export const useVulnerabilitiesStore = defineStore('vulnerabilities', {
   },
 
   actions: {
-    // Load vulnerabilities (mock implementation)
+    // Load vulnerabilities from API
     async loadVulnerabilities() {
       this.isLoading = true
       this.error = null
       
       try {
-        // Mock data - replace with actual API call
-        this.vulnerabilities = [
-          {
-            id: 'vuln-001',
-            title: 'SQL Injection in Login Form',
-            description: 'User input is not properly sanitized before being used in SQL queries',
-            severity: 'critical',
-            priority: 'critical',
-            status: 'open',
-            cveId: 'CVE-2024-1234',
-            affectedComponent: 'auth/login',
-            detectedDate: new Date('2024-03-01'),
-            codeSnippets: [
-              {
-                file: 'src/auth/login.js',
-                language: 'javascript',
-                lineStart: 45,
-                lineEnd: 52,
-                code: `const query = \`SELECT * FROM users WHERE username = '\${username}' AND password = '\${password}'\`;
-const result = await db.query(query);`
-              }
-            ],
-            suggestedFix: 'Use parameterized queries with prepared statements to prevent SQL injection',
-            relatedVulnerabilities: ['vuln-002'],
-            dependencies: ['express', 'mysql2'],
-            historicalData: {
-              firstDetected: '2024-03-01',
-              frequency: 3,
-              similar: 2
-            }
-          },
-          {
-            id: 'vuln-002',
-            title: 'Cross-Site Scripting (XSS)',
-            description: 'User-supplied data is rendered without proper escaping',
-            severity: 'high',
-            priority: 'high',
-            status: 'in-progress',
-            cveId: 'CVE-2024-5678',
-            affectedComponent: 'comments/display',
-            detectedDate: new Date('2024-03-05'),
-            codeSnippets: [
-              {
-                file: 'src/components/CommentDisplay.vue',
-                language: 'vue',
-                lineStart: 12,
-                lineEnd: 18,
-                code: `<div class="comment-text">
-  {{ comment.text }}
-</div>`
-              }
-            ],
-            suggestedFix: 'Use Vue\'s built-in XSS protection or sanitize with DOMPurify',
-            relatedVulnerabilities: ['vuln-001'],
-            dependencies: ['vue'],
-            historicalData: {
-              firstDetected: '2024-02-15',
-              frequency: 5,
-              similar: 1
-            }
-          }
-        ]
-        
-        // Initialize issues and remediations
-        this.vulnerabilities.forEach(v => {
-          if (!this.issues[v.id]) {
-            this.issues[v.id] = []
-          }
-          if (!this.remediations[v.id]) {
-            this.remediations[v.id] = null
-          }
-        })
-        
+        const response = await api.getVulnerabilities()
+        this.vulnerabilities = response.vulnerabilities || []
       } catch (err) {
         this.error = err.message
       } finally {
@@ -161,22 +90,18 @@ const result = await db.query(query);`
       }
     },
 
-    // Load specific vulnerability details
+    // Load specific vulnerability details from API
     async loadVulnerabilityDetails(vulnId) {
       this.isLoading = true
       this.error = null
       
       try {
-        const vuln = this.getVulnerabilityById(vulnId)
-        if (vuln) {
-          this.currentVulnerability = vuln
-          
-          // Load related issues
-          await this.loadIssuesForVulnerability(vulnId)
-          
-          // Load remediation info
-          await this.loadRemediationForVulnerability(vulnId)
-        }
+        const vulnResponse = await api.getVulnerability(vulnId)
+        this.currentVulnerability = vulnResponse.vulnerability
+        
+        // Load related issues and remediations
+        await this.loadIssuesForVulnerability(vulnId)
+        await this.loadRemediationForVulnerability(vulnId)
       } catch (err) {
         this.error = err.message
       } finally {
@@ -184,137 +109,94 @@ const result = await db.query(query);`
       }
     },
 
-    // Load issues for a vulnerability
+    // Load issues for a vulnerability from API
     async loadIssuesForVulnerability(vulnId) {
-      // Mock issues - replace with API call
-      this.issues[vulnId] = [
-        {
-          id: `issue-${vulnId}-001`,
-          vulnId,
-          title: 'Implement prepared statements',
-          description: 'Convert all database queries to use parameterized/prepared statements',
-          assignedTo: 'Alice Johnson',
-          status: 'open',
-          priority: 'critical',
-          dueDate: new Date('2024-03-15'),
-          createdDate: new Date('2024-03-01'),
-          updatedDate: new Date('2024-03-08'),
-          relatedIssueUrl: null,
-          comments: []
-        },
-        {
-          id: `issue-${vulnId}-002`,
-          vulnId,
-          title: 'Code review for database layer',
-          description: 'Review all database queries for potential injection vulnerabilities',
-          assignedTo: 'Bob Smith',
-          status: 'open',
-          priority: 'high',
-          dueDate: new Date('2024-03-20'),
-          createdDate: new Date('2024-03-01'),
-          updatedDate: new Date('2024-03-07'),
-          relatedIssueUrl: null,
-          comments: []
-        }
-      ]
+      try {
+        const response = await api.getIssues(vulnId)
+        this.issues[vulnId] = response.issues || []
+      } catch (err) {
+        this.error = err.message
+      }
     },
 
-    // Load remediation for a vulnerability
+    // Load remediation for a vulnerability from API
     async loadRemediationForVulnerability(vulnId) {
-      const vuln = this.getVulnerabilityById(vulnId)
-      if (vuln) {
-        this.remediations[vulnId] = {
-          id: `rem-${vulnId}`,
-          vulnId,
-          status: 'draft',  // draft, proposed, in-progress, completed
-          progress: 30,
-          suggestedFixes: [
-            {
-              id: 'fix-001',
-              title: 'Primary: Use Prepared Statements',
-              description: 'Convert raw SQL to parameterized queries using mysql2/promise',
-              complexity: 'medium',
-              estimatedTime: '2 hours',
-              confidence: 0.95
-            },
-            {
-              id: 'fix-002',
-              title: 'Alternative: ORM Migration',
-              description: 'Migrate database layer to TypeORM or Prisma',
-              complexity: 'high',
-              estimatedTime: '20 hours',
-              confidence: 0.90
-            }
-          ],
-          appliedFix: null,
-          pullRequests: [],
-          beforeCode: vuln.codeSnippets[0]?.code || '',
-          afterCode: null,
-          mergeRequestIntegration: {
-            platform: 'github',
-            enabled: false,
-            autoCreate: false
-          }
-        }
+      try {
+        const response = await api.getRemediation(vulnId)
+        this.remediations[vulnId] = response.remediation || null
+      } catch (err) {
+        this.error = err.message
       }
     },
 
     // Update issue status
-    updateIssueStatus(vulnId, issueId, newStatus) {
-      const issues = this.issues[vulnId] || []
-      const issue = issues.find(i => i.id === issueId)
-      if (issue) {
-        issue.status = newStatus
-        issue.updatedDate = new Date()
+    async updateIssueStatus(vulnId, issueId, newStatus) {
+      try {
+        const response = await api.updateIssue(vulnId, issueId, { status: newStatus })
+        const issues = this.issues[vulnId] || []
+        const issue = issues.find(i => i.id === issueId)
+        if (issue && response.issue) {
+          Object.assign(issue, response.issue)
+        }
+      } catch (err) {
+        this.error = err.message
       }
     },
 
     // Update issue assignment
-    updateIssueAssignment(vulnId, issueId, assignedTo) {
-      const issues = this.issues[vulnId] || []
-      const issue = issues.find(i => i.id === issueId)
-      if (issue) {
-        issue.assignedTo = assignedTo
-        issue.updatedDate = new Date()
+    async updateIssueAssignment(vulnId, issueId, assignedTo) {
+      try {
+        const response = await api.updateIssue(vulnId, issueId, { assignedTo })
+        const issues = this.issues[vulnId] || []
+        const issue = issues.find(i => i.id === issueId)
+        if (issue && response.issue) {
+          Object.assign(issue, response.issue)
+        }
+      } catch (err) {
+        this.error = err.message
       }
     },
 
     // Add comment to issue
-    addCommentToIssue(vulnId, issueId, comment) {
-      const issues = this.issues[vulnId] || []
-      const issue = issues.find(i => i.id === issueId)
-      if (issue) {
-        issue.comments.push({
-          id: `comment-${Date.now()}`,
-          author: 'Current User',
-          text: comment,
-          timestamp: new Date(),
-          edited: false
-        })
+    async addCommentToIssue(vulnId, issueId, comment) {
+      try {
+        const response = await api.addComment(vulnId, issueId, { text: comment })
+        const issues = this.issues[vulnId] || []
+        const issue = issues.find(i => i.id === issueId)
+        if (issue && response.comment) {
+          issue.comments = issue.comments || []
+          issue.comments.push(response.comment)
+        }
+      } catch (err) {
+        this.error = err.message
       }
     },
 
     // Update vulnerability status
-    updateVulnerabilityStatus(vulnId, newStatus) {
-      const vuln = this.getVulnerabilityById(vulnId)
-      if (vuln) {
-        vuln.status = newStatus
+    async updateVulnerabilityStatus(vulnId, newStatus) {
+      try {
+        const response = await api.updateVulnerability(vulnId, { status: newStatus })
+        const vuln = this.getVulnerabilityById(vulnId)
+        if (vuln && response.vulnerability) {
+          Object.assign(vuln, response.vulnerability)
+        }
+      } catch (err) {
+        this.error = err.message
       }
     },
 
     // Create merge request for remediation
     async createMergeRequest(vulnId, fixId, branchName) {
       try {
-        const remediation = this.remediations[vulnId]
-        if (remediation) {
-          remediation.pullRequests.push({
-            id: `pr-${Date.now()}`,
-            platform: 'github',
-            url: `https://github.com/example/repo/pull/new/${branchName}`,
-            status: 'draft',
-            createdDate: new Date()
-          })
-          remediation.status = 'in-progress'
+        const response = await api.createMergeRequest(vulnId, {
+          branchName,
+          fixId
+        })
+        if (this.remediations[vulnId] && response.pullRequest) {
+          this.remediations[vulnId].pullRequests = 
+            this.remediations[vulnId].pullRequests || []
+          this.remediations[vulnId].pullRequests.push(response.pullRequest)
+          this.remediations[vulnId].status = 'in-progress'
         }
         return true
       } catch (err) {
@@ -324,9 +206,14 @@ const result = await db.query(query);`
     },
 
     // Update remediation progress
-    updateRemediationProgress(vulnId, newProgress) {
-      if (this.remediations[vulnId]) {
-        this.remediations[vulnId].progress = Math.min(100, Math.max(0, newProgress))
+    async updateRemediationProgress(vulnId, newProgress) {
+      try {
+        const response = await api.updateRemediation(vulnId, { progress: newProgress })
+        if (this.remediations[vulnId] && response.remediation) {
+          Object.assign(this.remediations[vulnId], response.remediation)
+        }
+      } catch (err) {
+        this.error = err.message
       }
     },
 

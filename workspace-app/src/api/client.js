@@ -54,5 +54,47 @@ export const api = {
     request('/api/inquiries', {
       method: 'POST',
       body: JSON.stringify(inquiry)
+    }),
+
+  // Vulnerabilities
+  getVulnerabilities: () => request('/api/vulnerabilities'),
+  getVulnerability: (id) => request(`/api/vulnerabilities/${id}`),
+  updateVulnerability: (id, data) =>
+    request(`/api/vulnerabilities/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data)
+    }),
+
+  // Issues
+  getIssues: (vulnId) => request(`/api/vulnerabilities/${vulnId}/issues`),
+  createIssue: (vulnId, issue) =>
+    request(`/api/vulnerabilities/${vulnId}/issues`, {
+      method: 'POST',
+      body: JSON.stringify(issue)
+    }),
+  updateIssue: (vulnId, issueId, data) =>
+    request(`/api/vulnerabilities/${vulnId}/issues/${issueId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data)
+    }),
+
+  // Comments
+  addComment: (vulnId, issueId, comment) =>
+    request(`/api/vulnerabilities/${vulnId}/issues/${issueId}/comments`, {
+      method: 'POST',
+      body: JSON.stringify(comment)
+    }),
+
+  // Remediation
+  getRemediation: (id) => request(`/api/vulnerabilities/${id}/remediation`),
+  updateRemediation: (id, data) =>
+    request(`/api/vulnerabilities/${id}/remediation`, {
+      method: 'PATCH',
+      body: JSON.stringify(data)
+    }),
+  createMergeRequest: (id, data) =>
+    request(`/api/vulnerabilities/${id}/remediation/merge-request`, {
+      method: 'POST',
+      body: JSON.stringify(data)
     })
 }
