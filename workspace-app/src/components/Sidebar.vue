@@ -174,7 +174,8 @@ items: [
 { path: '/dashboard', label: 'Overview', icon: 'home' },
 { path: '/work', label: 'Work', icon: 'work_outline' },
 { path: '/services', label: 'Services', icon: 'construction' },
-{ path: '/insights', label: 'Insights', icon: 'insights' }
+{ path: '/insights', label: 'Insights', icon: 'insights' },
+{ path: '/vulnerabilities', label: 'Vulnerabilities', icon: 'security' }
 ]
 },
 {
