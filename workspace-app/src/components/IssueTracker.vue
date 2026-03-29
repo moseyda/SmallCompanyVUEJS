@@ -249,16 +249,17 @@ const resetForm = () => {
 }
 
 .issue-card {
-  background: var(--bg-tertiary);
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 20px;
   transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .issue-card:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .issue-header {
@@ -272,7 +273,7 @@ const resetForm = () => {
 .issue-header h3 {
   margin: 0;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
   flex: 1;
 }
@@ -284,56 +285,60 @@ const resetForm = () => {
 
 .status-badge,
 .priority-badge {
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
-.status-badge {
-  &.status-open {
-    background: #fee2e2;
-    color: #991b1b;
-  }
-  &.status-in-progress {
-    background: #fef3c7;
-    color: #92400e;
-  }
-  &.status-fixed {
-    background: #d1fae5;
-    color: #065f46;
-  }
-  &.status-closed {
-    background: #e5e7eb;
-    color: #374151;
-  }
+.status-badge.status-open {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
-.priority-badge {
-  &.priority-critical {
-    background: #fecaca;
-    color: #991b1b;
-  }
-  &.priority-high {
-    background: #fed7aa;
-    color: #92400e;
-  }
-  &.priority-medium {
-    background: #fef08a;
-    color: #713f12;
-  }
-  &.priority-low {
-    background: #dcfce7;
-    color: #166534;
-  }
+.status-badge.status-in-progress {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.status-fixed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.status-closed {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.priority-badge.priority-critical {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.priority-badge.priority-high {
+  background: #fed7aa;
+  color: #92400e;
+}
+
+.priority-badge.priority-medium {
+  background: #fef08a;
+  color: #713f12;
+}
+
+.priority-badge.priority-low {
+  background: #dcfce7;
+  color: #166534;
 }
 
 .issue-description {
   color: var(--text-secondary);
   font-size: 14px;
-  line-height: 1.5;
-  margin: 0 0 12px 0;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
 }
 
 .issue-meta {
@@ -354,7 +359,7 @@ const resetForm = () => {
 
 .meta-item label {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--text-secondary);
   letter-spacing: 0.5px;
@@ -363,40 +368,45 @@ const resetForm = () => {
 .meta-item span {
   font-size: 14px;
   color: var(--text-primary);
+  font-weight: 500;
 }
 
 .issue-actions {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 16px;
   flex-wrap: wrap;
 }
 
 .action-btn {
-  padding: 8px 12px;
-  border-radius: 4px;
+  padding: 10px 16px;
+  border-radius: 6px;
   border: none;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   background: var(--color-primary);
   color: white;
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 
-  &:hover {
-    opacity: 0.9;
-  }
+.action-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
 
-  &.secondary {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
+.action-btn.secondary {
+  background: #f0f2f5;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
 
-    &:hover {
-      background: var(--bg-primary);
-    }
-  }
+.action-btn.secondary:hover {
+  background: #e8eaed;
+  border-color: var(--color-primary);
 }
 
 .comment-count {
@@ -418,9 +428,9 @@ const resetForm = () => {
 }
 
 .comment {
-  background: var(--bg-secondary);
+  background: #fafbfc;
   padding: 12px;
-  border-radius: 4px;
+  border-radius: 6px;
   border-left: 3px solid var(--color-primary);
 }
 
@@ -434,7 +444,7 @@ const resetForm = () => {
 
 .comment-author {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
@@ -447,7 +457,7 @@ const resetForm = () => {
   margin: 0;
   font-size: 13px;
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .add-comment {
@@ -459,15 +469,17 @@ const resetForm = () => {
   flex: 1;
   padding: 10px 12px;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 13px;
-  background: var(--bg-secondary);
+  background: #fafbfc;
   color: var(--text-primary);
+  font-family: inherit;
+}
 
-  &:focus {
-    outline: none;
-    border-color: var(--color-primary);
-  }
+.comment-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: #ffffff;
 }
 
 .comment-submit {
@@ -475,39 +487,43 @@ const resetForm = () => {
   background: var(--color-primary);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 
-  &:hover {
-    opacity: 0.9;
-  }
+.comment-submit:hover {
+  opacity: 0.9;
 }
 
 .empty-state {
   text-align: center;
-  padding: 32px 24px;
+  padding: 40px 24px;
   color: var(--text-secondary);
 }
 
 .empty-state p {
   margin: 0 0 16px 0;
   font-size: 14px;
+  line-height: 1.6;
 }
 
 .add-issue-form {
-  background: var(--bg-tertiary);
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 20px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .add-issue-form h3 {
-  margin: 0 0 16px 0;
+  margin: 0 0 20px 0;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--text-primary);
   letter-spacing: 0.5px;
@@ -520,9 +536,11 @@ const resetForm = () => {
 .form-group label {
   display: block;
   font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 6px;
+  font-weight: 700;
+  margin-bottom: 8px;
   color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .form-group input,
@@ -531,17 +549,19 @@ const resetForm = () => {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 13px;
-  background: var(--bg-secondary);
+  background: #fafbfc;
   color: var(--text-primary);
   font-family: inherit;
+}
 
-  &:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    background: var(--bg-primary);
-  }
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: #ffffff;
 }
 
 .form-row {
@@ -553,37 +573,41 @@ const resetForm = () => {
 .form-actions {
   display: flex;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
 .form-actions button {
   flex: 1;
-  padding: 10px 16px;
-  border-radius: 4px;
+  padding: 12px 16px;
+  border-radius: 6px;
   border: none;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 
-  &:first-child {
-    background: var(--color-primary);
-    color: white;
+.form-actions button:first-child {
+  background: var(--color-primary);
+  color: white;
+}
 
-    &:hover {
-      opacity: 0.9;
-    }
-  }
+.form-actions button:first-child:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
 
-  &.secondary {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
+.form-actions button.secondary {
+  background: #f0f2f5;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
 
-    &:hover {
-      background: var(--bg-primary);
-    }
-  }
+.form-actions button.secondary:hover {
+  background: #e8eaed;
+  border-color: var(--color-primary);
 }
 
 .expand-enter-active {
