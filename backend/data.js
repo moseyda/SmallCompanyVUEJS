@@ -151,6 +151,99 @@ export const workspaceData = {
   ]
 }
 
+export const vulnerabilityData = [
+  {
+    id: 'vuln-001',
+    title: 'SQL Injection in Login Form',
+    description: 'User input is not properly sanitized before being used in SQL queries',
+    severity: 'critical',
+    priority: 'critical',
+    status: 'open',
+    cveId: 'CVE-2024-1234',
+    affectedComponent: 'auth/login',
+    detectedDate: new Date('2024-03-01'),
+    codeSnippets: [
+      {
+        file: 'src/auth/login.js',
+        language: 'javascript',
+        lineStart: 45,
+        lineEnd: 52,
+        code: `const query = \`SELECT * FROM users WHERE username = '\${username}' AND password = '\${password}'\`;
+const result = await db.query(query);`
+      }
+    ],
+    suggestedFix: 'Use parameterized queries with prepared statements to prevent SQL injection',
+    relatedVulnerabilities: ['vuln-002'],
+    dependencies: ['express', 'mysql2'],
+    historicalData: {
+      firstDetected: '2024-03-01',
+      frequency: 3,
+      similar: 2
+    }
+  },
+  {
+    id: 'vuln-002',
+    title: 'Cross-Site Scripting (XSS)',
+    description: 'User-supplied data is rendered without proper escaping in comment display',
+    severity: 'high',
+    priority: 'high',
+    status: 'in-progress',
+    cveId: 'CVE-2024-5678',
+    affectedComponent: 'comments/display',
+    detectedDate: new Date('2024-03-05'),
+    codeSnippets: [
+      {
+        file: 'src/components/CommentDisplay.vue',
+        language: 'vue',
+        lineStart: 12,
+        lineEnd: 18,
+        code: `<div class="comment-text">
+  {{ comment.text }}
+</div>`
+      }
+    ],
+    suggestedFix: 'Use Vue\'s built-in XSS protection or sanitize with DOMPurify',
+    relatedVulnerabilities: ['vuln-001'],
+    dependencies: ['vue'],
+    historicalData: {
+      firstDetected: '2024-02-15',
+      frequency: 5,
+      similar: 1
+    }
+  },
+  {
+    id: 'vuln-003',
+    title: 'Insecure Direct Object Reference (IDOR)',
+    description: 'API endpoints lack proper authorization checks allowing users to access unauthorized resources',
+    severity: 'high',
+    priority: 'high',
+    status: 'open',
+    cveId: 'CVE-2024-9012',
+    affectedComponent: 'api/users',
+    detectedDate: new Date('2024-03-10'),
+    codeSnippets: [
+      {
+        file: 'src/api/users.js',
+        language: 'javascript',
+        lineStart: 28,
+        lineEnd: 35,
+        code: `app.get('/api/users/:id', (req, res) => {
+  const user = UserModel.findById(req.params.id);
+  res.json(user);
+});`
+      }
+    ],
+    suggestedFix: 'Implement proper authorization checks to verify current user has access to requested resource',
+    relatedVulnerabilities: [],
+    dependencies: ['express'],
+    historicalData: {
+      firstDetected: '2024-03-10',
+      frequency: 1,
+      similar: 0
+    }
+  }
+]
+
 export const defaultSettings = {
   name: 'Security Lead',
   email: 'security@codebase.io',

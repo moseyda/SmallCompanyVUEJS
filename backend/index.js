@@ -1,6 +1,6 @@
 import express from 'express'
 import { fileURLToPath } from 'node:url'
-import { defaultSettings, workspaceData } from './data.js'
+import { defaultSettings, workspaceData, vulnerabilityData } from './data.js'
 
 const port = 8787
 const demoUsers = [
@@ -46,6 +46,78 @@ export function createApp() {
   const app = express()
   let workspaceSettings = { ...defaultSettings }
   let currentSessionUser = null
+  
+  // Vulnerability management state
+  let vulnerabilities = JSON.parse(JSON.stringify(vulnerabilityData))
+  let issues = {}  // vulnId -> array of issues
+  let remediations = {}  // vulnId -> remediation object
+  let comments = {}  // issueId -> array of comments
+
+  // Initialize issues, remediations, and comments for each vulnerability
+  vulnerabilities.forEach(v => {
+    issues[v.id] = [
+      {
+        id: `issue-${v.id}-001`,
+        vulnId: v.id,
+        title: 'Implement prepared statements',
+        description: 'Convert all database queries to use parameterized/prepared statements',
+        assignedTo: 'Alice Johnson',
+        status: 'open',
+        priority: 'critical',
+        dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+        createdDate: new Date(),
+        updatedDate: new Date(),
+        comments: []
+      },
+      {
+        id: `issue-${v.id}-002`,
+        vulnId: v.id,
+        title: 'Code review for security layer',
+        description: 'Review all queries for potential injection vulnerabilities',
+        assignedTo: 'Bob Smith',
+        status: 'open',
+        priority: 'high',
+        dueDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000),
+        createdDate: new Date(),
+        updatedDate: new Date(),
+        comments: []
+      }
+    ]
+
+    remediations[v.id] = {
+      id: `rem-${v.id}`,
+      vulnId: v.id,
+      status: 'draft',
+      progress: 30,
+      suggestedFixes: [
+        {
+          id: 'fix-001',
+          title: 'Primary: Use Prepared Statements',
+          description: 'Convert raw SQL to parameterized queries using mysql2/promise',
+          complexity: 'medium',
+          estimatedTime: '2 hours',
+          confidence: 0.95
+        },
+        {
+          id: 'fix-002',
+          title: 'Alternative: ORM Migration',
+          description: 'Migrate database layer to TypeORM or Prisma',
+          complexity: 'high',
+          estimatedTime: '20 hours',
+          confidence: 0.90
+        }
+      ],
+      appliedFix: null,
+      pullRequests: [],
+      beforeCode: v.codeSnippets[0]?.code || '',
+      afterCode: null,
+      mergeRequestIntegration: {
+        platform: 'github',
+        enabled: false,
+        autoCreate: false
+      }
+    }
+  })
 
   const requireAuth = (req, res, next) => {
     if (!currentSessionUser) {
@@ -165,6 +237,172 @@ export function createApp() {
     }
 
     res.status(201).json({ status: 'received' })
+  }))
+
+  // Vulnerability endpoints
+  app.get('/api/vulnerabilities', requireAuth, withLatency((req, res) => {
+    res.json({ vulnerabilities })
+  }))
+
+  app.get('/api/vulnerabilities/:id', requireAuth, withLatency((req, res) => {
+    const vuln = vulnerabilities.find(v => v.id === req.params.id)
+    if (!vuln) {
+      res.status(404).json({ error: 'Vulnerability not found' })
+      return
+    }
+    res.json({ vulnerability: vuln })
+  }))
+
+  app.patch('/api/vulnerabilities/:id', requireAuth, withLatency((req, res) => {
+    const vuln = vulnerabilities.find(v => v.id === req.params.id)
+    if (!vuln) {
+      res.status(404).json({ error: 'Vulnerability not found' })
+      return
+    }
+    
+    if (req.body.status) {
+      vuln.status = req.body.status
+    }
+    res.json({ vulnerability: vuln })
+  }))
+
+  // Issue endpoints (for vulnerabilities)
+  app.get('/api/vulnerabilities/:vulnId/issues', requireAuth, withLatency((req, res) => {
+    const vulnIssues = issues[req.params.vulnId] || []
+    res.json({ issues: vulnIssues })
+  }))
+
+  app.post('/api/vulnerabilities/:vulnId/issues', requireAuth, withLatency((req, res) => {
+    const { title, description, priority, assignedTo, dueDate } = req.body ?? {}
+    
+    if (!title) {
+      res.status(400).json({ error: 'Issue title is required' })
+      return
+    }
+
+    if (!issues[req.params.vulnId]) {
+      issues[req.params.vulnId] = []
+    }
+
+    const newIssue = {
+      id: `issue-${req.params.vulnId}-${Date.now()}`,
+      vulnId: req.params.vulnId,
+      title,
+      description: description || '',
+      assignedTo: assignedTo || null,
+      status: 'open',
+      priority: priority || 'medium',
+      dueDate: dueDate ? new Date(dueDate) : null,
+      createdDate: new Date(),
+      updatedDate: new Date(),
+      comments: []
+    }
+
+    issues[req.params.vulnId].push(newIssue)
+    res.status(201).json({ issue: newIssue })
+  }))
+
+  app.patch('/api/vulnerabilities/:vulnId/issues/:issueId', requireAuth, withLatency((req, res) => {
+    const vulnIssues = issues[req.params.vulnId]
+    if (!vulnIssues) {
+      res.status(404).json({ error: 'No issues found for this vulnerability' })
+      return
+    }
+
+    const issue = vulnIssues.find(i => i.id === req.params.issueId)
+    if (!issue) {
+      res.status(404).json({ error: 'Issue not found' })
+      return
+    }
+
+    if (req.body.status) issue.status = req.body.status
+    if (req.body.priority) issue.priority = req.body.priority
+    if (req.body.assignedTo) issue.assignedTo = req.body.assignedTo
+    if (req.body.dueDate) issue.dueDate = new Date(req.body.dueDate)
+    
+    issue.updatedDate = new Date()
+    res.json({ issue })
+  }))
+
+  // Comment endpoints (on issues)
+  app.post('/api/vulnerabilities/:vulnId/issues/:issueId/comments', requireAuth, withLatency((req, res) => {
+    const { text } = req.body ?? {}
+    
+    if (!text) {
+      res.status(400).json({ error: 'Comment text is required' })
+      return
+    }
+
+    const vulnIssues = issues[req.params.vulnId]
+    if (!vulnIssues) {
+      res.status(404).json({ error: 'No issues found for this vulnerability' })
+      return
+    }
+
+    const issue = vulnIssues.find(i => i.id === req.params.issueId)
+    if (!issue) {
+      res.status(404).json({ error: 'Issue not found' })
+      return
+    }
+
+    const newComment = {
+      id: `comment-${Date.now()}`,
+      author: currentSessionUser.name,
+      text,
+      timestamp: new Date(),
+      edited: false
+    }
+
+    issue.comments.push(newComment)
+    res.status(201).json({ comment: newComment })
+  }))
+
+  // Remediation endpoints
+  app.get('/api/vulnerabilities/:id/remediation', requireAuth, withLatency((req, res) => {
+    const remediation = remediations[req.params.id]
+    if (!remediation) {
+      res.status(404).json({ error: 'Remediation not found' })
+      return
+    }
+    res.json({ remediation })
+  }))
+
+  app.patch('/api/vulnerabilities/:id/remediation', requireAuth, withLatency((req, res) => {
+    const remediation = remediations[req.params.id]
+    if (!remediation) {
+      res.status(404).json({ error: 'Remediation not found' })
+      return
+    }
+
+    if (req.body.status) remediation.status = req.body.status
+    if (req.body.progress !== undefined) remediation.progress = req.body.progress
+    if (req.body.afterCode) remediation.afterCode = req.body.afterCode
+
+    res.json({ remediation })
+  }))
+
+  app.post('/api/vulnerabilities/:id/remediation/merge-request', requireAuth, withLatency((req, res) => {
+    const { platformUrl, branchName } = req.body ?? {}
+    const remediation = remediations[req.params.id]
+    
+    if (!remediation) {
+      res.status(404).json({ error: 'Remediation not found' })
+      return
+    }
+
+    const newPR = {
+      id: `pr-${Date.now()}`,
+      platform: 'github',
+      url: platformUrl || `https://github.com/example/repo/pull/new/${branchName || 'fix-vulnerability'}`,
+      status: 'draft',
+      createdDate: new Date()
+    }
+
+    remediation.pullRequests = remediation.pullRequests || []
+    remediation.pullRequests.push(newPR)
+    remediation.status = 'in-progress'
+
+    res.status(201).json({ pullRequest: newPR })
   }))
 
   app.use((error, req, res, next) => {
