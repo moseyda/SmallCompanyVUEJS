@@ -292,8 +292,8 @@ const formatDate = (date) => {
 }
 
 .search-box {
-  flex: 1;
-  min-width: 280px;
+  flex: 0.35;
+  min-width: 200px;
   position: relative;
 }
 
