@@ -359,7 +359,7 @@ const formatDate = (date) => {
 .view-toggle {
   display: flex;
   gap: 6px;
-  background: var(--bg-tertiary);
+  background: transparent;
   padding: 4px;
   border-radius: 8px;
   margin-left: auto;
@@ -383,7 +383,7 @@ const formatDate = (date) => {
   }
 
   &.active {
-    background: var(--bg-secondary);
+    background: #f0f2f5;
     color: var(--color-primary);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
