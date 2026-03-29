@@ -312,7 +312,7 @@ const formatDate = (date) => {
   padding: 10px 14px 10px 44px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: var(--bg-primary);
+  background: #f0f2f5;
   color: var(--text-primary);
   font-size: 14px;
   font-weight: 500;
@@ -339,7 +339,7 @@ const formatDate = (date) => {
   padding: 10px 12px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: var(--bg-primary);
+  background: #f0f2f5;
   color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
