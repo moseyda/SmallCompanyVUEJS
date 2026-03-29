@@ -52,6 +52,12 @@ export const routes = [
         meta: { title: 'Contact', requiresAuth: true }
     },
     {
+        path: '/vulnerabilities/:id',
+        name: 'vulnerability-detail',
+        component: () => import('../views/VulnerabilityDetail.vue'),
+        meta: { title: 'Vulnerability Details', requiresAuth: true }
+    },
+    {
         path: '/login',
         name: 'login',
         component: () => import('../views/Login.vue'),
