@@ -28,7 +28,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 
-defineProps({
+const props = defineProps({
   modelValue: {
     type: String,
     default: ''
@@ -136,19 +136,20 @@ const selectOption = (value) => {
   text-align: left;
   cursor: pointer;
   transition: all 0.15s ease;
+  font-family: inherit;
+}
 
-  &:hover {
-    background: #f0f2f5;
-    color: var(--color-primary);
-  }
+.dropdown-option:hover {
+  background: #f0f2f5;
+  color: var(--color-primary);
+}
 
-  &.active {
-    background: linear-gradient(90deg, #f0f2f5 0%, transparent 100%);
-    color: var(--color-primary);
-    font-weight: 700;
-    border-left: 3px solid var(--color-primary);
-    padding-left: 11px;
-  }
+.dropdown-option.active {
+  background: linear-gradient(90deg, #f0f2f5 0%, transparent 100%);
+  color: var(--color-primary);
+  font-weight: 700;
+  border-left: 3px solid var(--color-primary);
+  padding-left: 11px;
 }
 
 .dropdown-option:first-child {
