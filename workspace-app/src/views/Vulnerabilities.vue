@@ -19,28 +19,28 @@
         />
       </div>
       <div class="filters">
-        <select 
-          v-model="filterStatus" 
-          class="filter-select"
-          aria-label="Filter by status"
-        >
-          <option value="">All Status</option>
-          <option value="open">Open</option>
-          <option value="in-progress">In Progress</option>
-          <option value="fixed">Fixed</option>
-          <option value="closed">Closed</option>
-        </select>
-        <select 
-          v-model="filterPriority" 
-          class="filter-select"
-          aria-label="Filter by priority"
-        >
-          <option value="">All Priority</option>
-          <option value="critical">Critical</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
+        <FilterDropdown
+          v-model="filterStatus"
+          :options="[
+            { value: '', label: 'All Status' },
+            { value: 'open', label: 'Open' },
+            { value: 'in-progress', label: 'In Progress' },
+            { value: 'fixed', label: 'Fixed' },
+            { value: 'closed', label: 'Closed' }
+          ]"
+          label="Filter by status"
+        />
+        <FilterDropdown
+          v-model="filterPriority"
+          :options="[
+            { value: '', label: 'All Priority' },
+            { value: 'critical', label: 'Critical' },
+            { value: 'high', label: 'High' },
+            { value: 'medium', label: 'Medium' },
+            { value: 'low', label: 'Low' }
+          ]"
+          label="Filter by priority"
+        />
       </div>
       <div class="view-toggle" role="tablist" aria-label="View mode">
         <button
@@ -180,6 +180,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useVulnerabilitiesStore } from '../stores/vulnerabilities'
+import FilterDropdown from '../components/FilterDropdown.vue'
 
 const vulnStore = useVulnerabilitiesStore()
 
@@ -333,53 +334,77 @@ const formatDate = (date) => {
   display: flex;
   gap: 10px;
   align-items: center;
+  min-width: 0;
+}
+
+.filters > * {
+  flex: 1;
+  min-width: 140px;
 }
 
 .filter-select {
   padding: 10px 12px 10px 14px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: #f0f2f5 url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 8px center;
+  background-color: #f0f2f5;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
   background-size: 18px;
   padding-right: 32px;
   color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
+  font-family: inherit;
   cursor: pointer;
-  transition: all 0.2s;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  transition: all 0.2s ease;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
 
-  &:hover {
-    border-color: var(--color-primary);
-    background-color: #eaecf0;
-  }
+.filter-select::-ms-expand {
+  display: none;
+}
 
-  &:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
-    background-color: #f0f2f5;
-  }
+.filter-select:hover {
+  border-color: var(--color-primary);
+  background-color: #eaecf0;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230066cc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
 
-  &:focus-visible {
-    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
-  }
+.filter-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+  background-color: #f0f2f5;
+}
+
+.filter-select:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+}
+
+.filter-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .filter-select option {
   background: #ffffff;
   color: var(--text-primary);
-  padding: 10px;
+  padding: 12px;
   border: none;
   font-size: 13px;
   font-weight: 500;
+  line-height: 1.5;
 }
 
-.filter-select option:hover {
+.filter-select option:checked {
   background: #f0f2f5;
   color: var(--color-primary);
+  font-weight: 700;
 }
 
 .view-toggle {
