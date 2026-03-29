@@ -255,6 +255,7 @@ background: linear-gradient(180deg, var(--sidebar-bg-start), var(--sidebar-bg-en
 color: var(--sidebar-text);
 border-right: 1px solid var(--sidebar-border);
 transition: width 0.25s ease;
+z-index: 100;
 
 &.is-expanded {
 width: var(--sidebar-width);
