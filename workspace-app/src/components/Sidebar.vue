@@ -49,6 +49,10 @@ v-if="!isAuthenticated"
 to="/login"
 class="preferences-trigger auth-trigger"
 @click="closeMobileMenu"
+@mouseenter="showTooltip($event, 'Sign in')"
+@mouseleave="hideTooltip"
+@focus="showTooltip($event, 'Sign in')"
+@blur="hideTooltip"
 >
 <span class="material-icons">login</span>
 <span v-if="isSidebarExpanded">Sign in</span>
@@ -59,6 +63,10 @@ v-else
 type="button"
 class="preferences-trigger auth-trigger"
 @click="signOut"
+@mouseenter="showTooltip($event, 'Sign out')"
+@mouseleave="hideTooltip"
+@focus="showTooltip($event, 'Sign out')"
+@blur="hideTooltip"
 >
 <span class="material-icons">logout</span>
 <span v-if="isSidebarExpanded">Sign out</span>
