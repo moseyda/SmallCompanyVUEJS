@@ -193,19 +193,16 @@ const formatDate = (date) => {
 }
 
 const applySuggestion = (fix) => {
-  console.log('Applying fix:', fix)
-  // In a real app, this would prepare the fix and ask for branch name
+  // Prepare fix for application based on configuration
   emit('apply-fix', { fixId: fix.id, branchName: branchName.value })
 }
 
 const proposeRemediation = () => {
   vulnStore.remediations[props.vulnId].status = 'proposed'
-  console.log('Remediation proposed')
 }
 
 const startRemediation = () => {
   vulnStore.remediations[props.vulnId].status = 'in-progress'
-  console.log('Remediation started')
 }
 
 const createMergeRequest = async () => {

@@ -220,7 +220,6 @@ const submitNewIssue = () => {
   }
 
   // In a real app, this would call the store
-  console.log('Creating new issue:', newIssue.value)
   resetForm()
   emit('create-issue')
 }
