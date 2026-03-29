@@ -66,29 +66,37 @@
 
     <!-- Summary Statistics -->
     <div class="summary-stats">
-      <div class="stat-card">
-        <div class="stat-icon">🔴</div>
+      <div class="stat-card critical-card">
+        <div class="stat-icon critical-icon">
+          <span class="material-icons">error</span>
+        </div>
         <div class="stat-content">
           <div class="stat-value">{{ stats.critical }}</div>
           <div class="stat-label">Critical</div>
         </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon">🟠</div>
+      <div class="stat-card high-card">
+        <div class="stat-icon high-icon">
+          <span class="material-icons">warning</span>
+        </div>
         <div class="stat-content">
           <div class="stat-value">{{ stats.high }}</div>
           <div class="stat-label">High</div>
         </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon">🟡</div>
+      <div class="stat-card medium-card">
+        <div class="stat-icon medium-icon">
+          <span class="material-icons">info</span>
+        </div>
         <div class="stat-content">
           <div class="stat-value">{{ stats.medium }}</div>
           <div class="stat-label">Medium</div>
         </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon">🟢</div>
+      <div class="stat-card low-card">
+        <div class="stat-icon low-icon">
+          <span class="material-icons">task_alt</span>
+        </div>
         <div class="stat-content">
           <div class="stat-value">{{ stats.low }}</div>
           <div class="stat-label">Low</div>
@@ -407,6 +415,36 @@ const formatDate = (date) => {
 .stat-icon {
   font-size: 32px;
   min-width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+}
+
+.stat-icon .material-icons {
+  font-size: 28px;
+}
+
+.critical-icon {
+  background: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+}
+
+.high-icon {
+  background: rgba(234, 88, 12, 0.12);
+  color: #ea580c;
+}
+
+.medium-icon {
+  background: rgba(234, 179, 8, 0.12);
+  color: #eab308;
+}
+
+.low-icon {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
 }
 
 .stat-content {
