@@ -1,12 +1,12 @@
 <template>
   <div class="vulnerabilities-container">
-    <!-- Header -->
+    <!-- Header Section -->
     <div class="page-header">
       <h1>Vulnerabilities</h1>
       <p class="subtitle">Track and manage security vulnerabilities across your codebase</p>
     </div>
 
-    <!-- Toolbar -->
+    <!-- Control Toolbar -->
     <div class="toolbar">
       <div class="search-box">
         <span class="material-icons search-icon">search</span>
@@ -15,17 +15,26 @@
           type="text"
           placeholder="Search vulnerabilities..."
           class="search-input"
+          aria-label="Search vulnerabilities"
         />
       </div>
       <div class="filters">
-        <select v-model="filterStatus" class="filter-select">
+        <select 
+          v-model="filterStatus" 
+          class="filter-select"
+          aria-label="Filter by status"
+        >
           <option value="">All Status</option>
           <option value="open">Open</option>
           <option value="in-progress">In Progress</option>
           <option value="fixed">Fixed</option>
           <option value="closed">Closed</option>
         </select>
-        <select v-model="filterPriority" class="filter-select">
+        <select 
+          v-model="filterPriority" 
+          class="filter-select"
+          aria-label="Filter by priority"
+        >
           <option value="">All Priority</option>
           <option value="critical">Critical</option>
           <option value="high">High</option>
@@ -33,11 +42,13 @@
           <option value="low">Low</option>
         </select>
       </div>
-      <div class="view-toggle">
+      <div class="view-toggle" role="tablist" aria-label="View mode">
         <button
           :class="['toggle-btn', { active: viewMode === 'list' }]"
           @click="viewMode = 'list'"
           title="List view"
+          role="tab"
+          :aria-selected="viewMode === 'list'"
         >
           <span class="material-icons">view_list</span>
         </button>
@@ -45,36 +56,38 @@
           :class="['toggle-btn', { active: viewMode === 'grid' }]"
           @click="viewMode = 'grid'"
           title="Grid view"
+          role="tab"
+          :aria-selected="viewMode === 'grid'"
         >
           <span class="material-icons">grid_view</span>
         </button>
       </div>
     </div>
 
-    <!-- Summary Stats -->
+    <!-- Summary Statistics -->
     <div class="summary-stats">
-      <div class="stat-card critical">
+      <div class="stat-card">
         <div class="stat-icon">🔴</div>
         <div class="stat-content">
           <div class="stat-value">{{ stats.critical }}</div>
           <div class="stat-label">Critical</div>
         </div>
       </div>
-      <div class="stat-card high">
+      <div class="stat-card">
         <div class="stat-icon">🟠</div>
         <div class="stat-content">
           <div class="stat-value">{{ stats.high }}</div>
           <div class="stat-label">High</div>
         </div>
       </div>
-      <div class="stat-card medium">
+      <div class="stat-card">
         <div class="stat-icon">🟡</div>
         <div class="stat-content">
           <div class="stat-value">{{ stats.medium }}</div>
           <div class="stat-label">Medium</div>
         </div>
       </div>
-      <div class="stat-card low">
+      <div class="stat-card">
         <div class="stat-icon">🟢</div>
         <div class="stat-content">
           <div class="stat-value">{{ stats.low }}</div>
@@ -83,14 +96,16 @@
       </div>
     </div>
 
-    <!-- Vulnerabilities List/Grid -->
+    <!-- Main Content -->
     <div v-if="!loading" :class="['vulnerabilities-view', `view-${viewMode}`]">
+      <!-- Vulnerabilities List/Grid -->
       <div v-if="filteredVulnerabilities.length > 0" class="vulnerabilities-content">
         <div
           v-for="vuln in filteredVulnerabilities"
           :key="vuln.id"
           :class="['vulnerability-item', `priority-${vuln.priority}`]"
         >
+          <!-- Item Header with Title and Badges -->
           <div class="item-header">
             <div class="item-title-section">
               <router-link :to="`/vulnerabilities/${vuln.id}`" class="vuln-title">
@@ -111,8 +126,10 @@
             </div>
           </div>
 
+          <!-- Item Description -->
           <p class="item-description">{{ vuln.description }}</p>
 
+          <!-- Item Metadata -->
           <div class="item-meta">
             <span class="meta-item">
               <span class="material-icons">code</span>
@@ -128,12 +145,14 @@
             </span>
           </div>
 
+          <!-- Action Link -->
           <router-link :to="`/vulnerabilities/${vuln.id}`" class="item-link">
             View Details →
           </router-link>
         </div>
       </div>
 
+      <!-- Empty State -->
       <div v-else class="empty-state">
         <span class="material-icons large-icon">security</span>
         <h2>No vulnerabilities found</h2>
@@ -222,78 +241,106 @@ const formatDate = (date) => {
 .vulnerabilities-container {
   min-height: 100vh;
   background: var(--bg-primary);
-  padding: 32px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
+/* Header Section */
 .page-header {
-  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .page-header h1 {
-  font-size: 32px;
-  font-weight: 600;
-  margin: 0 0 8px 0;
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0;
   color: var(--text-primary);
+  letter-spacing: -0.5px;
 }
 
 .subtitle {
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text-secondary);
   margin: 0;
+  font-weight: 400;
 }
 
-/* Toolbar */
+/* Control Panel */
 .toolbar {
   display: flex;
   gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
   align-items: center;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  flex-wrap: wrap;
 }
 
 .search-box {
   flex: 1;
-  min-width: 250px;
+  min-width: 280px;
   position: relative;
 }
 
 .search-icon {
   position: absolute;
-  left: 12px;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-secondary);
   font-size: 20px;
+  pointer-events: none;
 }
 
 .search-input {
   width: 100%;
-  padding: 10px 12px 10px 40px;
+  padding: 10px 14px 10px 44px;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: var(--bg-secondary);
+  border-radius: 8px;
+  background: var(--bg-primary);
   color: var(--text-primary);
   font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
 
   &:focus {
     outline: none;
     border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
   }
 }
 
 .filters {
   display: flex;
-  gap: 12px;
+  gap: 10px;
+  align-items: center;
 }
 
 .filter-select {
   padding: 10px 12px;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: var(--bg-secondary);
+  border-radius: 8px;
+  background: var(--bg-primary);
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
 
   &:focus {
     outline: none;
@@ -303,70 +350,88 @@ const formatDate = (date) => {
 
 .view-toggle {
   display: flex;
-  gap: 4px;
+  gap: 6px;
+  background: var(--bg-tertiary);
+  padding: 4px;
+  border-radius: 8px;
+  margin-left: auto;
 }
 
 .toggle-btn {
-  padding: 10px 12px;
-  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  border: none;
   border-radius: 6px;
-  background: var(--bg-secondary);
+  background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
 
   &:hover {
-    background: var(--bg-tertiary);
+    color: var(--text-primary);
   }
 
   &.active {
-    background: var(--color-primary);
-    color: white;
-    border-color: var(--color-primary);
+    background: var(--bg-secondary);
+    color: var(--color-primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
 }
 
-/* Summary Stats */
+/* Summary Stats - Professional Grid */
 .summary-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
-  margin-bottom: 32px;
 }
 
 .stat-card {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 20px;
   display: flex;
-  gap: 12px;
   align-items: center;
+  gap: 16px;
+  transition: all 0.2s;
+}
+
+.stat-card:hover {
+  border-color: var(--color-primary);
+  background: var(--bg-primary);
 }
 
 .stat-icon {
-  font-size: 28px;
+  font-size: 32px;
+  min-width: 32px;
 }
 
 .stat-content {
   display: flex;
   flex-direction: column;
+  gap: 6px;
+  flex: 1;
 }
 
 .stat-value {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
   color: var(--text-primary);
+  line-height: 1;
 }
 
 .stat-label {
   font-size: 12px;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  font-weight: 600;
 }
 
-/* Vulnerabilities View */
+/* Content Area */
 .vulnerabilities-view {
   display: flex;
   flex-direction: column;
@@ -375,26 +440,31 @@ const formatDate = (date) => {
 .vulnerabilities-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .view-grid .vulnerabilities-content {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 16px;
 }
 
+/* Vulnerability Item Card */
 .vulnerability-item {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 20px;
-  transition: all 0.2s;
+  border-radius: 10px;
+  padding: 24px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .vulnerability-item:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .vulnerability-item.priority-critical {
@@ -413,28 +483,29 @@ const formatDate = (date) => {
   border-left: 4px solid #22c55e;
 }
 
+/* Item Header */
 .item-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 12px;
 }
 
 .item-title-section {
   display: flex;
-  gap: 10px;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 12px;
   flex: 1;
   min-width: 0;
 }
 
 .vuln-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   color: var(--text-primary);
   text-decoration: none;
-  line-height: 1.4;
+  line-height: 1.3;
+  transition: color 0.2s;
 
   &:hover {
     color: var(--color-primary);
@@ -443,27 +514,34 @@ const formatDate = (date) => {
 
 .cve-badge {
   font-family: 'Courier New', monospace;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 600;
   background: var(--bg-tertiary);
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 5px 10px;
+  border-radius: 5px;
   color: var(--text-secondary);
   white-space: nowrap;
+  width: fit-content;
+  letter-spacing: 0.5px;
 }
 
 .item-badges {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .severity-badge,
 .status-badge,
 .priority-badge {
-  padding: 4px 10px;
-  border-radius: 4px;
+  padding: 5px 11px;
+  border-radius: 5px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   white-space: nowrap;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 .severity-badge {
@@ -523,98 +601,108 @@ const formatDate = (date) => {
   }
 }
 
+/* Item Description */
 .item-description {
   font-size: 14px;
   color: var(--text-secondary);
-  line-height: 1.5;
-  margin: 0 0 12px 0;
+  line-height: 1.6;
+  margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
+/* Item Meta */
 .item-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
   font-size: 13px;
   color: var(--text-secondary);
-  padding: 12px 0;
+  padding: 14px 0;
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
-  margin-bottom: 12px;
 }
 
 .meta-item {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  font-weight: 500;
 
   .material-icons {
     font-size: 16px;
+    opacity: 0.6;
   }
 
   &.related {
     color: var(--color-primary);
-    font-weight: 600;
+    font-weight: 700;
   }
 }
 
+/* Item Link */
 .item-link {
   color: var(--color-primary);
   text-decoration: none;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+  align-self: flex-end;
 
   &:hover {
-    text-decoration: underline;
+    gap: 8px;
   }
 }
 
 /* Empty State */
 .empty-state {
   text-align: center;
-  padding: 60px 24px;
+  padding: 80px 24px;
   background: var(--bg-secondary);
   border: 2px dashed var(--border-color);
-  border-radius: 8px;
+  border-radius: 10px;
   color: var(--text-secondary);
 }
 
 .large-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-  opacity: 0.5;
+  font-size: 56px;
+  margin-bottom: 20px;
+  opacity: 0.4;
 }
 
 .empty-state h2 {
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color: var(--text-primary);
-  margin: 0 0 8px 0;
+  margin: 0 0 12px 0;
 }
 
 .empty-state p {
-  margin: 0 0 24px 0;
+  margin: 0 0 28px 0;
   font-size: 14px;
+  font-weight: 500;
 }
 
 .action-btn {
-  padding: 10px 20px;
+  padding: 12px 24px;
   background: var(--color-primary);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
     opacity: 0.9;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.25);
   }
 }
 
@@ -624,14 +712,14 @@ const formatDate = (date) => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
-  gap: 16px;
+  min-height: 500px;
+  gap: 20px;
   color: var(--text-secondary);
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border: 3px solid var(--border-color);
   border-top-color: var(--color-primary);
   border-radius: 50%;
@@ -642,9 +730,26 @@ const formatDate = (date) => {
   to { transform: rotate(360deg); }
 }
 
-@media (max-width: 1024px) {
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .vulnerabilities-container {
+    padding: 32px;
+    gap: 28px;
+  }
+
+  .view-grid .vulnerabilities-content {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
   .vulnerabilities-container {
     padding: 24px;
+    gap: 24px;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
   }
 
   .toolbar {
@@ -654,28 +759,99 @@ const formatDate = (date) => {
 
   .search-box {
     min-width: auto;
+    width: 100%;
+  }
+
+  .filters {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .filter-select {
+    flex: 1;
+  }
+
+  .view-toggle {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+  }
+
+  .vulnerability-item {
+    padding: 20px;
   }
 
   .view-grid .vulnerabilities-content {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
+  }
+
+  .item-header {
+    flex-direction: column;
+  }
+
+  .item-meta {
+    flex-direction: column;
+    gap: 8px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .vulnerabilities-container {
     padding: 16px;
+    gap: 20px;
+  }
+
+  .page-header {
+    padding-bottom: 16px;
   }
 
   .page-header h1 {
     font-size: 24px;
   }
 
-  .item-badges {
-    flex-wrap: wrap;
+  .subtitle {
+    font-size: 13px;
   }
 
-  .view-grid .vulnerabilities-content {
-    grid-template-columns: 1fr;
+  .toolbar {
+    padding: 16px;
+  }
+
+  .summary-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-icon {
+    font-size: 28px;
+  }
+
+  .stat-value {
+    font-size: 22px;
+  }
+
+  .vulnerability-item {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .vuln-title {
+    font-size: 15px;
+  }
+
+  .item-badges {
+    gap: 6px;
+  }
+
+  .severity-badge,
+  .status-badge,
+  .priority-badge {
+    padding: 4px 8px;
+    font-size: 10px;
   }
 }
 </style>
