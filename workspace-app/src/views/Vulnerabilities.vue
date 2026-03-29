@@ -285,7 +285,7 @@ const formatDate = (date) => {
   gap: 16px;
   align-items: center;
   padding: 20px;
-  background: var(--bg-secondary);
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: 10px;
   flex-wrap: wrap;
@@ -397,7 +397,7 @@ const formatDate = (date) => {
 }
 
 .stat-card {
-  background: var(--bg-secondary);
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 20px;
@@ -489,7 +489,7 @@ const formatDate = (date) => {
 
 /* Vulnerability Item Card */
 .vulnerability-item {
-  background: var(--bg-secondary);
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 24px;
@@ -687,7 +687,7 @@ const formatDate = (date) => {
 .empty-state {
   text-align: center;
   padding: 80px 24px;
-  background: var(--bg-secondary);
+  background: #ffffff;
   border: 2px dashed var(--border-color);
   border-radius: 10px;
   color: var(--text-secondary);
