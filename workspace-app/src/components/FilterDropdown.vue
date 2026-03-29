@@ -1,9 +1,8 @@
 <template>
-  <div class="filter-dropdown">
+  <div class="filter-dropdown" ref="dropdownRef">
     <button
       class="filter-dropdown-trigger"
-      @click="isOpen = !isOpen"
-      @blur="isOpen = false"
+      @click="toggleMenu"
       :aria-expanded="isOpen"
       :aria-label="label"
     >
@@ -26,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -46,16 +45,35 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const isOpen = ref(false)
+const dropdownRef = ref(null)
 
 const selectedLabel = computed(() => {
   const selected = props.options.find(opt => opt.value === props.modelValue)
   return selected ? selected.label : props.options[0].label
 })
 
+const toggleMenu = () => {
+  isOpen.value = !isOpen.value
+}
+
 const selectOption = (value) => {
   emit('update:modelValue', value)
   isOpen.value = false
 }
+
+const handleClickOutside = (event) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+    isOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <style scoped>
