@@ -336,24 +336,50 @@ const formatDate = (date) => {
 }
 
 .filter-select {
-  padding: 10px 12px;
+  padding: 10px 12px 10px 14px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: #f0f2f5;
+  background: #f0f2f5 url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 8px center;
+  background-size: 18px;
+  padding-right: 32px;
   color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 
   &:hover {
     border-color: var(--color-primary);
+    background-color: #eaecf0;
   }
 
   &:focus {
     outline: none;
     border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+    background-color: #f0f2f5;
   }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+  }
+}
+
+.filter-select option {
+  background: #ffffff;
+  color: var(--text-primary);
+  padding: 10px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.filter-select option:hover {
+  background: #f0f2f5;
+  color: var(--color-primary);
 }
 
 .view-toggle {
