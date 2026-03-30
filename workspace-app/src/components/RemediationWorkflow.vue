@@ -232,10 +232,11 @@ const updateMergeConfig = (key, value) => {
 
 /* Progress Section */
 .progress-section {
-  background: var(--bg-tertiary);
+  background: #ffffff;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 20px;
+  box-shadow: 0 6px 18px rgba(13,29,45,0.06);
 }
 
 .progress-section h3 {
@@ -271,13 +272,14 @@ const updateMergeConfig = (key, value) => {
 
 /* Status Section */
 .status-section {
-  background: var(--bg-tertiary);
+  background: #ffffff;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 10px;
+  padding: 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 6px 18px rgba(13,29,45,0.04);
 }
 
 .status-item {
@@ -319,20 +321,26 @@ const updateMergeConfig = (key, value) => {
 
 /* Action Button */
 .action-btn {
-  padding: 10px 16px;
-  background: var(--color-primary);
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 1rem;
+  background: linear-gradient(125deg, var(--brand-teal), #14c0a8);
+  color: #ffffff;
   border: none;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 600;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  box-shadow: 0 8px 22px rgba(0, 167, 142, 0.12);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
 
-  &:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
+.action-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+  box-shadow: 0 10px 30px rgba(0, 167, 142, 0.16);
 }
 
 /* Fixes Section */
@@ -357,15 +365,17 @@ const updateMergeConfig = (key, value) => {
 }
 
 .fix-option {
-  background: var(--bg-tertiary);
+  background: #ffffff;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 16px;
-  transition: border-color 0.2s;
+  border-radius: 10px;
+  padding: 18px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 6px 18px rgba(13,29,45,0.04);
 }
 
 .fix-option:hover {
   border-color: var(--color-primary);
+  box-shadow: 0 10px 30px rgba(13,29,45,0.06);
 }
 
 .fix-header {
@@ -390,13 +400,14 @@ const updateMergeConfig = (key, value) => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  background: var(--color-primary);
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--brand-teal), #14c0a8);
   color: white;
   border-radius: 50%;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 6px 18px rgba(0, 167, 142, 0.12);
 }
 
 .fix-meta {
@@ -671,15 +682,16 @@ const updateMergeConfig = (key, value) => {
   flex: 1;
   padding: 10px 12px;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 13px;
-  background: var(--bg-tertiary);
+  background: #f3f6f7;
   color: var(--text-primary);
   font-family: 'Courier New', monospace;
 
   &:focus {
     outline: none;
     border-color: var(--color-primary);
+    box-shadow: 0 6px 18px rgba(var(--color-primary-rgb), 0.08);
   }
 }
 
