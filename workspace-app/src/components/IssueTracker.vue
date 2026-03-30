@@ -494,7 +494,7 @@ const resetForm = () => {
   border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 13px;
-  background: #fafbfc;
+  background: #f3f6f7;
   color: var(--text-primary);
   font-family: inherit;
 }
@@ -574,7 +574,7 @@ const resetForm = () => {
   border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 13px;
-  background: #fafbfc;
+  background: #f3f6f7;
   color: var(--text-primary);
   font-family: inherit;
 }
