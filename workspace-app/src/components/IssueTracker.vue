@@ -387,6 +387,19 @@ const resetForm = () => {
   flex-wrap: wrap;
 }
 
+/* Slightly smaller action buttons inside issue cards for compactness */
+.issue-actions .action-btn {
+  padding: 0.42rem 0.7rem;
+  font-size: 0.78rem;
+  gap: 0.25rem;
+  box-shadow: 0 3px 8px rgba(0, 167, 142, 0.14);
+  min-height: 34px;
+}
+
+.issue-actions .action-btn.secondary {
+  box-shadow: 0 3px 8px rgba(149, 111, 83, 0.12);
+}
+
 .action-btn {
   display: inline-flex;
   align-items: center;
