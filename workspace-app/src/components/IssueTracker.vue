@@ -43,7 +43,7 @@
           <button class="action-btn secondary" @click="toggleAssigneeMenu(issue.id)">
             Reassign
           </button>
-          <button class="action-btn secondary" @click="toggleCommentSection(issue.id)">
+          <button class="action-btn secondary comments-btn" @click="toggleCommentSection(issue.id)">
             {{ expandedComments.includes(issue.id) ? 'Hide' : 'Show' }} Comments
             <span v-if="issue.comments?.length" class="comment-count">({{ issue.comments.length }})</span>
           </button>
@@ -414,6 +414,19 @@ const resetForm = () => {
   color: #0f1623;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(246, 183, 60, 0.35);
+}
+
+.action-btn.comments-btn {
+  background: #e8eaed;
+  border: 1px solid #d0d2d6;
+  color: #222b45;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.action-btn.comments-btn:hover {
+  background: #dfe1e6;
+  border-color: #aeb0b8;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .comment-count {
