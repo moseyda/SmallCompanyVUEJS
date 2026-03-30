@@ -1,6 +1,7 @@
 <template>
   <div class="filter-dropdown" ref="dropdownRef">
     <button
+      type="button"
       class="filter-dropdown-trigger"
       @click="toggleMenu"
       :aria-expanded="isOpen"
@@ -12,6 +13,7 @@
 
     <div v-if="isOpen" class="filter-dropdown-menu">
       <button
+        type="button"
         v-for="option in options"
         :key="option.value"
         class="dropdown-option"
