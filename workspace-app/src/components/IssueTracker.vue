@@ -379,34 +379,41 @@ const resetForm = () => {
 }
 
 .action-btn {
-  padding: 10px 16px;
-  border-radius: 6px;
+  padding: 0.75rem 1.2rem;
+  border-radius: 8px;
   border: none;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
-  background: var(--color-primary);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(125deg, var(--brand-teal), #14c0a8);
   color: white;
   white-space: nowrap;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
+  font-family: var(--font-display);
+  box-shadow: 0 4px 12px rgba(0, 167, 142, 0.2);
 }
 
 .action-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+  opacity: 0.95;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 167, 142, 0.3);
 }
 
 .action-btn.secondary {
-  background: #f0f2f5;
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
+  background: linear-gradient(125deg, var(--brand-gold), #f9c561);
+  border: none;
+  color: #132033;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(246, 183, 60, 0.25);
 }
 
 .action-btn.secondary:hover {
-  background: #e8eaed;
-  border-color: var(--color-primary);
+  background: linear-gradient(125deg, #f9c561, #ffd166);
+  color: #0f1623;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(246, 183, 60, 0.35);
 }
 
 .comment-count {
