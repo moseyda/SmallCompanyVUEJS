@@ -402,18 +402,18 @@ const resetForm = () => {
 }
 
 .action-btn.secondary {
-  background: linear-gradient(125deg, var(--brand-gold), #f9c561);
-  border: none;
+  background: linear-gradient(125deg, #ffe8cc, #ffd8bf);
+  border: 1px solid rgba(149, 111, 83, 0.25);
   color: #132033;
   font-weight: 700;
-  box-shadow: 0 4px 12px rgba(246, 183, 60, 0.25);
+  box-shadow: 0 4px 12px rgba(149, 111, 83, 0.12);
 }
 
 .action-btn.secondary:hover {
-  background: linear-gradient(125deg, #f9c561, #ffd166);
+  background: linear-gradient(125deg, #ffd8bf, #ffc99f);
   color: #0f1623;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(246, 183, 60, 0.35);
+  box-shadow: 0 6px 16px rgba(149, 111, 83, 0.2);
 }
 
 .action-btn.comments-btn {
