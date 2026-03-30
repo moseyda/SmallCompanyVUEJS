@@ -3,8 +3,17 @@
     <!-- Progress Tracking -->
     <div class="progress-section">
       <h3>Remediation Progress</h3>
-      <div class="progress-bar">
-        <div class="progress-fill" :style="{ width: `${remediation.progress || 0}%` }"></div>
+      <div
+        class="progress-bar"
+        role="progressbar"
+        :aria-valuenow="remediation.progress || 0"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        <div class="progress-track">
+          <div class="progress-fill" :style="{ width: `${remediation.progress || 0}%` }"></div>
+        </div>
+        <div class="progress-label">{{ remediation.progress || 0 }}%</div>
       </div>
       <p class="progress-percentage">{{ remediation.progress || 0 }}% Complete</p>
     </div>
@@ -249,18 +258,53 @@ const updateMergeConfig = (key, value) => {
 }
 
 .progress-bar {
-  height: 8px;
-  background: var(--border-color);
-  border-radius: 4px;
-  overflow: hidden;
+  position: relative;
+  height: 32px;
   margin-bottom: 8px;
+}
+
+.progress-track {
+  height: 12px;
+  background: #eef3f6;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 10px 0;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-primary) 0%, #06b6d4 100%);
-  transition: width 0.3s ease;
-  border-radius: 4px;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--brand-teal), #14c0a8);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+
+.progress-fill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0 8px, rgba(255,255,255,0.02) 8px 16px);
+  mix-blend-mode: overlay;
+  background-size: 200% 100%;
+  animation: progress-stripes 2s linear infinite;
+}
+
+.progress-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  pointer-events: none;
+}
+
+@keyframes progress-stripes {
+  from { background-position: 0 0; }
+  to { background-position: -48px 0; }
 }
 
 .progress-percentage {
