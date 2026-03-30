@@ -591,7 +591,7 @@ const formatDate = (date) => {
   font-family: 'Courier New', monospace;
   font-size: 11px;
   font-weight: 600;
-  background: var(--bg-tertiary);
+  background: #e8eaed;
   padding: 5px 10px;
   border-radius: 5px;
   color: var(--text-secondary);
