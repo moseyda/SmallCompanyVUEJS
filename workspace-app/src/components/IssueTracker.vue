@@ -96,26 +96,34 @@
           <label for="description">Description</label>
           <textarea v-model="newIssue.description" id="description" placeholder="Describe the issue..." rows="4"></textarea>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="priority">Priority *</label>
-            <select v-model="newIssue.priority" id="priority" required>
-              <option value="critical">Critical</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="assignee">Assign to</label>
-            <select v-model="newIssue.assignedTo" id="assignee">
-              <option value="">Unassigned</option>
-              <option value="Alice Johnson">Alice Johnson</option>
-              <option value="Bob Smith">Bob Smith</option>
-              <option value="Charlie Brown">Charlie Brown</option>
-            </select>
-          </div>
-        </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="priority">Priority *</label>
+                <FilterDropdown
+                  v-model="newIssue.priority"
+                  :options="[
+                    { value: 'critical', label: 'Critical' },
+                    { value: 'high', label: 'High' },
+                    { value: 'medium', label: 'Medium' },
+                    { value: 'low', label: 'Low' }
+                  ]"
+                  label="Priority"
+                />
+              </div>
+              <div class="form-group">
+                <label for="assignee">Assign to</label>
+                <FilterDropdown
+                  v-model="newIssue.assignedTo"
+                  :options="[
+                    { value: '', label: 'Unassigned' },
+                    { value: 'Alice Johnson', label: 'Alice Johnson' },
+                    { value: 'Bob Smith', label: 'Bob Smith' },
+                    { value: 'Charlie Brown', label: 'Charlie Brown' }
+                  ]"
+                  label="Assign to"
+                />
+              </div>
+            </div>
         <div class="form-group">
           <label for="dueDate">Due Date</label>
           <input v-model="newIssue.dueDate" type="date" id="dueDate" />
@@ -132,6 +140,7 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue'
 import { useVulnerabilitiesStore } from '../stores/vulnerabilities'
+import FilterDropdown from './FilterDropdown.vue'
 
 const props = defineProps({
   vulnId: String,
