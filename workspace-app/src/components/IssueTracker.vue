@@ -613,8 +613,10 @@ const resetForm = () => {
 }
 
 .form-actions button:first-child {
-  background: var(--color-primary);
+  background: linear-gradient(125deg, var(--brand-teal), #14c0a8);
   color: white;
+  border: none;
+  box-shadow: 0 6px 18px rgba(20, 192, 168, 0.18);
 }
 
 .form-actions button:first-child:hover {
