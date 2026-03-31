@@ -128,19 +128,14 @@
         <div class="config-item">
           <label>Platform:</label>
           <div class="platform-select">
-            <select v-model="selectedPlatform">
-              <option v-for="p in platforms" :key="p" :value="p">{{ p }}</option>
-            </select>
+            <FilterDropdown v-model="selectedPlatform" :options="platformOptions" label="Platform" />
           </div>
         </div>
 
               <div class="config-item">
                 <label>Repository Mapping:</label>
                 <div class="mapping-select">
-                  <select v-model="selectedMappingIndex">
-                    <option :value="-1">Manual / None</option>
-                    <option v-for="(m, idx) in mappings" :key="idx" :value="idx">{{ m.owner }}/{{ m.repo }} (inst {{ m.installationId }})</option>
-                  </select>
+                  <FilterDropdown v-model="selectedMappingIndex" :options="mappingOptions" label="Repository Mapping" />
                 </div>
               </div>
               <div v-if="!mappings.length" class="no-mappings-hint">
@@ -248,6 +243,7 @@ import { ref, defineProps, defineEmits, computed, watch, onMounted } from 'vue'
 import { useVulnerabilitiesStore } from '../stores/vulnerabilities'
 import { useSettingsStore } from '../stores/settings'
 import ToggleSwitch from './ToggleSwitch.vue'
+import FilterDropdown from './FilterDropdown.vue'
 import { ClockIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
@@ -262,6 +258,7 @@ const settingsStore = useSettingsStore()
 
 const branchName = ref('feature/fix-vulnerability')
 const platforms = ['GitHub', 'GitLab', 'Bitbucket']
+const platformOptions = computed(() => platforms.map(p => ({ label: p, value: p })))
 const normalizePlatform = (p) => {
   if (!p) return null
   const key = p.toString().toLowerCase()
@@ -276,7 +273,15 @@ const mrCreating = ref(false)
 const createError = ref(null)
 const createSuccess = ref(null)
 const mappings = computed(() => settingsStore.profile.githubAppMappings || [])
-const selectedMappingIndex = ref(-1)
+const mappingOptions = computed(() => {
+  const out = [{ label: 'Manual / None', value: '-1' }];
+  (mappings.value || []).forEach((m, idx) => {
+    out.push({ label: `${m.owner}/${m.repo} (inst ${m.installationId})`, value: String(idx) })
+  })
+  return out
+})
+
+const selectedMappingIndex = ref('-1')
 
 const formatStatus = (status) => {
   const map = { draft: 'Draft', proposed: 'Proposed', 'in-progress': 'In Progress', completed: 'Completed' }
@@ -382,8 +387,9 @@ const updateMergeConfig = async (key, value) => {
 
 // Apply a selected mapping (single API call)
 const applySelectedMapping = async (idx) => {
-  if (idx >= 0 && mappings.value[idx]) {
-    const m = mappings.value[idx]
+  const n = Number(idx)
+  if (Number.isFinite(n) && n >= 0 && mappings.value[n]) {
+    const m = mappings.value[n]
     const current = { ...(props.remediation?.mergeRequestIntegration || {}), installationId: m.installationId, owner: m.owner, repo: m.repo, baseBranch: m.baseBranch || 'main' }
     if (props.remediation) props.remediation.mergeRequestIntegration = current
     try {
@@ -407,7 +413,7 @@ const applySelectedMapping = async (idx) => {
 watch([() => mappings.value, () => props.remediation?.mergeRequestIntegration], () => {
   const remMap = props.remediation?.mergeRequestIntegration || {}
   const idx = mappings.value.findIndex(m => String(m.installationId) === String(remMap.installationId) || (m.owner === remMap.owner && m.repo === remMap.repo))
-  selectedMappingIndex.value = idx >= 0 ? idx : -1
+  selectedMappingIndex.value = idx >= 0 ? String(idx) : '-1'
 }, { immediate: true })
 
 watch(selectedMappingIndex, (val) => {
@@ -913,8 +919,8 @@ const afterLines = computed(() => {
 
 .config-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
 .config-item label {
@@ -956,7 +962,7 @@ const afterLines = computed(() => {
 .mapping-select {
   max-width: 420px;
   width: 100%;
-  display: inline-block;
+  display: block;
 }
 
 .config-item label {
@@ -967,7 +973,8 @@ const afterLines = computed(() => {
 }
 
 .config-item > div {
-  flex: 0 0 auto;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .pr-item {
