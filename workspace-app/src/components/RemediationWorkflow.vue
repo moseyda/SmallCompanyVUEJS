@@ -1277,10 +1277,21 @@ const afterLines = computed(() => {
   grid-column: 1 / -1;
   margin: 16px 0;
   padding: 12px 20px;
-  background: rgba(240, 242, 245, 0.9);
-  border: 1px solid var(--line-soft);
+  background: rgba(245, 237, 205, 0.8); /* light amber hint */
+  border: 1px solid rgba(234, 179, 8, 0.6);
   border-radius: 10px;
   text-align: center;
+  color: #6b4f01;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.no-mappings-hint::before {
+  content: '⚠';
+  font-size: 16px;
 }
 
 .no-mappings-hint .muted {
