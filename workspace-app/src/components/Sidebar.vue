@@ -174,28 +174,7 @@ import { storeToRefs } from 'pinia'
 import logoURL from '../assets/vue.svg'
 import { useUiStore } from '../stores/ui'
 import { useAuthStore } from '../stores/auth'
-
-const navGroups = [
-{
-title: 'Workspace',
-items: [
-{ path: '/dashboard', label: 'Overview', icon: 'home' },
-{ path: '/work', label: 'Work', icon: 'work_outline' },
-{ path: '/services', label: 'Services', icon: 'construction' },
-{ path: '/insights', label: 'Insights', icon: 'insights' },
-{ path: '/vulnerabilities', label: 'Vulnerabilities', icon: 'security' }
-]
-},
-{
-title: 'Company',
-items: [
-{ path: '/about', label: 'About', icon: 'description' },
-{ path: '/team', label: 'Team', icon: 'groups' },
-{ path: '/contact', label: 'Contact', icon: 'mail_outline' },
-{ path: '/settings', label: 'Settings', icon: 'settings' }
-]
-}
-]
+// `navGroups` is computed below so it can reference `authStore`
 
 const uiStore = useUiStore()
 const { isSidebarExpanded, isMobileMenuOpen, theme, density, motion } = storeToRefs(uiStore)
@@ -204,6 +183,39 @@ const authStore = useAuthStore()
 const { currentUser, isAuthenticated } = storeToRefs(authStore)
 const router = useRouter()
 
+const navGroups = computed(() => {
+	const groups = [
+		{
+			title: 'Workspace',
+			items: [
+				{ path: '/dashboard', label: 'Overview', icon: 'home' },
+				{ path: '/work', label: 'Work', icon: 'work_outline' },
+				{ path: '/services', label: 'Services', icon: 'construction' },
+				{ path: '/insights', label: 'Insights', icon: 'insights' },
+				{ path: '/vulnerabilities', label: 'Vulnerabilities', icon: 'security' }
+			]
+		},
+		{
+			title: 'Company',
+			items: [
+				{ path: '/about', label: 'About', icon: 'description' },
+				{ path: '/team', label: 'Team', icon: 'groups' },
+				{ path: '/contact', label: 'Contact', icon: 'mail_outline' },
+				{ path: '/settings', label: 'Settings', icon: 'settings' }
+			]
+		}
+	]
+
+	try {
+		if (authStore && typeof authStore.hasPermission === 'function' && authStore.hasPermission('settings:write')) {
+			groups[1].items.push({ path: '/admin/integrations', label: 'Admin Integrations', icon: 'admin_panel_settings' })
+		}
+	} catch (e) {
+		// ignore permission-check errors and do not show admin link
+	}
+
+	return groups
+})
 const tooltipLabel = ref('')
 const tooltipX = ref(0)
 const tooltipY = ref(0)
