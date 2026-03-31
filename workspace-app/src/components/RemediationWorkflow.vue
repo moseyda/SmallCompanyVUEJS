@@ -121,8 +121,8 @@
     </div>
 
     <!-- Merge Request Integration -->
-    <div class="merge-request-section">
-      <h3>Merge Request Integration</h3>
+    <article class="glass panel merge-request-section">
+      <h2 class="section-title">Merge Request Integration</h2>
 
       <div class="merge-config">
         <div class="config-item">
@@ -203,7 +203,7 @@
 
       <div v-if="createSuccess" class="mr-status-message success">{{ createSuccess }}</div>
       <div v-if="createError" class="mr-status-message error">{{ createError }}</div>
-    </div>
+    </article>
 
     <!-- Remediation Timeline -->
     <div class="timeline-section">
@@ -893,10 +893,8 @@ const afterLines = computed(() => {
 
 /* Merge Request Section */
 .merge-request-section {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 24px;
+  /* Use global .glass.panel for card background/border; keep minimal overrides here */
+  padding: 0;
 }
 
 .merge-request-section h3 {
