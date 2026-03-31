@@ -75,6 +75,12 @@ export const routes = [
         component: () => import('../views/Setting.vue'),
         meta: { title: 'Settings', requiresAuth: true, requiredPermission: 'settings:read' }
     }
+    ,{
+        path: '/admin/integrations',
+        name: 'admin-integrations',
+        component: () => import('../views/AdminIntegrations.vue'),
+        meta: { title: 'Admin Integrations', requiresAuth: true, requiredPermission: 'settings:write' }
+    }
 ]
 
 const router = createRouter({
