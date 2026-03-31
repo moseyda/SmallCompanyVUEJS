@@ -7,7 +7,13 @@ const defaults = {
   cadence: 'Fortnightly',
   notifyEmail: true,
   notifyPush: true,
-  shareSummary: false
+  shareSummary: false,
+  githubApp: {
+    installationId: null,
+    owner: '',
+    repo: '',
+    baseBranch: 'main'
+  }
 }
 
 export const useSettingsStore = defineStore('settings', {
