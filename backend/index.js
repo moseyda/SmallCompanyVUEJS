@@ -230,6 +230,51 @@ export function createApp() {
 
   app.use(express.json())
 
+  // Background token refresh worker for GitHub App installation tokens
+  const REFRESH_INTERVAL_MS = parseInt(process.env.GITHUB_APP_TOKEN_REFRESH_INTERVAL_MS || '60000', 10)
+  const REFRESH_BEFORE_EXPIRY_MS = parseInt(process.env.GITHUB_APP_TOKEN_REFRESH_BEFORE_EXPIRY_MS || String(5 * 60 * 1000), 10)
+  let tokenRefreshTimer = null
+
+  const startTokenRefreshWorker = () => {
+    if (tokenRefreshTimer) return
+    tokenRefreshTimer = setInterval(async () => {
+      try {
+        const now = Date.now()
+        const ids = Object.keys(installationTokens)
+        for (const id of ids) {
+          try {
+            const meta = installationTokens[id]
+            if (!meta || !meta.expiresAt) continue
+            const timeLeft = meta.expiresAt - now
+            if (timeLeft < REFRESH_BEFORE_EXPIRY_MS) {
+              // getInstallationToken will refresh and cache the token
+              await getInstallationToken(id)
+              console.log(`[github-app] refreshed token for installation ${id}`)
+            }
+          } catch (err) {
+            console.error(`[github-app] error refreshing token for ${id}:`, err?.message || err)
+          }
+        }
+      } catch (err) {
+        console.error('[github-app] token refresh worker failed:', err?.message || err)
+      }
+    }, REFRESH_INTERVAL_MS)
+  }
+
+  // Start worker (safe to call; idempotent)
+  startTokenRefreshWorker()
+
+  // Clear timer on process exit to avoid dangling handlers in tests
+  const clearTokenRefreshWorker = () => {
+    if (tokenRefreshTimer) {
+      clearInterval(tokenRefreshTimer)
+      tokenRefreshTimer = null
+    }
+  }
+  process.on('exit', clearTokenRefreshWorker)
+  process.on('SIGINT', () => { clearTokenRefreshWorker(); process.exit(0) })
+  process.on('SIGTERM', () => { clearTokenRefreshWorker(); process.exit(0) })
+
   app.get('/api/overview', withLatency((req, res) => {
     res.json({
       kpis: workspaceData.kpis,
