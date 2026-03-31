@@ -891,28 +891,24 @@ const afterLines = computed(() => {
   opacity: 0.9;
 }
 
+
 /* Merge Request Section */
 .merge-request-section {
-  /* Use global .glass.panel for card background/border; keep minimal overrides here */
-  padding: 0;
+  /* Use `glass panel` for the outer card; keep internal spacing minimal but consistent. */
+  /* No explicit padding override so the global .panel padding applies. */
 }
 
-.merge-request-section h3 {
-  margin: 0 0 16px 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
+.merge-request-section .section-title {
+  margin: 0 0 12px 0;
 }
 
 .merge-config {
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 16px;
+  padding-top: 8px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* Responsive two-column layout with sensible minimum column width */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .config-item {
@@ -944,12 +940,34 @@ const afterLines = computed(() => {
   text-transform: uppercase;
 }
 
-.platform-select select {
+.platform-select select,
+.mapping-select select,
+.merge-config select {
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
+  background: var(--surface-strong);
   color: var(--text-primary);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.platform-select,
+.mapping-select {
+  max-width: 420px;
+  width: 100%;
+  display: inline-block;
+}
+
+.config-item label {
+  display: inline-block;
+  margin-right: 12px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.config-item > div {
+  flex: 0 0 auto;
 }
 
 .pr-item {
@@ -1100,7 +1118,7 @@ const afterLines = computed(() => {
 
 .no-mappings-hint {
   grid-column: 1 / -1;
-  padding-top: 6px;
+  margin-top: 6px;
 }
 
 .no-mappings-hint .muted {
