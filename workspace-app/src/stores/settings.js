@@ -76,6 +76,8 @@ export const useSettingsStore = defineStore('settings', {
       this.isLoading = false
     }
 
+      ,
+
     // Update GitHub App mappings and persist settings
     async updateGithubAppMappings(mappings) {
       this.profile.githubAppMappings = mappings || []
