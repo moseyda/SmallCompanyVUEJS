@@ -1339,48 +1339,79 @@ const afterLines = computed(() => {
 
 .timeline {
   position: relative;
-  padding-left: 32px;
+  padding-left: 42px;
+  margin-top: 8px;
 }
 
 .timeline::before {
   content: '';
   position: absolute;
-  left: 5px;
+  left: 10px;
   top: 0;
   bottom: 0;
-  width: 2px;
-  background: var(--border-color);
+  width: 3px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.09), rgba(0,0,0,0.04));
 }
 
 .timeline-item {
   position: relative;
   margin-bottom: 24px;
+  padding: 16px 16px 16px 20px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(132, 152, 176, 0.24);
+  border-radius: 12px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+.timeline-item:last-child {
+  margin-bottom: 0;
 }
 
 .timeline-dot {
   position: absolute;
-  left: -27px;
-  top: 0;
-  width: 12px;
-  height: 12px;
+  left: -22px;
+  top: 18px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: var(--border-color);
-  border: 2px solid var(--bg-secondary);
-  transition: all 0.2s;
+  background: var(--bg-secondary);
+  border: 3px solid var(--border-color);
+  box-shadow: 0 0 0 0 rgba(var(--color-primary-rgb), 0.1);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .timeline-item.completed .timeline-dot {
   background: var(--color-primary);
-  box-shadow: 0 0 0 4px rgba(var(--color-primary-rgb), 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 6px rgba(var(--color-primary-rgb), 0.2);
+  transform: scale(1.1);
 }
 
 .timeline-item.in-progress .timeline-dot {
-  background: var(--color-primary);
-  animation: pulse 2s infinite;
+  background: #f59e0b;
+  border-color: #f59e0b;
+  animation: pulse 1.8s infinite;
+}
+
+.timeline-item.draft .timeline-dot {
+  background: #9ca3af;
+  border-color: #9ca3af;
+}
+
+.timeline-item .timeline-content {
+  margin-left: 6px;
+}
+
+.timeline-item .timeline-content h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.timeline-item .timeline-content p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
 }
 
 @keyframes pulse {
