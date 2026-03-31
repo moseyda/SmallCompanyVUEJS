@@ -143,6 +143,9 @@
                   </select>
                 </div>
               </div>
+              <div v-if="!mappings.length" class="no-mappings-hint">
+                <p class="muted">No repository mappings found. Admins can add mappings in <router-link to="/admin/integrations">Admin → Integrations</router-link>.</p>
+              </div>
 
         <div class="config-item">
           <label>Auto-Create PR:</label>
@@ -1095,6 +1098,17 @@ const afterLines = computed(() => {
   font-size: 12px;
   color: var(--text-secondary);
   margin: 4px 0 0 0;
+}
+
+.no-mappings-hint {
+  grid-column: 1 / -1;
+  padding-top: 6px;
+}
+
+.no-mappings-hint .muted {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin: 0;
 }
 
 .merge-actions {
