@@ -156,28 +156,53 @@
 
       <div v-if="remediation.pullRequests?.length" class="pull-requests-list">
         <h4>Created Merge Requests</h4>
+
+        <div class="pr-filter-row">
+          <label>
+            Status:
+            <select v-model="statusFilter">
+              <option value="all">All</option>
+              <option value="open">Open</option>
+              <option value="merged">Merged</option>
+              <option value="in-progress">In Progress</option>
+              <option value="proposed">Proposed</option>
+              <option value="draft">Draft</option>
+            </select>
+          </label>
+        </div>
+
         <div class="table-wrap">
           <table class="pr-table">
             <thead>
               <tr>
                 <th>PR</th>
-                <th>Created</th>
-                <th>Status</th>
+                <th>
+                  <button class="sort-btn" @click="setSort('createdDate')">
+                    Created
+                    <span v-if="sortField === 'createdDate'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                  </button>
+                </th>
+                <th>
+                  <button class="sort-btn" @click="setSort('status')">
+                    Status
+                    <span v-if="sortField === 'status'">{{ sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                  </button>
+                </th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="pr in remediation.pullRequests" :key="pr.id">
+              <tr v-for="pr in filteredPullRequests" :key="pr.id">
                 <td>
-                  <a :href="pr.url" target="_blank" class="pr-link">
+                  <a :href="pr.url" target="_blank" class="pr-link" :title="pr.url">
                     #{{ pr.id.split('-').pop() }} <span class="external-icon">↗</span>
                   </a>
                 </td>
                 <td>{{ formatDate(pr.createdDate) }}</td>
-                <td><span class="pr-status" :class="`pr-${pr.status}`">{{ pr.status.charAt(0).toUpperCase() + pr.status.slice(1) }}</span></td>
+                <td><span class="pr-status" :class="`pr-${pr.status}`">{{ formatStatus(pr.status) }}</span></td>
                 <td class="pr-actions-cell">
-                  <button class="btn copy-btn" @click="copyToClipboard(pr.url)">Copy</button>
-                  <a :href="pr.url" target="_blank" class="btn open-btn">Open</a>
+                  <button class="btn copy-btn" @click="copyToClipboard(pr.url)" :title="`Copy ${pr.url}`">Copy</button>
+                  <a :href="pr.url" target="_blank" class="btn open-btn" :title="`Open ${pr.url}`">Open</a>
                 </td>
               </tr>
             </tbody>
@@ -292,6 +317,44 @@ const mappingOptions = computed(() => {
 })
 
 const selectedMappingIndex = ref('-1')
+const statusFilter = ref('all')
+const sortField = ref('createdDate')
+const sortDirection = ref('desc')
+
+const filteredPullRequests = computed(() => {
+  const base = (props.remediation?.pullRequests || []).filter((pr) => {
+    if (statusFilter.value === 'all') return true
+    return pr.status === statusFilter.value
+  })
+
+  const sorted = [...base].sort((a, b) => {
+    let aVal = a[sortField.value]
+    let bVal = b[sortField.value]
+
+    if (sortField.value === 'createdDate') {
+      aVal = new Date(aVal || '')
+      bVal = new Date(bVal || '')
+    } else if (sortField.value === 'status') {
+      aVal = String(aVal || '').toLowerCase()
+      bVal = String(bVal || '').toLowerCase()
+    }
+
+    if (aVal < bVal) return sortDirection.value === 'asc' ? -1 : 1
+    if (aVal > bVal) return sortDirection.value === 'asc' ? 1 : -1
+    return 0
+  })
+
+  return sorted
+})
+
+const setSort = (field) => {
+  if (sortField.value === field) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortField.value = field
+    sortDirection.value = 'desc'
+  }
+}
 
 const formatStatus = (status) => {
   const map = { draft: 'Draft', proposed: 'Proposed', 'in-progress': 'In Progress', completed: 'Completed' }
@@ -1054,6 +1117,38 @@ const afterLines = computed(() => {
   display: inline-flex;
   gap: 8px;
   align-items: center;
+}
+
+.pr-filter-row {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+
+.pr-filter-row select {
+  margin-left: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--surface-strong);
+}
+
+.sort-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.sort-btn:hover {
+  color: var(--color-primary);
 }
 
 .btn {
