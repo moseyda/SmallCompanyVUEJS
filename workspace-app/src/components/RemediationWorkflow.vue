@@ -82,15 +82,40 @@
             <span>Before Fix</span>
             <span class="badge warning">Has Vulnerability</span>
           </div>
-          <pre><code>{{ remediation.beforeCode }}</code></pre>
+          <div class="code-lines" aria-label="Before code">
+            <div
+              v-for="(line, idx) in beforeLines"
+              :key="idx"
+              :class="['code-line', line.status]"
+            >
+              <span class="ln">{{ idx + 1 }}</span>
+              <code>{{ line.text }}</code>
+            </div>
+          </div>
         </div>
-        <div class="comparison-arrow">→</div>
+
+        <div class="comparison-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="M13 5l7 7-7 7"></path>
+          </svg>
+        </div>
+
         <div class="code-pane after">
           <div class="pane-header">
             <span>After Fix</span>
             <span class="badge success">Secure</span>
           </div>
-          <pre><code>{{ remediation.afterCode }}</code></pre>
+          <div class="code-lines" aria-label="After code">
+            <div
+              v-for="(line, idx) in afterLines"
+              :key="idx"
+              :class="['code-line', line.status]"
+            >
+              <span class="ln">{{ idx + 1 }}</span>
+              <code>{{ line.text }}</code>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -180,7 +205,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref, defineProps, defineEmits, computed } from 'vue'
 import { useVulnerabilitiesStore } from '../stores/vulnerabilities'
 import ToggleSwitch from './ToggleSwitch.vue'
 import { ClockIcon } from '@heroicons/vue/24/outline'
@@ -236,6 +261,39 @@ const updateMergeConfig = (key, value) => {
     props.remediation.mergeRequestIntegration[key] = value
   }
 }
+
+// Compute simple line-by-line comparison arrays for before/after panes.
+const beforeLines = computed(() => {
+  const before = String(props.remediation?.beforeCode || '')
+  const after = String(props.remediation?.afterCode || '')
+  const bLines = before.split('\n')
+  const aLines = after.split('\n')
+  const max = Math.max(bLines.length, aLines.length)
+  const out = []
+  for (let i = 0; i < max; i++) {
+    const bl = bLines[i] ?? ''
+    const al = aLines[i] ?? ''
+    if (bl === al) out.push({ text: bl, status: 'unchanged' })
+    else out.push({ text: bl, status: bl ? 'removed' : 'empty' })
+  }
+  return out
+})
+
+const afterLines = computed(() => {
+  const before = String(props.remediation?.beforeCode || '')
+  const after = String(props.remediation?.afterCode || '')
+  const bLines = before.split('\n')
+  const aLines = after.split('\n')
+  const max = Math.max(bLines.length, aLines.length)
+  const out = []
+  for (let i = 0; i < max; i++) {
+    const bl = bLines[i] ?? ''
+    const al = aLines[i] ?? ''
+    if (bl === al) out.push({ text: al, status: 'unchanged' })
+    else out.push({ text: al, status: al ? 'added' : 'empty' })
+  }
+  return out
+})
 </script>
 
 <style scoped>
@@ -553,10 +611,11 @@ const updateMergeConfig = (key, value) => {
 
 /* Comparison Section */
 .comparison-section {
-  background: var(--bg-secondary);
+  background: #ffffff;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 24px;
+  border-radius: 10px;
+  padding: 28px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .comparison-section h3 {
@@ -570,20 +629,20 @@ const updateMergeConfig = (key, value) => {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   gap: 12px;
-  align-items: center;
+  align-items: stretch;
 }
 
 .code-pane {
-  background: var(--bg-tertiary);
+  background: #ffffff;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .pane-header {
-  background: var(--bg-primary);
+  background: var(--surface);
   padding: 12px 16px;
   display: flex;
   justify-content: space-between;
@@ -610,27 +669,70 @@ const updateMergeConfig = (key, value) => {
   }
 }
 
-.code-pane pre {
-  margin: 0;
-  padding: 16px;
-  font-size: 12px;
-  line-height: 1.5;
-  overflow-x: auto;
-  flex: 1;
+.code-lines {
+  max-height: 320px;
+  overflow: auto;
 }
 
-.code-pane code {
-  color: var(--text-primary);
+.code-line {
+  display: flex;
+  gap: 12px;
+  padding: 6px 12px;
+  font-size: 13px;
+  align-items: flex-start;
+  white-space: pre;
+}
+
+.code-line .ln {
+  width: 40px;
+  text-align: right;
+  color: var(--text-secondary);
   font-family: 'Courier New', monospace;
+  padding-right: 12px;
+  user-select: none;
+}
+
+.code-line.unchanged {
+  background: transparent;
+}
+
+.code-line.removed {
+  background: rgba(254, 226, 226, 0.6);
+  border-left: 4px solid #fecaca;
+  color: #991b1b;
+}
+
+.code-line.added {
+  background: rgba(209, 250, 229, 0.6);
+  border-left: 4px solid #34d399;
+  color: #065f46;
+}
+
+.code-line.empty {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.code-line code {
+  display: block;
+  flex: 1;
+  color: inherit;
+  font-family: 'Courier New', monospace;
+  white-space: pre;
 }
 
 .comparison-arrow {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  color: var(--text-secondary);
   padding: 0 8px;
+}
+
+.comparison-arrow svg {
+  width: 36px;
+  height: 36px;
+  color: var(--text-secondary);
+  opacity: 0.9;
 }
 
 /* Merge Request Section */
