@@ -45,6 +45,13 @@
           </label>
         </div>
       </article>
+      
+      <article class="glass panel">
+        <h2 class="section-title">Integrations</h2>
+        <div style="margin-top:12px">
+          <GitHubAppOnboarding />
+        </div>
+      </article>
     </section>
 
     <p v-if="!canEditSettings" class="status">Read-only mode: your role can view but cannot edit settings.</p>
@@ -58,6 +65,7 @@ import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '../stores/settings'
 import { useAuthStore } from '../stores/auth'
+import GitHubAppOnboarding from '../components/GitHubAppOnboarding.vue'
 
 const settingsStore = useSettingsStore()
 const { profile, isLoading, error, saveState } = storeToRefs(settingsStore)
