@@ -206,7 +206,6 @@
                 <td><span class="pr-status" :class="`pr-${pr.status}`">{{ formatStatus(pr.status) }}</span></td>
                 <td class="pr-actions-cell">
                   <button class="btn copy-btn" @click="copyToClipboard(pr.url)" :title="`Copy ${pr.url}`">Copy</button>
-                  <a :href="pr.url" target="_blank" class="btn open-btn" :title="`Open ${pr.url}`">Open</a>
                 </td>
               </tr>
             </tbody>
