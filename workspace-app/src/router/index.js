@@ -102,7 +102,14 @@ export function installAuthGuard(router, pinia) {
 
         // Check permission requirements
         if (to.meta.requiredPermission && !authStore.hasPermission(to.meta.requiredPermission)) {
-            return '/dashboard'
+            // Notify user that access is denied and redirect to dashboard
+            try {
+                window.alert('You do not have permission to access that page.')
+            } catch (e) {
+                /* ignore in non-browser contexts */
+            }
+
+            return { path: '/dashboard' }
         }
 
         // Authenticated users trying to access public-only routes (landing, login) redirect to dashboard
