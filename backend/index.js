@@ -1,5 +1,7 @@
 import express from 'express'
 import { fileURLToPath } from 'node:url'
+import fs from 'fs'
+import crypto from 'crypto'
 import { defaultSettings, workspaceData, vulnerabilityData } from './data.js'
 
 const port = 8787
@@ -8,6 +10,76 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ''
 const GITHUB_OWNER = process.env.GITHUB_OWNER || 'example'
 const GITHUB_REPO = process.env.GITHUB_REPO || 'repo'
 const GITHUB_BASE_BRANCH = process.env.GITHUB_BASE_BRANCH || 'main'
+
+// GitHub App (preferred for SaaS): configure APP ID and PRIVATE KEY or PRIVATE_KEY_PATH
+const GITHUB_APP_ID = process.env.GITHUB_APP_ID || ''
+let GITHUB_APP_PRIVATE_KEY = process.env.GITHUB_APP_PRIVATE_KEY || ''
+const GITHUB_APP_PRIVATE_KEY_PATH = process.env.GITHUB_APP_PRIVATE_KEY_PATH || ''
+
+if (!GITHUB_APP_PRIVATE_KEY && GITHUB_APP_PRIVATE_KEY_PATH) {
+  try {
+    GITHUB_APP_PRIVATE_KEY = fs.readFileSync(GITHUB_APP_PRIVATE_KEY_PATH, 'utf8')
+  } catch (e) {
+    console.warn('Could not read GITHUB_APP_PRIVATE_KEY_PATH:', e.message)
+  }
+}
+
+// Simple in-memory cache for installation tokens: installationId -> { token, expiresAt }
+const installationTokens = {}
+
+const base64Url = (input) => {
+  return Buffer.from(input).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+const createJwt = (appId, privateKey) => {
+  const header = { alg: 'RS256', typ: 'JWT' }
+  const now = Math.floor(Date.now() / 1000)
+  const payload = { iat: now - 60, exp: now + (10 * 60), iss: appId }
+  const encodedHeader = base64Url(JSON.stringify(header))
+  const encodedPayload = base64Url(JSON.stringify(payload))
+  const data = `${encodedHeader}.${encodedPayload}`
+  const signer = crypto.createSign('RSA-SHA256')
+  signer.update(data)
+  signer.end()
+  const signature = signer.sign(privateKey, 'base64')
+  const encodedSig = signature.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  return `${data}.${encodedSig}`
+}
+
+const getInstallationToken = async (installationId) => {
+  const cached = installationTokens[installationId]
+  if (cached && cached.expiresAt && cached.expiresAt > Date.now() + 5000) {
+    return cached.token
+  }
+
+  if (!GITHUB_APP_ID || !GITHUB_APP_PRIVATE_KEY) {
+    throw new Error('GitHub App credentials not configured')
+  }
+
+  const jwt = createJwt(GITHUB_APP_ID, GITHUB_APP_PRIVATE_KEY)
+  const url = `https://api.github.com/app/installations/${installationId}/access_tokens`
+  const res = await fetch(url, { method: 'POST', headers: { Authorization: `Bearer ${jwt}`, Accept: 'application/vnd.github.v3+json' } })
+  if (!res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new Error(`Failed to create installation token: ${res.status} ${text}`)
+  }
+  const data = await res.json()
+  const token = data.token
+  const expiresAt = data.expires_at ? new Date(data.expires_at).getTime() : (Date.now() + 60 * 60 * 1000)
+  installationTokens[installationId] = { token, expiresAt }
+  return token
+}
+
+const listAppInstallations = async () => {
+  if (!GITHUB_APP_ID || !GITHUB_APP_PRIVATE_KEY) throw new Error('GitHub App credentials not configured')
+  const jwt = createJwt(GITHUB_APP_ID, GITHUB_APP_PRIVATE_KEY)
+  const res = await fetch('https://api.github.com/app/installations', { headers: { Authorization: `Bearer ${jwt}`, Accept: 'application/vnd.github.v3+json' } })
+  if (!res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new Error(`Failed to list installations: ${res.status} ${text}`)
+  }
+  return res.json()
+}
 const demoUsers = [
   {
     id: 'user_project_lead',
@@ -361,6 +433,25 @@ export function createApp() {
     res.status(201).json({ comment: newComment })
   }))
 
+  // --- GitHub App helper endpoints (admin) ---
+  app.get('/api/github/app/installations', requireAuth, withLatency(async (req, res) => {
+    try {
+      const installations = await listAppInstallations()
+      res.json({ installations })
+    } catch (err) {
+      res.status(500).json({ error: err.message })
+    }
+  }))
+
+  app.post('/api/github/app/installations/:installationId/token', requireAuth, withLatency(async (req, res) => {
+    try {
+      const token = await getInstallationToken(req.params.installationId)
+      res.json({ token })
+    } catch (err) {
+      res.status(500).json({ error: err.message })
+    }
+  }))
+
   // Remediation endpoints
   app.get('/api/vulnerabilities/:id/remediation', requireAuth, withLatency((req, res) => {
     const remediation = remediations[req.params.id]
@@ -404,6 +495,81 @@ export function createApp() {
     const platformKey = (platform || remediation.mergeRequestIntegration?.platform || 'github').toString().toLowerCase()
     let prUrl = platformUrl || ''
     const branchName = requestedBranchName || `fix-vulnerability-${req.params.id}-${Date.now()}`
+
+    // GitHub App flow: if an installationId is provided (or stored in remediation config)
+    const installationId = req.body.installationId || remediation.mergeRequestIntegration?.installationId
+    const owner = req.body.owner || remediation.mergeRequestIntegration?.owner || GITHUB_OWNER
+    const repo = req.body.repo || remediation.mergeRequestIntegration?.repo || GITHUB_REPO
+    const baseBranch = req.body.baseBranch || remediation.mergeRequestIntegration?.baseBranch || GITHUB_BASE_BRANCH
+
+    if (installationId && GITHUB_APP_ID && GITHUB_APP_PRIVATE_KEY) {
+      try {
+        const token = await getInstallationToken(installationId)
+
+        // 1) get base branch SHA
+        const baseRefRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/ref/heads/${baseBranch}`, {
+          headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+        })
+
+        if (!baseRefRes.ok) {
+          const text = await baseRefRes.text()
+          throw new Error(`Failed to fetch base branch ref: ${baseRefRes.status} ${text}`)
+        }
+
+        const baseRefData = await baseRefRes.json()
+        const baseSha = baseRefData.object?.sha
+        if (!baseSha) throw new Error('Could not determine base branch SHA')
+
+        // 2) create branch (ref). If already exists, ignore the 422 error.
+        const createRefRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/refs`, {
+          method: 'POST',
+          headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ref: `refs/heads/${branchName}`, sha: baseSha })
+        })
+
+        if (!createRefRes.ok && createRefRes.status !== 422) {
+          const text = await createRefRes.text()
+          throw new Error(`Failed to create branch: ${createRefRes.status} ${text}`)
+        }
+
+        // 3) create the pull request
+        const prTitle = title || `Remediation: ${req.params.id}`
+        const prBody = body || `Automated remediation PR for vulnerability ${req.params.id}`
+
+        const createPrRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/pulls`, {
+          method: 'POST',
+          headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: prTitle, head: branchName, base: baseBranch, body: prBody })
+        })
+
+        if (!createPrRes.ok) {
+          const text = await createPrRes.text()
+          throw new Error(`Failed to create pull request: ${createPrRes.status} ${text}`)
+        }
+
+        const prData = await createPrRes.json()
+        prUrl = prData.html_url || prData.url || prUrl
+
+        const newPR = {
+          id: `pr-${Date.now()}`,
+          platform: 'github-app',
+          url: prUrl,
+          status: prData.state || 'open',
+          createdDate: new Date(),
+          meta: prData
+        }
+
+        remediation.pullRequests = remediation.pullRequests || []
+        remediation.pullRequests.push(newPR)
+        remediation.status = 'in-progress'
+
+        res.status(201).json({ pullRequest: newPR })
+        return
+      } catch (err) {
+        console.error('GitHub App PR creation failed:', err)
+        // fall through to other flows/fallback
+      }
+    }
 
     // Attempt real GitHub PR creation when configured
     if (platformKey === 'github' && GITHUB_TOKEN && GITHUB_OWNER && GITHUB_REPO) {
