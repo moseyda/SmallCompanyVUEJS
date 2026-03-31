@@ -277,12 +277,20 @@ const applySuggestion = (fix) => {
   emit('apply-fix', { fixId: fix.id, branchName: branchName.value })
 }
 
-const proposeRemediation = () => {
-  vulnStore.remediations[props.vulnId].status = 'proposed'
+const proposeRemediation = async () => {
+  try {
+    await vulnStore.updateRemediation(props.vulnId, { status: 'proposed' })
+  } catch (e) {
+    console.warn('Failed to set remediation to proposed', e)
+  }
 }
 
-const startRemediation = () => {
-  vulnStore.remediations[props.vulnId].status = 'in-progress'
+const startRemediation = async () => {
+  try {
+    await vulnStore.updateRemediation(props.vulnId, { status: 'in-progress' })
+  } catch (e) {
+    console.warn('Failed to start remediation', e)
+  }
 }
 
 const createMergeRequest = async () => {

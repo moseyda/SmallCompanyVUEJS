@@ -185,17 +185,17 @@ export const useVulnerabilitiesStore = defineStore('vulnerabilities', {
       }
     },
 
-    // Create merge request for remediation (now accepts optional platform)
-    async createMergeRequest(vulnId, fixId, branchName, platform = 'GitHub') {
+    // Create merge request for remediation (accepts optional fixId/branch/platform)
+    async createMergeRequest(vulnId, fixId = null, branchName = null, platform = 'GitHub') {
       try {
-        const response = await api.createMergeRequest(vulnId, {
+        const payload = {
           branchName,
           fixId,
           platform
-        })
+        }
+        const response = await api.createMergeRequest(vulnId, payload)
         if (this.remediations[vulnId] && response.pullRequest) {
-          this.remediations[vulnId].pullRequests =
-            this.remediations[vulnId].pullRequests || []
+          this.remediations[vulnId].pullRequests = this.remediations[vulnId].pullRequests || []
           this.remediations[vulnId].pullRequests.push(response.pullRequest)
           this.remediations[vulnId].status = 'in-progress'
         }
@@ -213,6 +213,27 @@ export const useVulnerabilitiesStore = defineStore('vulnerabilities', {
         if (this.remediations[vulnId] && response.remediation) {
           Object.assign(this.remediations[vulnId], response.remediation)
         }
+
+        // If auto-create is enabled and remediation moved to in-progress, attempt to create PR
+        const rem = this.remediations[vulnId]
+        if (rem) {
+          const autoCreate = rem.mergeRequestIntegration?.autoCreate
+          const statusInProgress = rem.status === 'in-progress'
+          const hasPRs = Array.isArray(rem.pullRequests) && rem.pullRequests.length > 0
+
+          if (autoCreate && statusInProgress && !hasPRs) {
+            // Determine a sensible fixId and branch name
+            const fixId = (rem.appliedFix && rem.appliedFix.id) || (rem.suggestedFixes && rem.suggestedFixes[0] && rem.suggestedFixes[0].id) || null
+            const branch = rem.mergeRequestIntegration?.branchName || `feature/auto-fix-${vulnId}-${Date.now()}`
+            try {
+              await this.createMergeRequest(vulnId, fixId, branch, rem.mergeRequestIntegration?.platform || 'GitHub')
+            } catch (e) {
+              // store the error but do not throw (non-fatal)
+              this.error = e?.message || 'Auto PR creation failed'
+            }
+          }
+        }
+
         return true
       } catch (err) {
         this.error = err.message
