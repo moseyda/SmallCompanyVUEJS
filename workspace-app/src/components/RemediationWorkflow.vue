@@ -452,12 +452,17 @@ const updateMergeConfig = (key, value) => {
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, var(--brand-teal), #14c0a8);
-  color: white;
+  background: linear-gradient(135deg, var(--btn-secondary-bg-start), var(--btn-secondary-bg-end));
+  color: #132033;
   border-radius: 50%;
   font-size: 13px;
   font-weight: 800;
-  box-shadow: 0 6px 18px rgba(0, 167, 142, 0.12);
+  box-shadow: 0 6px 18px rgba(149,111,83,0.12);
+}
+
+/* Use the app's secondary button gold for all option badges */
+.fixes-list .fix-option .fix-badge {
+  background: linear-gradient(135deg, var(--btn-secondary-bg-start), var(--btn-secondary-bg-end));
 }
 
 .fix-meta {
