@@ -123,17 +123,25 @@
     <!-- Merge Request Integration -->
     <div class="merge-request-section">
       <h3>Merge Request Integration</h3>
+
       <div class="merge-config">
         <div class="config-item">
           <label>Platform:</label>
-          <span>{{ remediation.mergeRequestIntegration?.platform || 'GitHub' }}</span>
+          <div class="platform-select">
+            <select v-model="selectedPlatform">
+              <option v-for="p in platforms" :key="p" :value="p">{{ p }}</option>
+            </select>
+          </div>
         </div>
+
         <div class="config-item">
           <label>Auto-Create PR:</label>
-          <toggle-switch
-            :value="remediation.mergeRequestIntegration?.autoCreate || false"
-            @change="(val) => updateMergeConfig('autoCreate', val)"
-          />
+          <div>
+            <toggle-switch
+              :value="remediation.mergeRequestIntegration?.autoCreate || false"
+              @change="(val) => updateMergeConfig('autoCreate', val)"
+            />
+          </div>
         </div>
       </div>
 
@@ -145,6 +153,12 @@
               Pull Request #{{ pr.id.split('-').pop() }}
               <span class="external-icon">↗</span>
             </a>
+
+            <div class="pr-actions">
+              <button class="btn copy-btn" @click="copyToClipboard(pr.url)">Copy URL</button>
+              <a :href="pr.url" target="_blank" class="btn open-btn">Open</a>
+            </div>
+
             <span class="pr-status" :class="`pr-${pr.status}`">
               {{ pr.status.charAt(0).toUpperCase() + pr.status.slice(1) }}
             </span>
@@ -154,16 +168,28 @@
       </div>
 
       <div v-if="remediation.status === 'in-progress'" class="merge-actions">
-        <input
-          v-model="branchName"
-          type="text"
-          placeholder="feature/fix-sql-injection"
-          class="branch-input"
-        />
-        <button class="action-btn" @click="createMergeRequest">
-          Create Merge Request
-        </button>
+        <div class="branch-group">
+          <input
+            v-model="branchName"
+            type="text"
+            placeholder="feature/fix-sql-injection"
+            class="branch-input"
+            :disabled="mrCreating"
+          />
+          <button class="btn copy-btn" @click="copyToClipboard(branchName)">Copy</button>
+        </div>
+
+        <div class="create-group">
+          <button class="action-btn" @click="createMergeRequest" :disabled="mrCreating">
+            <span v-if="mrCreating" class="mr-spinner" aria-hidden="true"></span>
+            <span v-if="!mrCreating">Create Merge Request</span>
+            <span v-else>Creating...</span>
+          </button>
+        </div>
       </div>
+
+      <div v-if="createSuccess" class="mr-status-message success">{{ createSuccess }}</div>
+      <div v-if="createError" class="mr-status-message error">{{ createError }}</div>
     </div>
 
     <!-- Remediation Timeline -->
@@ -205,7 +231,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, computed } from 'vue'
+import { ref, defineProps, defineEmits, computed, watch } from 'vue'
 import { useVulnerabilitiesStore } from '../stores/vulnerabilities'
 import ToggleSwitch from './ToggleSwitch.vue'
 import { ClockIcon } from '@heroicons/vue/24/outline'
@@ -220,6 +246,20 @@ const emit = defineEmits(['apply-fix'])
 const vulnStore = useVulnerabilitiesStore()
 
 const branchName = ref('feature/fix-vulnerability')
+const platforms = ['GitHub', 'GitLab', 'Bitbucket']
+const normalizePlatform = (p) => {
+  if (!p) return null
+  const key = p.toString().toLowerCase()
+  if (key === 'github' || key === 'gh') return 'GitHub'
+  if (key === 'gitlab') return 'GitLab'
+  if (key === 'bitbucket') return 'Bitbucket'
+  return p
+}
+
+const selectedPlatform = ref(normalizePlatform(props.remediation?.mergeRequestIntegration?.platform) || 'GitHub')
+const mrCreating = ref(false)
+const createError = ref(null)
+const createSuccess = ref(null)
 
 const formatStatus = (status) => {
   const map = { draft: 'Draft', proposed: 'Proposed', 'in-progress': 'In Progress', completed: 'Completed' }
@@ -247,18 +287,72 @@ const startRemediation = () => {
 
 const createMergeRequest = async () => {
   if (!branchName.value.trim()) {
-    alert('Please enter a branch name')
+    createError.value = 'Please enter a branch name'
+    createSuccess.value = null
     return
   }
-  const applied = await vulnStore.createMergeRequest(props.vulnId, 'fix-001', branchName.value)
-  if (applied) {
-    branchName.value = 'feature/fix-vulnerability'
+
+  mrCreating.value = true
+  createError.value = null
+  createSuccess.value = null
+
+  // Persist selected platform before creating MR
+  try {
+    await vulnStore.updateRemediation(props.vulnId, {
+      mergeRequestIntegration: props.remediation.mergeRequestIntegration || { platform: selectedPlatform.value }
+    })
+  } catch (e) {
+    // non-fatal, proceed but surface a warning
+    console.warn('Failed to persist merge config before MR creation', e)
+  }
+
+  // prefer first suggested fix id if available
+  const fixIdForCreate = props.remediation?.suggestedFixes?.[0]?.id || 'fix-001'
+  try {
+    const applied = await vulnStore.createMergeRequest(props.vulnId, fixIdForCreate, branchName.value, selectedPlatform.value)
+    if (applied) {
+      createSuccess.value = 'Merge request created successfully.'
+      // reset branch field to default after success
+      branchName.value = 'feature/fix-vulnerability'
+      // clear success message after a short delay
+      setTimeout(() => { createSuccess.value = null }, 3500)
+    } else {
+      createError.value = vulnStore.error || 'Failed to create merge request.'
+    }
+  } catch (err) {
+    createError.value = err?.message || 'Failed to create merge request.'
+  } finally {
+    mrCreating.value = false
   }
 }
 
-const updateMergeConfig = (key, value) => {
+const copyToClipboard = async (text) => {
+  if (!text) return
+  try {
+    await navigator.clipboard.writeText(text)
+    createSuccess.value = 'Copied to clipboard.'
+    setTimeout(() => { createSuccess.value = null }, 1800)
+  } catch (e) {
+    createError.value = 'Unable to copy to clipboard.'
+    setTimeout(() => { createError.value = null }, 2400)
+  }
+}
+
+watch(selectedPlatform, (val) => {
+  updateMergeConfig('platform', val)
+})
+
+const updateMergeConfig = async (key, value) => {
   if (props.remediation?.mergeRequestIntegration) {
     props.remediation.mergeRequestIntegration[key] = value
+    // persist the change to the server
+    try {
+      await vulnStore.updateRemediation(props.vulnId, {
+        mergeRequestIntegration: props.remediation.mergeRequestIntegration
+      })
+    } catch (e) {
+      console.warn('Failed to persist mergeRequestIntegration', e)
+    }
   }
 }
 
@@ -788,6 +882,100 @@ const afterLines = computed(() => {
   font-weight: 600;
   color: var(--text-primary);
   text-transform: uppercase;
+}
+
+.platform-select select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.pr-item {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pr-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.pr-actions {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn.open-btn {
+  background: linear-gradient(125deg, var(--brand-teal), #14c0a8);
+  color: #fff;
+  border: none;
+}
+
+.copy-btn {
+  background: transparent;
+}
+
+.branch-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.create-group {
+  margin-top: 8px;
+}
+
+.mr-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.18);
+  border-top-color: #fff;
+  margin-right: 8px;
+  animation: mr-spin 0.9s linear infinite;
+}
+
+@keyframes mr-spin {
+  to { transform: rotate(360deg); }
+}
+
+.mr-status-message {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.mr-status-message.success {
+  background: rgba(34,197,94,0.12);
+  color: #065f46;
+}
+
+.mr-status-message.error {
+  background: rgba(254,202,202,0.12);
+  color: #991b1b;
 }
 
 .pr-item {
