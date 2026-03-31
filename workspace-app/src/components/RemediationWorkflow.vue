@@ -132,15 +132,12 @@
           </div>
         </div>
 
-              <div class="config-item">
-                <label>Repository Mapping:</label>
-                <div class="mapping-select">
-                  <FilterDropdown v-model="selectedMappingIndex" :options="mappingOptions" label="Repository Mapping" />
-                </div>
-              </div>
-              <div v-if="!mappings.length" class="no-mappings-hint">
-                <p class="muted">No repository mappings found. Admins can add mappings in <router-link to="/admin/integrations">Admin → Integrations</router-link>.</p>
-              </div>
+        <div class="config-item">
+          <label>Repository Mapping:</label>
+          <div class="mapping-select">
+            <FilterDropdown v-model="selectedMappingIndex" :options="mappingOptions" label="Repository Mapping" />
+          </div>
+        </div>
 
         <div class="config-item">
           <label>Auto-Create PR:</label>
@@ -151,6 +148,10 @@
             />
           </div>
         </div>
+      </div>
+
+      <div v-if="!mappings.length" class="no-mappings-hint">
+        <p class="muted">No repository mappings found. Admins can add mappings in <router-link to="/admin/integrations">Admin → Integrations</router-link>.</p>
       </div>
 
       <div v-if="remediation.pullRequests?.length" class="pull-requests-list">
@@ -960,7 +961,7 @@ const afterLines = computed(() => {
 
 .platform-select,
 .mapping-select {
-  max-width: 420px;
+  max-width: 290px;
   width: 100%;
   display: block;
 }
@@ -1125,7 +1126,12 @@ const afterLines = computed(() => {
 
 .no-mappings-hint {
   grid-column: 1 / -1;
-  margin-top: 6px;
+  margin: 16px 0;
+  padding: 12px 20px;
+  background: rgba(240, 242, 245, 0.9);
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  text-align: center;
 }
 
 .no-mappings-hint .muted {
