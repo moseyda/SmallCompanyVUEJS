@@ -479,7 +479,7 @@ export function createApp() {
   }))
 
   // --- GitHub App helper endpoints (admin) ---
-  app.get('/api/github/app/installations', requireAuth, withLatency(async (req, res) => {
+  app.get('/api/github/app/installations', requirePermission('settings:write'), withLatency(async (req, res) => {
     try {
       const installations = await listAppInstallations()
       res.json({ installations })
@@ -488,7 +488,7 @@ export function createApp() {
     }
   }))
 
-  app.post('/api/github/app/installations/:installationId/token', requireAuth, withLatency(async (req, res) => {
+  app.post('/api/github/app/installations/:installationId/token', requirePermission('settings:write'), withLatency(async (req, res) => {
     try {
       const token = await getInstallationToken(req.params.installationId)
       res.json({ token })
