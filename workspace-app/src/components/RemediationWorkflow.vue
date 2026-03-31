@@ -57,7 +57,10 @@
 
           <p class="fix-description">{{ fix.description }}</p>
           <div class="fix-details">
-            <span class="detail-item">⏱️ Est. Time: {{ fix.estimatedTime }}</span>
+            <span class="detail-item">
+              <ClockIcon class="fix-icon" aria-hidden="true" />
+              <span>Est. Time: {{ fix.estimatedTime }}</span>
+            </span>
           </div>
           <button class="action-btn" @click="applySuggestion(fix)">
             Apply This Fix
@@ -180,6 +183,7 @@
 import { ref, defineProps, defineEmits } from 'vue'
 import { useVulnerabilitiesStore } from '../stores/vulnerabilities'
 import ToggleSwitch from './ToggleSwitch.vue'
+import { ClockIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
   vulnId: String,
@@ -510,6 +514,13 @@ const updateMergeConfig = (key, value) => {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+.fix-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
 }
 
 .empty-state {
