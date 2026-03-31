@@ -193,6 +193,19 @@ export const useVulnerabilitiesStore = defineStore('vulnerabilities', {
           fixId,
           platform
         }
+
+        // If a per-repo mapping (GitHub App) is configured on the remediation, include it
+        const rem = this.remediations[vulnId]
+        if (rem && rem.mergeRequestIntegration) {
+          const m = rem.mergeRequestIntegration
+          if (m.installationId) payload.installationId = m.installationId
+          if (m.owner) payload.owner = m.owner
+          if (m.repo) payload.repo = m.repo
+          if (m.baseBranch) payload.baseBranch = m.baseBranch
+          // allow platform override present on remediation
+          if (m.platform) payload.platform = m.platform
+        }
+
         const response = await api.createMergeRequest(vulnId, payload)
         if (this.remediations[vulnId] && response.pullRequest) {
           this.remediations[vulnId].pullRequests = this.remediations[vulnId].pullRequests || []
