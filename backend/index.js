@@ -377,12 +377,18 @@ export function createApp() {
     if (req.body.status) remediation.status = req.body.status
     if (req.body.progress !== undefined) remediation.progress = req.body.progress
     if (req.body.afterCode) remediation.afterCode = req.body.afterCode
+    if (req.body.mergeRequestIntegration) {
+      remediation.mergeRequestIntegration = {
+        ...(remediation.mergeRequestIntegration || {}),
+        ...req.body.mergeRequestIntegration
+      }
+    }
 
     res.json({ remediation })
   }))
 
   app.post('/api/vulnerabilities/:id/remediation/merge-request', requireAuth, withLatency((req, res) => {
-    const { platformUrl, branchName } = req.body ?? {}
+    const { platformUrl, branchName, platform } = req.body ?? {}
     const remediation = remediations[req.params.id]
     
     if (!remediation) {
@@ -390,11 +396,24 @@ export function createApp() {
       return
     }
 
+    // determine platform and construct a friendly URL (demo/stub)
+    const platformKey = (platform || remediation.mergeRequestIntegration?.platform || 'github').toString().toLowerCase()
+    let prUrl = platformUrl || ''
+    if (!prUrl) {
+      if (platformKey === 'gitlab') {
+        prUrl = `https://gitlab.com/example/repo/-/merge_requests/new?merge_request[source_branch]=${encodeURIComponent(branchName || 'fix-vulnerability')}`
+      } else if (platformKey === 'bitbucket') {
+        prUrl = `https://bitbucket.org/example/repo/pull-requests/new?source=${encodeURIComponent(branchName || 'fix-vulnerability')}`
+      } else {
+        prUrl = `https://github.com/example/repo/pull/new/${encodeURIComponent(branchName || 'fix-vulnerability')}`
+      }
+    }
+
     const newPR = {
       id: `pr-${Date.now()}`,
-      platform: 'github',
-      url: platformUrl || `https://github.com/example/repo/pull/new/${branchName || 'fix-vulnerability'}`,
-      status: 'draft',
+      platform: platformKey,
+      url: prUrl,
+      status: 'open',
       createdDate: new Date()
     }
 
