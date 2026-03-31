@@ -134,6 +134,16 @@
           </div>
         </div>
 
+              <div class="config-item">
+                <label>Repository Mapping:</label>
+                <div class="mapping-select">
+                  <select v-model="selectedMappingIndex">
+                    <option :value="-1">Manual / None</option>
+                    <option v-for="(m, idx) in mappings" :key="idx" :value="idx">{{ m.owner }}/{{ m.repo }} (inst {{ m.installationId }})</option>
+                  </select>
+                </div>
+              </div>
+
         <div class="config-item">
           <label>Auto-Create PR:</label>
           <div>
@@ -231,8 +241,9 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, computed, watch } from 'vue'
+import { ref, defineProps, defineEmits, computed, watch, onMounted } from 'vue'
 import { useVulnerabilitiesStore } from '../stores/vulnerabilities'
+import { useSettingsStore } from '../stores/settings'
 import ToggleSwitch from './ToggleSwitch.vue'
 import { ClockIcon } from '@heroicons/vue/24/outline'
 
@@ -244,6 +255,7 @@ const props = defineProps({
 const emit = defineEmits(['apply-fix'])
 
 const vulnStore = useVulnerabilitiesStore()
+const settingsStore = useSettingsStore()
 
 const branchName = ref('feature/fix-vulnerability')
 const platforms = ['GitHub', 'GitLab', 'Bitbucket']
@@ -260,6 +272,8 @@ const selectedPlatform = ref(normalizePlatform(props.remediation?.mergeRequestIn
 const mrCreating = ref(false)
 const createError = ref(null)
 const createSuccess = ref(null)
+const mappings = computed(() => settingsStore.profile.githubAppMappings || [])
+const selectedMappingIndex = ref(-1)
 
 const formatStatus = (status) => {
   const map = { draft: 'Draft', proposed: 'Proposed', 'in-progress': 'In Progress', completed: 'Completed' }
@@ -350,19 +364,56 @@ watch(selectedPlatform, (val) => {
   updateMergeConfig('platform', val)
 })
 
+// Ensure a mergeRequestIntegration object exists and persist updates in a single call
 const updateMergeConfig = async (key, value) => {
-  if (props.remediation?.mergeRequestIntegration) {
-    props.remediation.mergeRequestIntegration[key] = value
-    // persist the change to the server
+  const current = props.remediation?.mergeRequestIntegration ? { ...props.remediation.mergeRequestIntegration } : { platform: selectedPlatform.value }
+  current[key] = value
+  // reflect locally for immediate UI feedback
+  if (props.remediation) props.remediation.mergeRequestIntegration = current
+  try {
+    await vulnStore.updateRemediation(props.vulnId, { mergeRequestIntegration: current })
+  } catch (e) {
+    console.warn('Failed to persist mergeRequestIntegration', e)
+  }
+}
+
+// Apply a selected mapping (single API call)
+const applySelectedMapping = async (idx) => {
+  if (idx >= 0 && mappings.value[idx]) {
+    const m = mappings.value[idx]
+    const current = { ...(props.remediation?.mergeRequestIntegration || {}), installationId: m.installationId, owner: m.owner, repo: m.repo, baseBranch: m.baseBranch || 'main' }
+    if (props.remediation) props.remediation.mergeRequestIntegration = current
     try {
-      await vulnStore.updateRemediation(props.vulnId, {
-        mergeRequestIntegration: props.remediation.mergeRequestIntegration
-      })
+      await vulnStore.updateRemediation(props.vulnId, { mergeRequestIntegration: current })
     } catch (e) {
-      console.warn('Failed to persist mergeRequestIntegration', e)
+      console.warn('Failed to save mapping selection', e)
+    }
+  } else {
+    // clear mapping fields
+    const current = { ...(props.remediation?.mergeRequestIntegration || {}), installationId: null, owner: '', repo: '', baseBranch: 'main' }
+    if (props.remediation) props.remediation.mergeRequestIntegration = current
+    try {
+      await vulnStore.updateRemediation(props.vulnId, { mergeRequestIntegration: current })
+    } catch (e) {
+      console.warn('Failed to clear mapping selection', e)
     }
   }
 }
+
+// keep selectedMappingIndex in sync when settings or remediation change
+watch([() => mappings.value, () => props.remediation?.mergeRequestIntegration], () => {
+  const remMap = props.remediation?.mergeRequestIntegration || {}
+  const idx = mappings.value.findIndex(m => String(m.installationId) === String(remMap.installationId) || (m.owner === remMap.owner && m.repo === remMap.repo))
+  selectedMappingIndex.value = idx >= 0 ? idx : -1
+}, { immediate: true })
+
+watch(selectedMappingIndex, (val) => {
+  applySelectedMapping(val)
+})
+
+onMounted(() => {
+  if (!settingsStore.loaded) settingsStore.fetchSettings().catch(() => {})
+})
 
 // Compute simple line-by-line comparison arrays for before/after panes.
 const beforeLines = computed(() => {
