@@ -156,23 +156,32 @@
 
       <div v-if="remediation.pullRequests?.length" class="pull-requests-list">
         <h4>Created Merge Requests</h4>
-        <div v-for="pr in remediation.pullRequests" :key="pr.id" class="pr-item">
-          <div class="pr-header">
-            <a :href="pr.url" target="_blank" class="pr-link">
-              Pull Request #{{ pr.id.split('-').pop() }}
-              <span class="external-icon">↗</span>
-            </a>
-
-            <div class="pr-actions">
-              <button class="btn copy-btn" @click="copyToClipboard(pr.url)">Copy URL</button>
-              <a :href="pr.url" target="_blank" class="btn open-btn">Open</a>
-            </div>
-
-            <span class="pr-status" :class="`pr-${pr.status}`">
-              {{ pr.status.charAt(0).toUpperCase() + pr.status.slice(1) }}
-            </span>
-          </div>
-          <p class="pr-date">Created {{ formatDate(pr.createdDate) }}</p>
+        <div class="table-wrap">
+          <table class="pr-table">
+            <thead>
+              <tr>
+                <th>PR</th>
+                <th>Created</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="pr in remediation.pullRequests" :key="pr.id">
+                <td>
+                  <a :href="pr.url" target="_blank" class="pr-link">
+                    #{{ pr.id.split('-').pop() }} <span class="external-icon">↗</span>
+                  </a>
+                </td>
+                <td>{{ formatDate(pr.createdDate) }}</td>
+                <td><span class="pr-status" :class="`pr-${pr.status}`">{{ pr.status.charAt(0).toUpperCase() + pr.status.slice(1) }}</span></td>
+                <td class="pr-actions-cell">
+                  <button class="btn copy-btn" @click="copyToClipboard(pr.url)">Copy</button>
+                  <a :href="pr.url" target="_blank" class="btn open-btn">Open</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -945,6 +954,51 @@ const afterLines = computed(() => {
   font-weight: 600;
   color: var(--text-primary);
   text-transform: uppercase;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.pr-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+}
+
+.pr-table th,
+.pr-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 13px;
+}
+
+.pr-table th {
+  color: var(--text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: rgba(238, 243, 247, 0.85);
+}
+
+.pr-table tbody tr:hover {
+  background: rgba(240, 242, 245, 0.8);
+}
+
+.pr-link {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.pr-actions-cell {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .platform-select select,
