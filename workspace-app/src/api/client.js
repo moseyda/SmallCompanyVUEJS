@@ -97,4 +97,11 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(data)
     })
+
+  // GitHub App admin endpoints
+  ,getGithubAppInstallations: () => request('/api/github/app/installations')
+  ,createGithubInstallationToken: (installationId) =>
+    request(`/api/github/app/installations/${installationId}/token`, {
+      method: 'POST'
+    })
 }
