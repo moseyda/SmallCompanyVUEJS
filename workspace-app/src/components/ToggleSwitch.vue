@@ -27,7 +27,7 @@ defineEmits(['change'])
   padding: 0;
   border: none;
   border-radius: 12px;
-  background: var(--border-color);
+  background: var(--ink-300);
   cursor: pointer;
   transition: all 0.2s;
 
@@ -37,7 +37,7 @@ defineEmits(['change'])
   }
 
   &.active {
-    background: var(--color-primary);
+    background: linear-gradient(125deg, var(--brand-teal), #14c0a8);
 
     .toggle-thumb {
       left: 22px;
