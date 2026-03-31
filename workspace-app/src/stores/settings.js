@@ -13,7 +13,9 @@ const defaults = {
     owner: '',
     repo: '',
     baseBranch: 'main'
-  }
+  },
+  // Support multiple repo mappings for GitHub App installations
+  githubAppMappings: []
 }
 
 export const useSettingsStore = defineStore('settings', {
@@ -72,6 +74,18 @@ export const useSettingsStore = defineStore('settings', {
       }
 
       this.isLoading = false
+    }
+
+    // Update GitHub App mappings and persist settings
+    async updateGithubAppMappings(mappings) {
+      this.profile.githubAppMappings = mappings || []
+      try {
+        await this.saveSettings()
+        return true
+      } catch (e) {
+        this.error = e?.message || 'Failed to save GitHub App mappings.'
+        return false
+      }
     }
   }
 })
