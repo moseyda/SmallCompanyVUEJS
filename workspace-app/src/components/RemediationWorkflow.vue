@@ -2,7 +2,10 @@
   <div class="remediation-workflow">
     <!-- Progress Tracking -->
     <div class="progress-section">
-      <h3>Remediation Progress</h3>
+      <h3 class="progress-heading">
+        <span>Remediation Progress</span>
+        <span class="progress-heading-value">{{ Math.round(remediation.progress || 0) }}%</span>
+      </h3>
       <div
         class="progress-bar"
         role="progressbar"
@@ -13,9 +16,7 @@
         <div class="progress-track">
           <div class="progress-fill" :style="{ width: `${remediation.progress || 0}%` }"></div>
         </div>
-        <div class="progress-label">{{ remediation.progress || 0 }}%</div>
       </div>
-      <p class="progress-percentage">{{ remediation.progress || 0 }}% Complete</p>
     </div>
 
     <!-- Status Overview -->
@@ -38,21 +39,22 @@
     <div class="fixes-section">
       <h3>Suggested Fixes</h3>
       <div v-if="remediation.suggestedFixes?.length" class="fixes-list">
-        <div v-for="(fix, index) in remediation.suggestedFixes" :key="fix.id" class="fix-option">
+        <div
+          v-for="(fix, idx) in remediation.suggestedFixes"
+          :key="fix.id"
+          class="fix-option"
+        >
           <div class="fix-header">
             <h4>
-              <span class="fix-badge">{{ String.fromCharCode(65 + index) }}</span>
+              <span class="fix-badge">{{ String.fromCharCode(65 + idx) }}</span>
               {{ fix.title }}
             </h4>
             <div class="fix-meta">
-              <span class="complexity-badge" :class="`complexity-${fix.complexity}`">
-                {{ fix.complexity }}
-              </span>
-              <span class="confidence-badge">
-                {{ Math.round(fix.confidence * 100) }}% confidence
-              </span>
+              <span :class="['complexity-badge', `complexity-${fix.complexity}`]">{{ fix.complexity }}</span>
+              <span class="confidence-badge">{{ Math.round(fix.confidence * 100) }}% confidence</span>
             </div>
           </div>
+
           <p class="fix-description">{{ fix.description }}</p>
           <div class="fix-details">
             <span class="detail-item">⏱️ Est. Time: {{ fix.estimatedTime }}</span>
@@ -290,28 +292,28 @@ const updateMergeConfig = (key, value) => {
   animation: progress-stripes 2s linear infinite;
 }
 
-.progress-label {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: #ffffff;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-  pointer-events: none;
-}
-
 @keyframes progress-stripes {
   from { background-position: 0 0; }
   to { background-position: -48px 0; }
 }
 
-.progress-percentage {
-  margin: 0;
+.progress-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progress-heading-value {
+  font-weight: 800;
   font-size: 13px;
-  color: var(--text-secondary);
-  text-align: right;
+  color: var(--brand-teal);
 }
 
 /* Status Section */
