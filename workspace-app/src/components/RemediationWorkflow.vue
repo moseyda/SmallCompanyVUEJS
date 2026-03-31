@@ -158,17 +158,21 @@
         <h4>Created Merge Requests</h4>
 
         <div class="pr-filter-row">
-          <label>
-            Status:
-            <select v-model="statusFilter">
-              <option value="all">All</option>
-              <option value="open">Open</option>
-              <option value="merged">Merged</option>
-              <option value="in-progress">In Progress</option>
-              <option value="proposed">Proposed</option>
-              <option value="draft">Draft</option>
-            </select>
-          </label>
+          <label>Status:</label>
+          <div class="status-filter-select">
+            <FilterDropdown
+              v-model="statusFilter"
+              :options="[
+                { label: 'All', value: 'all' },
+                { label: 'Open', value: 'open' },
+                { label: 'Merged', value: 'merged' },
+                { label: 'In Progress', value: 'in-progress' },
+                { label: 'Proposed', value: 'proposed' },
+                { label: 'Draft', value: 'draft' }
+              ]"
+              label="Status"
+            />
+          </div>
         </div>
 
         <div class="table-wrap">
@@ -1127,12 +1131,9 @@ const afterLines = computed(() => {
   gap: 12px;
 }
 
-.pr-filter-row select {
-  margin-left: 8px;
-  padding: 6px 8px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: var(--surface-strong);
+.status-filter-select {
+  max-width: 220px;
+  width: 100%;
 }
 
 .sort-btn {
