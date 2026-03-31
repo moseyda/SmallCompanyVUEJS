@@ -185,18 +185,33 @@ export const useVulnerabilitiesStore = defineStore('vulnerabilities', {
       }
     },
 
-    // Create merge request for remediation
-    async createMergeRequest(vulnId, fixId, branchName) {
+    // Create merge request for remediation (now accepts optional platform)
+    async createMergeRequest(vulnId, fixId, branchName, platform = 'GitHub') {
       try {
         const response = await api.createMergeRequest(vulnId, {
           branchName,
-          fixId
+          fixId,
+          platform
         })
         if (this.remediations[vulnId] && response.pullRequest) {
-          this.remediations[vulnId].pullRequests = 
+          this.remediations[vulnId].pullRequests =
             this.remediations[vulnId].pullRequests || []
           this.remediations[vulnId].pullRequests.push(response.pullRequest)
           this.remediations[vulnId].status = 'in-progress'
+        }
+        return true
+      } catch (err) {
+        this.error = err.message
+        return false
+      }
+    },
+
+    // Persist remediation updates (e.g., mergeRequestIntegration changes)
+    async updateRemediation(vulnId, data) {
+      try {
+        const response = await api.updateRemediation(vulnId, data)
+        if (this.remediations[vulnId] && response.remediation) {
+          Object.assign(this.remediations[vulnId], response.remediation)
         }
         return true
       } catch (err) {
