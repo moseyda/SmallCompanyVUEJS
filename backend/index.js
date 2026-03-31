@@ -3,6 +3,11 @@ import { fileURLToPath } from 'node:url'
 import { defaultSettings, workspaceData, vulnerabilityData } from './data.js'
 
 const port = 8787
+// GitHub integration config (set in environment for real PR creation)
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ''
+const GITHUB_OWNER = process.env.GITHUB_OWNER || 'example'
+const GITHUB_REPO = process.env.GITHUB_REPO || 'repo'
+const GITHUB_BASE_BRANCH = process.env.GITHUB_BASE_BRANCH || 'main'
 const demoUsers = [
   {
     id: 'user_project_lead',
@@ -34,11 +39,10 @@ const permissionsByRole = {
 
 const withLatency = (handler) => (req, res, next) => {
   setTimeout(() => {
-    try {
-      handler(req, res, next)
-    } catch (error) {
-      next(error)
-    }
+    // Support both sync and async handlers
+    Promise.resolve()
+      .then(() => handler(req, res, next))
+      .catch(next)
   }, 120)
 }
 
@@ -387,8 +391,8 @@ export function createApp() {
     res.json({ remediation })
   }))
 
-  app.post('/api/vulnerabilities/:id/remediation/merge-request', requireAuth, withLatency((req, res) => {
-    const { platformUrl, branchName, platform } = req.body ?? {}
+  app.post('/api/vulnerabilities/:id/remediation/merge-request', requireAuth, withLatency(async (req, res) => {
+    const { platformUrl, branchName: requestedBranchName, platform, title, body } = req.body ?? {}
     const remediation = remediations[req.params.id]
     
     if (!remediation) {
@@ -399,13 +403,86 @@ export function createApp() {
     // determine platform and construct a friendly URL (demo/stub)
     const platformKey = (platform || remediation.mergeRequestIntegration?.platform || 'github').toString().toLowerCase()
     let prUrl = platformUrl || ''
+    const branchName = requestedBranchName || `fix-vulnerability-${req.params.id}-${Date.now()}`
+
+    // Attempt real GitHub PR creation when configured
+    if (platformKey === 'github' && GITHUB_TOKEN && GITHUB_OWNER && GITHUB_REPO) {
+      try {
+        const baseBranch = GITHUB_BASE_BRANCH
+
+        // 1) get base branch SHA
+        const baseRefRes = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/ref/heads/${baseBranch}`, {
+          headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json' }
+        })
+
+        if (!baseRefRes.ok) {
+          const text = await baseRefRes.text()
+          throw new Error(`Failed to fetch base branch ref: ${baseRefRes.status} ${text}`)
+        }
+
+        const baseRefData = await baseRefRes.json()
+        const baseSha = baseRefData.object?.sha
+        if (!baseSha) throw new Error('Could not determine base branch SHA')
+
+        // 2) create branch (ref). If already exists, ignore the 422 error.
+        const createRefRes = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs`, {
+          method: 'POST',
+          headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ref: `refs/heads/${branchName}`, sha: baseSha })
+        })
+
+        if (!createRefRes.ok && createRefRes.status !== 422) {
+          const text = await createRefRes.text()
+          throw new Error(`Failed to create branch: ${createRefRes.status} ${text}`)
+        }
+
+        // 3) create the pull request
+        const prTitle = title || `Remediation: ${req.params.id}`
+        const prBody = body || `Automated remediation PR for vulnerability ${req.params.id}`
+
+        const createPrRes = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls`, {
+          method: 'POST',
+          headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: prTitle, head: branchName, base: baseBranch, body: prBody })
+        })
+
+        if (!createPrRes.ok) {
+          const text = await createPrRes.text()
+          throw new Error(`Failed to create pull request: ${createPrRes.status} ${text}`)
+        }
+
+        const prData = await createPrRes.json()
+        prUrl = prData.html_url || prData.url || prUrl
+
+        const newPR = {
+          id: `pr-${Date.now()}`,
+          platform: 'github',
+          url: prUrl,
+          status: prData.state || 'open',
+          createdDate: new Date(),
+          meta: prData
+        }
+
+        remediation.pullRequests = remediation.pullRequests || []
+        remediation.pullRequests.push(newPR)
+        remediation.status = 'in-progress'
+
+        res.status(201).json({ pullRequest: newPR })
+        return
+      } catch (err) {
+        console.error('GitHub PR creation failed:', err)
+        // fall through to demo URL fallback below
+      }
+    }
+
+    // Fallback demo/stub URL if GitHub creation not configured or failed
     if (!prUrl) {
       if (platformKey === 'gitlab') {
-        prUrl = `https://gitlab.com/example/repo/-/merge_requests/new?merge_request[source_branch]=${encodeURIComponent(branchName || 'fix-vulnerability')}`
+        prUrl = `https://gitlab.com/example/repo/-/merge_requests/new?merge_request[source_branch]=${encodeURIComponent(branchName)}`
       } else if (platformKey === 'bitbucket') {
-        prUrl = `https://bitbucket.org/example/repo/pull-requests/new?source=${encodeURIComponent(branchName || 'fix-vulnerability')}`
+        prUrl = `https://bitbucket.org/example/repo/pull-requests/new?source=${encodeURIComponent(branchName)}`
       } else {
-        prUrl = `https://github.com/example/repo/pull/new/${encodeURIComponent(branchName || 'fix-vulnerability')}`
+        prUrl = `https://github.com/example/repo/pull/new/${encodeURIComponent(branchName)}`
       }
     }
 
