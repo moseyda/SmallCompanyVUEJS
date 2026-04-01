@@ -157,7 +157,25 @@ onMounted(() => {
 .install-item, .mapping-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border-color) }
 .muted { color: var(--text-secondary) }
 .token-box pre { background:#0b1220; color:#e6f1ff; padding:8px; border-radius:6px }
-.mapping-form input { width:100%; padding:8px; margin:6px 0; border:1px solid var(--border-color); border-radius:6px }
+.mapping-form input {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 8px 0 16px 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: rgba(19, 32, 51, 0.06);
+  color: var(--ink-950);
+  font-family: inherit;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.mapping-form input:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: var(--brand-teal);
+  box-shadow: 0 0 0 3px rgba(0, 167, 142, 0.08);
+}
 .mapping-actions { margin-top:8px }
 
 .panel-header-row {
