@@ -35,12 +35,6 @@
     </section>
 
     <section class="glass panel">
-      <h2>GitHub App Onboarding</h2>
-      <p class="muted">Use this section to install or refresh GitHub App connections and configure the default repository mappings.</p>
-      <GitHubAppOnboarding />
-    </section>
-
-    <section class="glass panel">
       <h2>Repository Mappings</h2>
       <p class="muted">Mappings determine which installation/owner/repo the backend uses when creating PRs.</p>
 
@@ -80,7 +74,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import GitHubAppOnboarding from '../components/GitHubAppOnboarding.vue'
 import { api } from '../api/client'
 import { useSettingsStore } from '../stores/settings'
 
