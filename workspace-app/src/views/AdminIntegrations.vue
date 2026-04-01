@@ -6,10 +6,12 @@
     </section>
 
     <section class="glass panel">
-      <h2>GitHub App Installations</h2>
-      <div class="controls">
-        <button class="btn" @click="fetchInstallations" :disabled="loading">Refresh</button>
-        <span v-if="loading" class="muted">Loading...</span>
+      <div class="panel-header-row">
+        <h2>GitHub App Installations</h2>
+        <div class="controls">
+          <button class="btn" @click="fetchInstallations" :disabled="loading">Refresh</button>
+          <span v-if="loading" class="muted">Loading...</span>
+        </div>
       </div>
 
       <ul class="install-list">
@@ -164,4 +166,23 @@ onMounted(() => {
 .token-box pre { background:#0b1220; color:#e6f1ff; padding:8px; border-radius:6px }
 .mapping-form input { width:100%; padding:8px; margin:6px 0; border:1px solid var(--border-color); border-radius:6px }
 .mapping-actions { margin-top:8px }
+
+.panel-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.panel-header-row h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 </style>
