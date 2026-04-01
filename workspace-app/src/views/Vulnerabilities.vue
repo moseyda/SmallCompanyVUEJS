@@ -286,7 +286,7 @@ const formatDate = (date) => {
   gap: 16px;
   align-items: center;
   padding: 20px;
-  background: #ffffff;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   flex-wrap: wrap;
@@ -445,7 +445,7 @@ const formatDate = (date) => {
   }
 
   &.active {
-    background: #f0f2f5;
+    background: var(--bg-primary);
     color: var(--color-primary);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
@@ -467,11 +467,6 @@ const formatDate = (date) => {
   align-items: center;
   gap: 16px;
   transition: all 0.2s;
-}
-
-.stat-card:hover {
-  border-color: var(--color-primary);
-  background: var(--bg-primary);
 }
 
 .stat-icon {
