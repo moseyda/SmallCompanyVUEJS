@@ -27,6 +27,8 @@
   --bg-quaternary: #fafbfc;
   --bg-code: #fafbfc;
   --bg-badge: #e8eaed;
+  --bg-dropdown: #ffffff;
+  --bg-dropdown-hover: #eaecf0;
   --text-badge: #222b45;
   --border-badge: #d0d2d6;
   --bg-suggestion: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
@@ -110,6 +112,8 @@
   --bg-quaternary: #1e3244;
   --bg-code: #0d1620;
   --bg-badge: #1f3a52;
+  --bg-dropdown: #1a2838;
+  --bg-dropdown-hover: #2d4563;
   --text-badge: #d4e5f7;
   --border-badge: #3d5a7a;
   --bg-suggestion: linear-gradient(135deg, #1e3a2a 0%, #1f4d4d 100%);

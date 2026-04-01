@@ -93,7 +93,7 @@ onUnmounted(() => {
   padding: 10px 12px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: #f0f2f5;
+  background: var(--bg-tertiary);
   color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
@@ -104,7 +104,7 @@ onUnmounted(() => {
 
 .filter-dropdown-trigger:hover {
   border-color: var(--color-primary);
-  background-color: #eaecf0;
+  background-color: var(--bg-dropdown-hover);
 }
 
 .filter-dropdown-trigger:focus {
@@ -136,7 +136,7 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: #ffffff;
+  background: var(--bg-dropdown);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -160,12 +160,12 @@ onUnmounted(() => {
 }
 
 .dropdown-option:hover {
-  background: #f0f2f5;
+  background: var(--bg-tertiary);
   color: var(--color-primary);
 }
 
 .dropdown-option.active {
-  background: linear-gradient(90deg, #f0f2f5 0%, transparent 100%);
+  background: linear-gradient(90deg, var(--bg-tertiary) 0%, transparent 100%);
   color: var(--color-primary);
   font-weight: 700;
   border-left: 3px solid var(--color-primary);

@@ -449,7 +449,7 @@ const formatDate = (date) => {
 }
 
 .stat-card {
-  background: #ffffff;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 20px;
@@ -592,10 +592,10 @@ const formatDate = (date) => {
   font-family: 'Courier New', monospace;
   font-size: 11px;
   font-weight: 600;
-  background: #e8eaed;
+  background: var(--bg-badge);
   padding: 5px 10px;
   border-radius: 5px;
-  color: var(--text-secondary);
+  color: var(--text-badge);
   white-space: nowrap;
   width: fit-content;
   letter-spacing: 0.5px;
