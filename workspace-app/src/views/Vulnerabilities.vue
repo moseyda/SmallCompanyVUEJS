@@ -311,13 +311,13 @@ const formatDate = (date) => {
 .search-input {
   width: 100%;
   padding: 10px 14px 10px 44px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: #f0f2f5;
-  color: var(--text-primary);
+  background: rgba(19, 32, 51, 0.06);
+  color: var(--ink-950);
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 
   &::placeholder {
     color: var(--text-secondary);
@@ -325,8 +325,9 @@ const formatDate = (date) => {
 
   &:focus {
     outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+    border-color: var(--brand-teal);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 167, 142, 0.08);
   }
 }
 
