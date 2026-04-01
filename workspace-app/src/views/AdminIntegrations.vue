@@ -186,3 +186,31 @@ onMounted(() => {
   gap: 10px;
 }
 </style>
+
+
+<style scoped>
+.btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 167, 142, 0.4);
+  background: linear-gradient(125deg, var(--brand-teal), #14c0a8);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 5px 14px rgba(0, 167, 142, 0.22);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn.secondary,
+.copy-btn {
+  background: rgba(0, 167, 142, 0.12);
+  color: #0f766e;
+  border: 1px solid rgba(0, 167, 142, 0.4);
+  border-radius: 999px;
+  padding: 8px 16px;
+}
+</style>
