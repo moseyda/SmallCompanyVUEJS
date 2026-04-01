@@ -31,6 +31,8 @@
   --bg-dropdown-hover: #eaecf0;
   --text-badge: #222b45;
   --border-badge: #d0d2d6;
+  --dropdown-arrow-color: #6b7280;
+  --dropdown-arrow-hover-color: #0066cc;
   --bg-suggestion: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
   --border-suggestion: #22c55e;
 
@@ -116,6 +118,8 @@
   --bg-dropdown-hover: #2d4563;
   --text-badge: #d4e5f7;
   --border-badge: #3d5a7a;
+  --dropdown-arrow-color: #9ca3af;
+  --dropdown-arrow-hover-color: #60a5fa;
   --bg-suggestion: linear-gradient(135deg, #1e3a2a 0%, #1f4d4d 100%);
   --border-suggestion: #4ade80;
 

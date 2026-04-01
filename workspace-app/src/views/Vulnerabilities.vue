@@ -326,7 +326,7 @@ const formatDate = (date) => {
   &:focus {
     outline: none;
     border-color: var(--brand-teal);
-    background: #ffffff;
+    background: var(--bg-secondary);
     box-shadow: 0 0 0 3px rgba(0, 167, 142, 0.08);
   }
 }
@@ -347,7 +347,7 @@ const formatDate = (date) => {
   padding: 10px 12px 10px 14px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  background-color: #f0f2f5;
+  background-color: var(--bg-tertiary);
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 8px center;
@@ -364,21 +364,31 @@ const formatDate = (date) => {
   -moz-appearance: none !important;
 }
 
+:root[data-theme='dark'] .filter-select {
+  background-color: var(--bg-tertiary);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
 .filter-select::-ms-expand {
   display: none;
 }
 
 .filter-select:hover {
   border-color: var(--color-primary);
-  background-color: #eaecf0;
+  background-color: var(--bg-dropdown-hover);
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230066cc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+:root[data-theme='dark'] .filter-select:hover {
+  background-color: var(--bg-dropdown-hover);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360a5fa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
 
 .filter-select:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
-  background-color: #f0f2f5;
+  background-color: var(--bg-tertiary);
 }
 
 .filter-select:focus-visible {
@@ -393,7 +403,7 @@ const formatDate = (date) => {
 }
 
 .filter-select option {
-  background: #ffffff;
+  background: var(--bg-secondary);
   color: var(--text-primary);
   padding: 12px;
   border: none;
@@ -403,7 +413,7 @@ const formatDate = (date) => {
 }
 
 .filter-select option:checked {
-  background: #f0f2f5;
+  background: var(--bg-tertiary);
   color: var(--color-primary);
   font-weight: 700;
 }
