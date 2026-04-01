@@ -593,20 +593,22 @@ const resetForm = () => {
 .form-group select {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--line-strong);
   border-radius: 6px;
   font-size: 13px;
-  background: #f3f6f7;
-  color: var(--text-primary);
+  background: rgba(19, 32, 51, 0.06);
+  color: var(--ink-950);
   font-family: inherit;
+  transition: all 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: var(--color-primary);
+  border-color: var(--brand-teal);
   background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 167, 142, 0.08);
 }
 
 .form-row {
