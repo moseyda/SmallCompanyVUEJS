@@ -313,7 +313,7 @@ const formatDate = (date) => {
   padding: 10px 14px 10px 44px;
   border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: rgba(19, 32, 51, 0.06);
+  background: var(--bg-quaternary);
   color: var(--ink-950);
   font-size: 14px;
   font-weight: 500;
@@ -541,7 +541,7 @@ const formatDate = (date) => {
 
 /* Vulnerability Item Card */
 .vulnerability-item {
-  background: #ffffff;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 24px;

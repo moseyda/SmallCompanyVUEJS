@@ -20,6 +20,18 @@
   --surface-soft: rgba(255, 255, 255, 0.78);
   --surface-subtle: rgba(255, 255, 255, 0.62);
 
+  /* Additional colors for dark mode support */
+  --bg-primary: #f5f7fa;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f0f2f5;
+  --bg-quaternary: #fafbfc;
+  --bg-code: #fafbfc;
+  --bg-badge: #e8eaed;
+  --text-badge: #222b45;
+  --border-badge: #d0d2d6;
+  --bg-suggestion: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  --border-suggestion: #22c55e;
+
   --radius-sm: 12px;
   --radius-md: 18px;
   --radius-lg: 28px;
@@ -70,6 +82,18 @@
   --surface-strong: rgba(18, 34, 53, 0.92);
   --surface-soft: rgba(22, 39, 59, 0.84);
   --surface-subtle: rgba(21, 37, 56, 0.7);
+
+  /* Dark mode background & text overrides */
+  --bg-primary: #0f1623;
+  --bg-secondary: #1a2838;
+  --bg-tertiary: #243547;
+  --bg-quaternary: #1e3244;
+  --bg-code: #0d1620;
+  --bg-badge: #1f3a52;
+  --text-badge: #d4e5f7;
+  --border-badge: #3d5a7a;
+  --bg-suggestion: linear-gradient(135deg, #1e3a2a 0%, #1f4d4d 100%);
+  --border-suggestion: #4ade80;
 
   --shadow-soft: 0 14px 36px rgba(0, 0, 0, 0.35);
   --shadow-strong: 0 26px 48px rgba(0, 0, 0, 0.45);
