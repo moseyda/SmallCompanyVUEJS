@@ -543,7 +543,7 @@ const afterLines = computed(() => {
 
 /* Progress Section */
 .progress-section {
-  background: #ffffff;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 20px;
@@ -618,7 +618,7 @@ const afterLines = computed(() => {
 
 /* Status Section */
 .status-section {
-  background: #ffffff;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 18px;
@@ -711,7 +711,7 @@ const afterLines = computed(() => {
 }
 
 .fix-option {
-  background: #ffffff;
+  background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 18px;
@@ -849,7 +849,7 @@ const afterLines = computed(() => {
 
 /* Comparison Section */
 .comparison-section {
-  background: #ffffff;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 28px;
@@ -871,7 +871,7 @@ const afterLines = computed(() => {
 }
 
 .code-pane {
-  background: #ffffff;
+  background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   overflow: hidden;
@@ -880,7 +880,7 @@ const afterLines = computed(() => {
 }
 
 .pane-header {
-  background: var(--surface);
+  background: var(--bg-tertiary);
   padding: 12px 16px;
   display: flex;
   justify-content: space-between;
@@ -1024,9 +1024,9 @@ const afterLines = computed(() => {
 
 .table-wrap {
   overflow-x: auto;
-  border: 1px solid var(--line-soft);
+  border: 1px solid var(--border-color);
   border-radius: 10px;
-  background: var(--surface-soft);
+  background: var(--bg-secondary);
 }
 
 .pr-table {
@@ -1039,20 +1039,25 @@ const afterLines = computed(() => {
 .pr-table td {
   text-align: left;
   padding: 10px 12px;
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--border-color);
   font-size: 13px;
 }
 
 .pr-table th {
-  color: var(--text-secondary);
+  color: var(--text-primary);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  background: rgba(238, 243, 247, 0.85);
+  background: var(--bg-tertiary);
+}
+
+.pr-table tbody tr {
+  background: var(--bg-secondary);
+  transition: background 0.2s ease;
 }
 
 .pr-table tbody tr:hover {
-  background: rgba(240, 242, 245, 0.8);
+  background: var(--bg-tertiary);
 }
 
 .pr-link {
@@ -1311,7 +1316,7 @@ const afterLines = computed(() => {
   border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 13px;
-  background: #f3f6f7;
+  background: var(--bg-tertiary);
   color: var(--text-primary);
   font-family: 'Courier New', monospace;
 
