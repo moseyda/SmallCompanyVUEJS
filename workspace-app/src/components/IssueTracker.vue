@@ -258,7 +258,7 @@ const resetForm = () => {
 }
 
 .issue-card {
-  background: #ffffff;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 20px;
@@ -558,7 +558,7 @@ const resetForm = () => {
 }
 
 .add-issue-form {
-  background: #ffffff;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 24px;
@@ -607,7 +607,6 @@ const resetForm = () => {
 .form-group select:focus {
   outline: none;
   border-color: var(--brand-teal);
-  background: #ffffff;
   box-shadow: 0 0 0 3px rgba(0, 167, 142, 0.08);
 }
 
