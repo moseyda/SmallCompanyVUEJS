@@ -1355,15 +1355,15 @@ const afterLines = computed(() => {
   top: 0;
   bottom: 0;
   width: 3px;
-  background: linear-gradient(180deg, rgba(0,0,0,0.09), rgba(0,0,0,0.04));
+  background: var(--line-strong);
 }
 
 .timeline-item {
   position: relative;
   margin-bottom: 24px;
   padding: 16px 16px 16px 20px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(132, 152, 176, 0.24);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   box-shadow: 0 1px 8px rgba(0,0,0,0.05);
 }
@@ -1393,14 +1393,14 @@ const afterLines = computed(() => {
 }
 
 .timeline-item.in-progress .timeline-dot {
-  background: #f59e0b;
-  border-color: #f59e0b;
+  background: var(--brand-gold);
+  border-color: var(--brand-gold);
   animation: pulse 1.8s infinite;
 }
 
 .timeline-item.draft .timeline-dot {
-  background: #9ca3af;
-  border-color: #9ca3af;
+  background: var(--text-secondary);
+  border-color: var(--text-secondary);
 }
 
 .timeline-item .timeline-content {
