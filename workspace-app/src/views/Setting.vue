@@ -36,20 +36,23 @@
             aria-labelledby="cadence-label"
           />
 
-          <label class="switch-row">
-            <input type="checkbox" v-model="profile.notifyEmail" :disabled="!canEditSettings" />
-            <span>Email updates</span>
-          </label>
+          <CheckboxField
+            v-model="profile.notifyEmail"
+            label="Email updates"
+            :disabled="!canEditSettings"
+          />
 
-          <label class="switch-row">
-            <input type="checkbox" v-model="profile.notifyPush" :disabled="!canEditSettings" />
-            <span>Push alerts for launch blockers</span>
-          </label>
+          <CheckboxField
+            v-model="profile.notifyPush"
+            label="Push alerts for launch blockers"
+            :disabled="!canEditSettings"
+          />
 
-          <label class="switch-row">
-            <input type="checkbox" v-model="profile.shareSummary" :disabled="!canEditSettings" />
-            <span>Share weekly digest with leadership</span>
-          </label>
+          <CheckboxField
+            v-model="profile.shareSummary"
+            label="Share weekly digest with leadership"
+            :disabled="!canEditSettings"
+          />
         </div>
       </article>
       
@@ -68,6 +71,7 @@ import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '../stores/settings'
 import { useAuthStore } from '../stores/auth'
 import FilterDropdown from '../components/FilterDropdown.vue'
+import CheckboxField from '../components/CheckboxField.vue'
 
 const settingsStore = useSettingsStore()
 const { profile, isLoading, error, saveState } = storeToRefs(settingsStore)
@@ -161,18 +165,6 @@ h1 {
 .btn-primary {
   background: linear-gradient(125deg, var(--brand-teal), #14c0a8);
   color: white;
-}
-
-.switch-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--ink-800);
-}
-
-.switch-row input {
-  width: 16px;
-  height: 16px;
 }
 
 .status {
