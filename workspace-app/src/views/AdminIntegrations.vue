@@ -172,7 +172,6 @@ onMounted(() => {
 
 .mapping-form input:focus {
   outline: none;
-  background: #ffffff;
   border-color: var(--brand-teal);
   box-shadow: 0 0 0 3px rgba(0, 167, 142, 0.08);
 }
