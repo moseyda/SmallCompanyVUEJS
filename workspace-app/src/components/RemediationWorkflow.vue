@@ -251,7 +251,7 @@
             </div>
           </div>
         </div>
-        <div v-if="remediation.status !== 'draft'" class="v-timeline-item" :style="{ '--dot-color': 'var(--bg-primary)' }">
+        <div v-if="remediation.status !== 'draft'" class="v-timeline-item" :style="{ '--dot-color': 'var(--bg-secondary)' }">
           <div class="timeline-card">
             <div class="card-time">Remediation Proposed</div>
             <div class="card-content">
@@ -269,7 +269,7 @@
             </div>
           </div>
         </div>
-        <div class="v-timeline-item" :style="{ '--dot-color': remediation.status === 'completed' ? 'var(--color-primary)' : 'var(--bg-primary)' }">
+        <div class="v-timeline-item" :style="{ '--dot-color': remediation.status === 'completed' ? 'var(--color-primary)' : 'var(--bg-secondary)' }">
           <div class="timeline-card">
             <div class="card-time">Vulnerability Resolved</div>
             <div class="card-content">
