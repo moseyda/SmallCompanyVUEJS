@@ -1,11 +1,12 @@
 <template>
-  <div class="filter-dropdown" ref="dropdownRef">
+  <div class="filter-dropdown" ref="dropdownRef" :class="{ 'is-disabled': disabled }">
     <button
       type="button"
       class="filter-dropdown-trigger"
       @click="toggleMenu"
       :aria-expanded="isOpen"
       :aria-label="label"
+      :disabled="disabled"
     >
       <span class="trigger-text">{{ selectedLabel }}</span>
       <span class="material-icons dropdown-icon">expand_more</span>
@@ -41,6 +42,10 @@ const props = defineProps({
   label: {
     type: String,
     default: 'Filter'
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -102,12 +107,17 @@ onUnmounted(() => {
   text-align: left;
 }
 
-.filter-dropdown-trigger:hover {
+.filter-dropdown-trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.filter-dropdown-trigger:not(:disabled):hover {
   border-color: var(--color-primary);
   background-color: var(--bg-dropdown-hover);
 }
 
-.filter-dropdown-trigger:focus {
+.filter-dropdown-trigger:not(:disabled):focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);

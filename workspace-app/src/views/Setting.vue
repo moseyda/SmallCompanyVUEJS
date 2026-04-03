@@ -22,12 +22,19 @@
       <article class="glass panel">
         <h2 class="section-title">Preferences</h2>
         <div class="field-stack">
-          <label class="field-label" for="cadence">Planning Cadence</label>
-          <select class="select-field" id="cadence" v-model="profile.cadence" :disabled="!canEditSettings">
-            <option>Weekly</option>
-            <option>Fortnightly</option>
-            <option>Monthly</option>
-          </select>
+          <label class="field-label" id="cadence-label">Planning Cadence</label>
+          <FilterDropdown
+            id="cadence"
+            class="cadence-dropdown"
+            v-model="profile.cadence"
+            :options="[
+              { value: 'Weekly', label: 'Weekly' },
+              { value: 'Fortnightly', label: 'Fortnightly' },
+              { value: 'Monthly', label: 'Monthly' }
+            ]"
+            :disabled="!canEditSettings"
+            aria-labelledby="cadence-label"
+          />
 
           <label class="switch-row">
             <input type="checkbox" v-model="profile.notifyEmail" :disabled="!canEditSettings" />
@@ -60,6 +67,7 @@ import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '../stores/settings'
 import { useAuthStore } from '../stores/auth'
+import FilterDropdown from '../components/FilterDropdown.vue'
 
 const settingsStore = useSettingsStore()
 const { profile, isLoading, error, saveState } = storeToRefs(settingsStore)
@@ -105,8 +113,7 @@ h1 {
   margin-top: 8px;
 }
 
-.input-field,
-.select-field {
+.input-field {
   width: 100%;
   padding: 10px 12px;
   margin: 8px 0 16px 0;
@@ -119,8 +126,11 @@ h1 {
   transition: all 0.2s ease;
 }
 
-.input-field:focus,
-.select-field:focus {
+.cadence-dropdown {
+  margin: 8px 0 16px 0;
+}
+
+.input-field:focus {
   outline: none;
   border-color: var(--brand-teal);
   box-shadow: 0 0 0 3px rgba(0, 167, 142, 0.08);
