@@ -650,7 +650,7 @@ const resetForm = () => {
 .form-actions button.secondary {
   background: #f0f2f5;
   border: 1px solid var(--border-color);
-  color: var(--text-primary);
+  color: #132033;
 }
 
 .form-actions button.secondary:hover {
