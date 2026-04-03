@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import PrimeVue from 'primevue/config'
 import App from './App.vue'
 import router, { installAuthGuard } from './router'
 import { useUiStore } from './stores/ui'
@@ -10,6 +11,7 @@ const app = createApp(App)
 const pinia = createPinia()
 
 app.use(pinia)
+app.use(PrimeVue)
 installAuthGuard(router, pinia)
 app.use(router)
 
