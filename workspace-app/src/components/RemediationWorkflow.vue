@@ -241,34 +241,42 @@
     <!-- Remediation Timeline -->
     <div class="timeline-section">
       <h3>Timeline</h3>
-      <div class="timeline">
-        <div class="timeline-item completed">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <h4>Vulnerability Detected</h4>
-            <p>{{ formatDate(new Date()) }}</p>
+      <div class="v-timeline" align="start" side="end">
+        <div class="v-timeline-item" :style="{ '--dot-color': 'var(--color-primary)' }">
+          <div class="timeline-card">
+            <div class="card-time">Vulnerability Detected</div>
+            <div class="card-content">
+              <strong class="card-title">Detected</strong>
+              <div class="card-subtitle">{{ formatDate(new Date()) }}</div>
+            </div>
           </div>
         </div>
-        <div v-if="remediation.status !== 'draft'" class="timeline-item completed">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <h4>Remediation Proposed</h4>
-            <p>awaiting decision...</p>
+        <div v-if="remediation.status !== 'draft'" class="v-timeline-item" :style="{ '--dot-color': 'var(--bg-primary)' }">
+          <div class="timeline-card">
+            <div class="card-time">Remediation Proposed</div>
+            <div class="card-content">
+              <strong class="card-title">Proposed</strong>
+              <div class="card-subtitle">awaiting decision...</div>
+            </div>
           </div>
         </div>
-        <div v-if="remediation.status === 'in-progress'" class="timeline-item in-progress">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <h4>Remediation In Progress</h4>
-            <p>Fix being implemented...</p>
+        <div v-if="remediation.status === 'in-progress'" class="v-timeline-item" :style="{ '--dot-color': 'var(--brand-gold)' }">
+          <div class="timeline-card">
+            <div class="card-time">Remediation In Progress</div>
+            <div class="card-content">
+              <strong class="card-title">In Progress</strong>
+              <div class="card-subtitle">Fix being implemented...</div>
+            </div>
           </div>
         </div>
-        <div :class="['timeline-item', { completed: remediation.status === 'completed' }]">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <h4>Vulnerab Resolved</h4>
-            <p v-if="remediation.status === 'completed'">{{ formatDate(new Date()) }}</p>
-            <p v-else>Awaiting completion...</p>
+        <div class="v-timeline-item" :style="{ '--dot-color': remediation.status === 'completed' ? 'var(--color-primary)' : 'var(--bg-primary)' }">
+          <div class="timeline-card">
+            <div class="card-time">Vulnerability Resolved</div>
+            <div class="card-content">
+              <strong class="card-title">Resolved</strong>
+              <div class="card-subtitle" v-if="remediation.status === 'completed'">{{ formatDate(new Date()) }}</div>
+              <div class="card-subtitle" v-else>Awaiting completion...</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1342,81 +1350,90 @@ const afterLines = computed(() => {
   color: var(--text-primary);
 }
 
-.timeline {
+.v-timeline {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  padding-left: 42px;
-  margin-top: 8px;
 }
 
-.timeline::before {
+.v-timeline::before {
   content: '';
   position: absolute;
-  left: 10px;
+  left: 31px;
   top: 0;
   bottom: 0;
-  width: 3px;
+  width: 2px;
   background: var(--line-strong);
 }
 
-.timeline-item {
+.v-timeline-item {
   position: relative;
-  margin-bottom: 24px;
-  padding: 16px 16px 16px 20px;
+  display: flex;
+  margin-bottom: 40px;
+  padding-left: 80px;
+  width: 100%;
+}
+
+.v-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--dot-color, var(--brand-teal));
+  border: 2px solid #9ca3af98;
+  box-shadow: 0 0 0 4px var(--bg-secondary);
+  z-index: 1;
+}
+
+.timeline-card {
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+  padding: 24px 28px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.2s;
+  width: 100%;
 }
 
-.timeline-item:last-child {
-  margin-bottom: 0;
-}
-
-.timeline-dot {
-  position: absolute;
-  left: -22px;
-  top: 18px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--bg-secondary);
-  border: 3px solid var(--border-color);
-  box-shadow: 0 0 0 0 rgba(var(--color-primary-rgb), 0.1);
-  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.timeline-item.completed .timeline-dot {
-  background: var(--color-primary);
+.timeline-card:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 6px rgba(var(--color-primary-rgb), 0.2);
-  transform: scale(1.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
-.timeline-item.in-progress .timeline-dot {
-  background: var(--brand-gold);
-  border-color: var(--brand-gold);
-  animation: pulse 1.8s infinite;
-}
-
-.timeline-item.draft .timeline-dot {
-  background: var(--text-secondary);
-  border-color: var(--text-secondary);
-}
-
-.timeline-item .timeline-content {
-  margin-left: 6px;
-}
-
-.timeline-item .timeline-content h4 {
-  font-size: 14px;
+.card-time {
+  font-size: 11px;
   font-weight: 700;
-  margin-bottom: 6px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
 }
 
-.timeline-item .timeline-content p {
-  margin: 0;
-  font-size: 13px;
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-title {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+}
+
+.card-subtitle {
+  font-size: 14px;
   color: var(--text-secondary);
+  line-height: 1.6;
+  font-weight: 500;
 }
 
 @keyframes pulse {
