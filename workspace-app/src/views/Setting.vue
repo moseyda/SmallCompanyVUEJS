@@ -92,6 +92,67 @@ h1 {
   gap: 0.9rem;
 }
 
+.field-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.input-field,
+.select-field {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 8px 0 16px 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: rgba(19, 32, 51, 0.06);
+  color: var(--ink-950);
+  font-family: inherit;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.input-field:focus,
+.select-field:focus {
+  outline: none;
+  border-color: var(--brand-teal);
+  box-shadow: 0 0 0 3px rgba(0, 167, 142, 0.08);
+}
+
+.btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 167, 142, 0.4);
+  background: linear-gradient(125deg, var(--brand-teal), #14c0a8);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 5px 14px rgba(0, 167, 142, 0.22);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  font-size: 13px;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(125deg, var(--brand-teal), #14c0a8);
+  color: white;
+}
+
 .switch-row {
   display: flex;
   align-items: center;
