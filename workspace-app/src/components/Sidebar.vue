@@ -258,6 +258,7 @@ if (!profileMenuRef.value) {
 if (profilePanelOpen.value && !profileMenuRef.value.contains(event.target)) {
   profilePanelOpen.value = false
   ignoreProfileHover.value = false
+  isPreferencesOpen.value = false
 }
 }
 
@@ -315,6 +316,7 @@ if (profilePanelOpen.value) {
 } else {
   profilePanelOpen.value = true
   ignoreProfileHover.value = false
+  isPreferencesOpen.value = false
 }
 }
 
