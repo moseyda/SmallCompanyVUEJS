@@ -577,13 +577,14 @@ border-color: var(--line-soft);
 }
 
 .profile-option.secondary {
-color: #e74c3c;
+color: #ff0000;
 }
 
 .profile-panel .preferences .preferences-trigger {
 width: 100%;
 display: flex;
 align-items: center;
+justify-content: flex-start;
 gap: 0.5rem;
 padding: 0.55rem 0.65rem;
 border-radius: 10px;
@@ -696,10 +697,9 @@ justify-content: center;
 padding-inline: 0.35rem;
 }
 
-.preferences-panel {
-left: calc(100% + 0.5rem);
-bottom: 0;
-}
+    .profile-panel .preferences .preferences-trigger {
+    justify-content: flex-start;
+    }
 }
 
 
