@@ -88,6 +88,10 @@ type="button"
 <span class="material-icons">logout</span>
 <span>Sign out</span>
 </button>
+<button type="button" class="profile-option" @click="openSettings">
+<span class="material-icons">settings</span>
+<span>Settings</span>
+</button>
 </div>
 
 <div class="preferences">
@@ -217,8 +221,7 @@ const navGroups = computed(() => {
 			items: [
 				{ path: '/about', label: 'About', icon: 'description' },
 				{ path: '/team', label: 'Team', icon: 'groups' },
-				{ path: '/contact', label: 'Contact', icon: 'mail_outline' },
-				{ path: '/settings', label: 'Settings', icon: 'settings' }
+				{ path: '/contact', label: 'Contact', icon: 'mail_outline' }
 			]
 		}
 	]
@@ -311,6 +314,13 @@ if (profilePanelOpen.value) {
   profilePanelOpen.value = true
   ignoreProfileHover.value = false
 }
+}
+
+function openSettings() {
+profilePanelOpen.value = false
+ignoreProfileHover.value = false
+closeMobileMenu()
+router.push('/settings')
 }
 
 async function signOut() {
