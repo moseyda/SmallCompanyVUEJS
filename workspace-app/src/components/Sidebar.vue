@@ -57,26 +57,43 @@ class="preferences-trigger auth-trigger"
 <span class="material-icons">login</span>
 <span v-if="isSidebarExpanded">Sign in</span>
 </router-link>
+</div>
 
+<div
+v-if="isAuthenticated"
+ref="profileMenuRef"
+class="profile-menu"
+:class="{ 'is-open': isProfilePanelVisible }"
+@mouseenter="onProfileMenuEnter"
+@mouseleave="onProfileMenuLeave"
+@focusin="onProfileMenuEnter"
+@focusout="onProfileMenuLeave"
+>
 <button
-v-else
+class="preferences-trigger profile-trigger"
 type="button"
-class="preferences-trigger auth-trigger"
-@click="signOut"
-@mouseenter="showTooltip($event, 'Sign out')"
+@click="toggleProfilePanel"
+@mouseenter="showTooltip($event, 'Profile')"
 @mouseleave="hideTooltip"
-@focus="showTooltip($event, 'Sign out')"
+@focus="showTooltip($event, 'Profile')"
 @blur="hideTooltip"
 >
+<span class="material-icons">account_circle</span>
+<span v-if="isSidebarExpanded">Profile</span>
+</button>
+
+<div class="profile-panel">
+<div class="profile-actions" v-if="isAuthenticated">
+<button type="button" class="profile-option secondary" @click="signOut">
 <span class="material-icons">logout</span>
-<span v-if="isSidebarExpanded">Sign out</span>
+<span>Sign out</span>
 </button>
 </div>
 
 <div class="preferences">
 <button class="preferences-trigger" type="button" aria-label="Open preferences">
 <span class="material-icons">tune</span>
-<span v-if="isSidebarExpanded">Preferences</span>
+<span>Preferences</span>
 </button>
 
 <div class="preferences-panel">
@@ -99,7 +116,6 @@ class="theme-option"
 <span class="material-icons">dark_mode</span>
 <span>Dark</span>
 </button>
-
 <button
 type="button"
 class="theme-option"
@@ -152,7 +168,7 @@ class="theme-option"
 </div>
 </div>
 </div>
-</aside>
+</div></div></aside>
 
 <transition name="sidebar-tooltip">
 <div
@@ -168,7 +184,7 @@ class="sidebar-hover-tooltip"
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import logoURL from '../assets/vue.svg'
@@ -182,6 +198,7 @@ const { toggleSidebar, toggleMobileMenu, closeMobileMenu, setTheme, setDensity, 
 const authStore = useAuthStore()
 const { currentUser, isAuthenticated } = storeToRefs(authStore)
 const router = useRouter()
+const profileMenuRef = ref(null)
 
 const navGroups = computed(() => {
 	const groups = [
@@ -220,10 +237,33 @@ const tooltipLabel = ref('')
 const tooltipX = ref(0)
 const tooltipY = ref(0)
 const isTooltipVisible = ref(false)
+const profilePanelOpen = ref(false)
+const isProfileHovering = ref(false)
+const ignoreProfileHover = ref(false)
 const tooltipStyle = computed(() => ({
 left: `${tooltipX.value}px`,
 top: `${tooltipY.value}px`
 }))
+const isProfilePanelVisible = computed(() => profilePanelOpen.value || (isProfileHovering.value && !ignoreProfileHover.value))
+
+function handleDocumentClick(event) {
+if (!profileMenuRef.value) {
+  return
+}
+
+if (profilePanelOpen.value && !profileMenuRef.value.contains(event.target)) {
+  profilePanelOpen.value = false
+  ignoreProfileHover.value = false
+}
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleDocumentClick)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleDocumentClick)
+})
 
 function canShowTooltip() {
 return !isSidebarExpanded.value && window.matchMedia('(hover: hover)').matches
@@ -254,7 +294,28 @@ function hideTooltip() {
 isTooltipVisible.value = false
 }
 
+function onProfileMenuEnter() {
+isProfileHovering.value = true
+}
+
+function onProfileMenuLeave() {
+isProfileHovering.value = false
+ignoreProfileHover.value = false
+}
+
+function toggleProfilePanel() {
+if (profilePanelOpen.value) {
+  profilePanelOpen.value = false
+  ignoreProfileHover.value = true
+} else {
+  profilePanelOpen.value = true
+  ignoreProfileHover.value = false
+}
+}
+
 async function signOut() {
+profilePanelOpen.value = false
+ignoreProfileHover.value = false
 await authStore.logout()
 closeMobileMenu()
 router.push('/login')
@@ -431,17 +492,6 @@ display: grid;
 gap: 0.22rem;
 }
 
-.preferences {
-position: relative;
-
-&:hover .preferences-panel,
-&:focus-within .preferences-panel {
-opacity: 1;
-pointer-events: auto;
-transform: translateY(0);
-}
-}
-
 .preferences-trigger {
 width: 100%;
 display: inline-flex;
@@ -462,6 +512,80 @@ font-size: 1rem;
 
 &:hover {
 background: color-mix(in srgb, var(--sidebar-icon-bg) 78%, var(--surface-strong));
+}
+}
+
+.profile-panel {
+position: absolute;
+left: 0;
+bottom: calc(100% + 0.55rem);
+min-width: 205px;
+padding: 0.65rem;
+border-radius: 12px;
+border: 1px solid var(--line-soft);
+background: var(--sidebar-panel-bg);
+box-shadow: 0 16px 30px rgba(2, 9, 17, 0.4);
+opacity: 0;
+pointer-events: none;
+transform: translateY(6px);
+transition: opacity 0.18s ease, transform 0.18s ease;
+z-index: 8;
+}
+
+.profile-menu {
+position: relative;
+
+&.is-open .profile-panel,
+&:hover .profile-panel,
+&:focus-within .profile-panel {
+opacity: 1;
+pointer-events: auto;
+transform: translateY(0);
+}
+}
+
+.profile-actions {
+display: grid;
+gap: 0.5rem;
+}
+
+.profile-option {
+width: 100%;
+display: flex;
+align-items: center;
+gap: 0.5rem;
+padding: 0.55rem 0.65rem;
+border-radius: 10px;
+background: transparent;
+color: var(--sidebar-panel-text);
+border: 1px solid transparent;
+font-size: 0.92rem;
+text-align: left;
+cursor: pointer;
+transition: background-color 0.18s ease, border-color 0.18s ease;
+
+.material-icons {
+font-size: 1rem;
+}
+
+&:hover {
+background: var(--sidebar-icon-bg);
+border-color: var(--line-soft);
+}
+}
+
+.profile-option.secondary {
+color: var(--sidebar-panel-text);
+}
+
+.preferences {
+position: relative;
+
+&:hover .preferences-panel,
+&:focus-within .preferences-panel {
+opacity: 1;
+pointer-events: auto;
+transform: translateY(0);
 }
 }
 
@@ -490,12 +614,6 @@ color: var(--sidebar-panel-muted);
 margin-bottom: 0.45rem;
 }
 
-.section-title {
-margin-top: 0.65rem;
-padding-top: 0.6rem;
-border-top: 1px solid var(--line-soft);
-}
-
 .theme-option {
 width: 100%;
 display: flex;
@@ -522,6 +640,25 @@ background: var(--sidebar-icon-bg);
 }
 }
 
+.theme-option:hover {
+background: var(--sidebar-icon-bg);
+}
+
+.theme-option.active {
+border-color: var(--brand-blue);
+background: rgba(0, 167, 142, 0.12);
+}
+
+.theme-option .material-icons {
+font-size: 1rem;
+}
+
+.section-title {
+margin-top: 0.65rem;
+padding-top: 0.6rem;
+border-top: 1px solid var(--line-soft);
+}
+
 .sidebar:not(.is-expanded) {
 .menu .button {
 justify-content: center;
@@ -539,6 +676,7 @@ left: calc(100% + 0.5rem);
 bottom: 0;
 }
 }
+
 
 .mobile-trigger {
 display: none;
