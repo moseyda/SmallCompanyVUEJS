@@ -95,12 +95,12 @@ type="button"
 </div>
 
 <div class="preferences">
-<button class="preferences-trigger" type="button" aria-label="Open preferences">
+<button class="preferences-trigger" type="button" aria-label="Toggle preferences" @click="togglePreferencesPanel">
 <span class="material-icons">tune</span>
 <span>Preferences</span>
 </button>
 
-<div class="preferences-panel">
+<div v-if="isPreferencesOpen" class="preferences-panel">
 <p class="preferences-title">Theme</p>
 <button
 type="button"
@@ -243,6 +243,7 @@ const isTooltipVisible = ref(false)
 const profilePanelOpen = ref(false)
 const isProfileHovering = ref(false)
 const ignoreProfileHover = ref(false)
+const isPreferencesOpen = ref(false)
 const tooltipStyle = computed(() => ({
 left: `${tooltipX.value}px`,
 top: `${tooltipY.value}px`
@@ -310,15 +311,23 @@ function toggleProfilePanel() {
 if (profilePanelOpen.value) {
   profilePanelOpen.value = false
   ignoreProfileHover.value = true
+  isPreferencesOpen.value = false
 } else {
   profilePanelOpen.value = true
   ignoreProfileHover.value = false
 }
 }
 
+function togglePreferencesPanel() {
+profilePanelOpen.value = true
+ignoreProfileHover.value = false
+isPreferencesOpen.value = !isPreferencesOpen.value
+}
+
 function openSettings() {
 profilePanelOpen.value = false
 ignoreProfileHover.value = false
+isPreferencesOpen.value = false
 closeMobileMenu()
 router.push('/settings')
 }
@@ -326,6 +335,7 @@ router.push('/settings')
 async function signOut() {
 profilePanelOpen.value = false
 ignoreProfileHover.value = false
+isPreferencesOpen.value = false
 await authStore.logout()
 closeMobileMenu()
 router.push('/login')
@@ -614,13 +624,6 @@ border-color: var(--line-soft);
 
 .preferences {
 position: relative;
-
-&:hover .preferences-panel,
-&:focus-within .preferences-panel {
-opacity: 1;
-pointer-events: auto;
-transform: translateY(0);
-}
 }
 
 .preferences-panel {
@@ -635,11 +638,6 @@ border-radius: 12px;
 border: 1px solid var(--line-soft);
 background: var(--sidebar-panel-bg);
 box-shadow: 0 16px 30px rgba(2, 9, 17, 0.4);
-opacity: 0;
-pointer-events: none;
-transform: translateY(6px);
-transition: opacity 0.18s ease, transform 0.18s ease;
-z-index: 8;
 }
 
 .preferences-title {
