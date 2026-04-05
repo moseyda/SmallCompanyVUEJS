@@ -519,6 +519,8 @@ background: color-mix(in srgb, var(--sidebar-icon-bg) 78%, var(--surface-strong)
 position: absolute;
 left: 0;
 bottom: calc(100% + 0.55rem);
+display: grid;
+gap: 0.65rem;
 min-width: 205px;
 padding: 0.65rem;
 border-radius: 12px;
