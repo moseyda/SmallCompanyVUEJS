@@ -558,9 +558,9 @@ align-items: center;
 gap: 0.5rem;
 padding: 0.55rem 0.65rem;
 border-radius: 10px;
-background: transparent;
+background: var(--sidebar-icon-bg);
 color: var(--sidebar-panel-text);
-border: 1px solid transparent;
+border: 1px solid var(--line-soft);
 font-size: 0.92rem;
 text-align: left;
 cursor: pointer;
@@ -571,13 +571,34 @@ font-size: 1rem;
 }
 
 &:hover {
-background: var(--sidebar-icon-bg);
+background: color-mix(in srgb, var(--sidebar-icon-bg) 78%, var(--surface-strong));
 border-color: var(--line-soft);
 }
 }
 
 .profile-option.secondary {
 color: var(--sidebar-panel-text);
+}
+
+.profile-panel .preferences .preferences-trigger {
+width: 100%;
+display: flex;
+align-items: center;
+gap: 0.5rem;
+padding: 0.55rem 0.65rem;
+border-radius: 10px;
+background: var(--sidebar-icon-bg);
+color: var(--sidebar-panel-text);
+border: 1px solid var(--line-soft);
+font-size: 0.92rem;
+text-align: left;
+cursor: pointer;
+transition: background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.profile-panel .preferences .preferences-trigger:hover {
+background: color-mix(in srgb, var(--sidebar-icon-bg) 78%, var(--surface-strong));
+border-color: var(--line-soft);
 }
 
 .preferences {
