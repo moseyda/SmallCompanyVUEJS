@@ -595,6 +595,8 @@ transform: translateY(0);
 position: absolute;
 left: 0;
 bottom: calc(100% + 0.55rem);
+display: grid;
+gap: 0.45rem;
 min-width: 205px;
 padding: 0.65rem;
 border-radius: 12px;
