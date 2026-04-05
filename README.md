@@ -1,5 +1,13 @@
 # SmallCompanyVUEJS Repository
 
+## Project Overview
+
+SmallCompanyVUEJS (temporary name) is a comprehensive vulnerability management and remediation platform designed specifically for small to medium-sized organisations. The application provides a sophisticated suite of tools for identifying, tracking, and resolving security vulnerabilities within codebases, enabling teams to maintain robust security postures whilst streamlining operational workflows.
+
+Built with modern technologies and a focus on user experience, the platform offers role-based access controls, real-time monitoring, comprehensive reporting, and integrated issue tracking to facilitate seamless collaboration between security and development teams. The system supports multiple deployment configurations and is architected to scale with organisational requirements.
+
+## Repository Structure
+
 This repository is structured as a small monorepo with separate frontend and backend folders:
 
 - `workspace-app/`: Vue 3 + Vite frontend application.
