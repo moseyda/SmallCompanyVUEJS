@@ -577,7 +577,7 @@ border-color: var(--line-soft);
 }
 
 .profile-option.secondary {
-color: var(--sidebar-panel-text);
+color: #e74c3c;
 }
 
 .profile-panel .preferences .preferences-trigger {
