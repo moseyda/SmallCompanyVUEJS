@@ -17,7 +17,7 @@ describe('settings auth middleware', () => {
 
     const loginResponse = await request(app)
       .post('/api/auth/login')
-      .send({ email: 'viewer@smallcompany.io', password: 'Passw0rd!' })
+      .send({ email: 'viewer@vulnlaunch.io', password: 'Passw0rd!' })
 
     expect(loginResponse.status).toBe(200)
 
@@ -32,7 +32,7 @@ describe('settings auth middleware', () => {
 
     await request(app)
       .post('/api/auth/login')
-      .send({ email: 'viewer@smallcompany.io', password: 'Passw0rd!' })
+      .send({ email: 'viewer@vulnlaunch.io', password: 'Passw0rd!' })
 
     const response = await request(app)
       .put('/api/settings')
@@ -47,7 +47,7 @@ describe('settings auth middleware', () => {
 
     await request(app)
       .post('/api/auth/login')
-      .send({ email: 'editor@smallcompany.io', password: 'Passw0rd!' })
+      .send({ email: 'editor@vulnlaunch.io', password: 'Passw0rd!' })
 
     const response = await request(app)
       .put('/api/settings')
@@ -62,7 +62,7 @@ describe('settings auth middleware', () => {
 
     await request(app)
       .post('/api/auth/login')
-      .send({ email: 'lead@smallcompany.io', password: 'Passw0rd!' })
+      .send({ email: 'lead@vulnlaunch.io', password: 'Passw0rd!' })
 
     const logoutResponse = await request(app).post('/api/auth/logout')
     expect(logoutResponse.status).toBe(200)
