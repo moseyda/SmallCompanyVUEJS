@@ -16,7 +16,10 @@
 
 <nav class="menu">
 <div class="menu-group" v-for="group in navGroups" :key="group.title">
-<h3 v-if="isSidebarExpanded">{{ group.title }}</h3>
+<h3 v-if="isSidebarExpanded" @click="toggleGroup(group.title)" class="group-title">
+{{ group.title }}
+<span class="group-chevron material-icons" aria-hidden="true">{{ openGroups[group.title] ? 'expand_less' : 'expand_more' }}</span>
+</h3>
 <router-link
 v-for="item in group.items"
 :key="item.path"
@@ -29,6 +32,7 @@ class="button"
 @focus="showTooltip($event, item.label)"
 @blur="hideTooltip"
 @click="closeMobileMenu"
+v-if="openGroups[group.title]"
 >
 <span class="icon material-icons">{{ item.icon }}</span>
 <span class="text" v-if="isSidebarExpanded">{{ item.label }}</span>
@@ -244,6 +248,7 @@ const profilePanelOpen = ref(false)
 const isProfileHovering = ref(false)
 const ignoreProfileHover = ref(false)
 const isPreferencesOpen = ref(false)
+const openGroups = ref({ Workspace: true, Company: true })
 const tooltipStyle = computed(() => ({
 left: `${tooltipX.value}px`,
 top: `${tooltipY.value}px`
@@ -324,6 +329,10 @@ function togglePreferencesPanel() {
 profilePanelOpen.value = true
 ignoreProfileHover.value = false
 isPreferencesOpen.value = !isPreferencesOpen.value
+}
+
+function toggleGroup(groupTitle) {
+openGroups.value[groupTitle] = !openGroups.value[groupTitle]
 }
 
 function openSettings() {
@@ -454,6 +463,19 @@ letter-spacing: 0.06em;
 text-transform: uppercase;
 color: var(--sidebar-muted);
 margin-bottom: 0.2rem;
+display: flex;
+align-items: center;
+justify-content: space-between;
+cursor: pointer;
+}
+
+.group-chevron {
+opacity: 0;
+transition: opacity 0.18s ease;
+}
+
+h3:hover .group-chevron {
+opacity: 1;
 }
 }
 
