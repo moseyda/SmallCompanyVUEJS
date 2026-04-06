@@ -320,7 +320,8 @@ export function createApp() {
 
   app.post('/api/auth/login', withLatency((req, res) => {
     const { email, password } = req.body ?? {}
-    const matchedUser = demoUsers.find((user) => user.email === email && user.password === password)
+    const normalizedEmail = String(email || '').trim().toLowerCase()
+    const matchedUser = demoUsers.find((user) => user.email.toLowerCase() === normalizedEmail && user.password === password)
 
     if (!matchedUser) {
       res.status(401).json({ error: 'Invalid sign-in credentials.' })
