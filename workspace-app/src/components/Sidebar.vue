@@ -33,7 +33,7 @@ class="button"
 @focus="showTooltip($event, item.label)"
 @blur="hideTooltip"
 @click="closeMobileMenu"
-v-if="openGroups[group.title]"
+v-if="isSidebarExpanded ? openGroups[group.title] : true"
 >
 <span class="icon material-icons">{{ item.icon }}</span>
 <span class="text" v-if="isSidebarExpanded">{{ item.label }}</span>
