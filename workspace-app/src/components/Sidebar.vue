@@ -471,17 +471,34 @@ cursor: pointer;
 }
 
 .group-chevron {
-opacity: 0;
-transition: opacity 0.18s ease;
-}
-
-h3:hover .group-chevron {
 opacity: 1;
+transition: opacity 0.18s ease;
 }
 
 .group-items {
 display: grid;
 gap: 0.4rem;
+}
+
+.group-title {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.group-title::before,
+.group-title::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255,255,255,0.2); /* adjust color */
+}
+
+.group-title::before {
+  margin-right: 10px;
+}
+
+.group-title::after {
+  margin-left: 10px;
 }
 
 .sidebar-group-enter-active,
