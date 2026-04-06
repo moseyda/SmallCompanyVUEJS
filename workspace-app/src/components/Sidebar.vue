@@ -98,7 +98,9 @@ type="button"
 <button class="preferences-trigger" type="button" aria-label="Toggle preferences" @click="togglePreferencesPanel">
 <span class="material-icons">tune</span>
 <span>Preferences</span>
+<span class="preferences-arrow material-icons">chevron_right</span>
 </button>
+
 
 <div v-if="isPreferencesOpen" class="preferences-panel">
 <p class="preferences-title">Theme</p>
@@ -619,6 +621,12 @@ cursor: pointer;
 transition: background-color 0.18s ease, border-color 0.18s ease;
 }
 
+.profile-panel .preferences .preferences-trigger .preferences-arrow {
+font-size: 1rem;
+opacity: 0.8;
+margin-left: auto;
+}
+
 .profile-panel .preferences .preferences-trigger:hover {
 background: color-mix(in srgb, var(--sidebar-icon-bg) 78%, var(--surface-strong));
 border-color: var(--line-soft);
@@ -630,8 +638,8 @@ position: relative;
 
 .preferences-panel {
 position: absolute;
-left: 0;
-bottom: calc(100% + 0.55rem);
+left: calc(100% + 0.7rem);
+bottom: 0;
 display: grid;
 gap: 0.45rem;
 min-width: 205px;
