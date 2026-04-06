@@ -39,8 +39,6 @@ class="button"
 <div class="sidebar-bottom">
 <div class="sidebar-footer" v-if="isSidebarExpanded">
 <p>v2.0 Modern</p>
-<p>Real-time Workspace</p>
-<p v-if="isAuthenticated">{{ currentUser?.name }}</p>
 </div>
 
 <div class="auth-controls">
