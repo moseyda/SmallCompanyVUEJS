@@ -20,6 +20,7 @@
 {{ group.title }}
 <span class="group-chevron material-icons" aria-hidden="true">{{ openGroups[group.title] ? 'expand_less' : 'expand_more' }}</span>
 </h3>
+<transition-group name="sidebar-group" tag="div" class="group-items">
 <router-link
 v-for="item in group.items"
 :key="item.path"
@@ -37,9 +38,9 @@ v-if="openGroups[group.title]"
 <span class="icon material-icons">{{ item.icon }}</span>
 <span class="text" v-if="isSidebarExpanded">{{ item.label }}</span>
 </router-link>
-</div>
+    </transition-group>
+  </div>
 </nav>
-
 <div class="sidebar-bottom">
 <div class="sidebar-footer" v-if="isSidebarExpanded">
 <p>v2.0 Modern</p>
@@ -476,6 +477,28 @@ transition: opacity 0.18s ease;
 
 h3:hover .group-chevron {
 opacity: 1;
+}
+
+.group-items {
+display: grid;
+gap: 0.4rem;
+}
+
+.sidebar-group-enter-active,
+.sidebar-group-leave-active {
+transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.sidebar-group-enter-from,
+.sidebar-group-leave-to {
+opacity: 0;
+transform: translateY(-6px);
+}
+
+.sidebar-group-enter-to,
+.sidebar-group-leave-from {
+opacity: 1;
+transform: translateY(0);
 }
 }
 
