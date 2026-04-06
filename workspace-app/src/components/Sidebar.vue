@@ -233,7 +233,7 @@ const navGroups = computed(() => {
 
 	try {
 		if (authStore && typeof authStore.hasPermission === 'function' && authStore.hasPermission('settings:write')) {
-			groups[1].items.push({ path: '/admin/integrations', label: 'Admin Integrations', icon: 'admin_panel_settings' })
+			groups[0].items.push({ path: '/admin/integrations', label: 'Admin Integrations', icon: 'admin_panel_settings' })
 		}
 	} catch (e) {
 		// ignore permission-check errors and do not show admin link
