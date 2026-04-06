@@ -79,7 +79,7 @@ type="button"
 @blur="hideTooltip"
 >
 <span class="material-icons">account_circle</span>
-<span v-if="isSidebarExpanded">Profile</span>
+<span v-if="isSidebarExpanded">{{ currentUser?.name || 'Profile' }}</span>
 </button>
 
 <div class="profile-panel">
