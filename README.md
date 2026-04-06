@@ -1,8 +1,8 @@
-# SmallCompanyVUEJS Repository
+# VulnLaunch Repository
 
 ## Project Overview
 
-SmallCompanyVUEJS (temporary name) is a comprehensive vulnerability management and remediation platform designed specifically for small to medium-sized organisations. The application provides a sophisticated suite of tools for identifying, tracking, and resolving security vulnerabilities within codebases, enabling teams to maintain robust security postures whilst streamlining operational workflows.
+VulnLaunch (temporary name) is a comprehensive vulnerability management and remediation platform designed specifically for small to medium-sized organisations. The application provides a sophisticated suite of tools for identifying, tracking, and resolving security vulnerabilities within codebases, enabling teams to maintain robust security postures whilst streamlining operational workflows.
 
 Built with modern technologies and a focus on user experience, the platform offers role-based access controls, real-time monitoring, comprehensive reporting, and integrated issue tracking to facilitate seamless collaboration between security and development teams. The system supports multiple deployment configurations and is architected to scale with organisational requirements.
 
@@ -46,6 +46,6 @@ API: `http://localhost:8787`
 
 ## Demo Users
 
-- `lead@smallcompany.io` / `Passw0rd!` (`admin`)
-- `editor@smallcompany.io` / `Passw0rd!` (`editor`)
-- `viewer@smallcompany.io` / `Passw0rd!` (`viewer`)
+- `lead@vulnlaunch.io` / `Passw0rd!` (`admin`)
+- `editor@vulnlaunch.io` / `Passw0rd!` (`editor`)
+- `viewer@vulnlaunch.io` / `Passw0rd!` (`viewer`)

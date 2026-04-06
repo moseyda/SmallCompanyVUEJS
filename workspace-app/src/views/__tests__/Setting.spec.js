@@ -16,7 +16,7 @@ describe('Setting view', () => {
     authStore.setUser({
       id: 'user_project_lead',
       name: 'Project Lead',
-      email: 'lead@smallcompany.io',
+      email: 'lead@vulnlaunch.io',
       role: 'admin',
       permissions: ['settings:read', 'settings:write']
     })

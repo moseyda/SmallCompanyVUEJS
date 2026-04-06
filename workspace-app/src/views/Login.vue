@@ -32,9 +32,9 @@
 
       <div class="hint">
         <p><strong>Demo credentials</strong></p>
-        <p>Admin: lead@smallcompany.io / Passw0rd!</p>
-        <p>Editor: editor@smallcompany.io / Passw0rd!</p>
-        <p>Viewer: viewer@smallcompany.io / Passw0rd!</p>
+        <p>Admin: lead@vulnlaunch.io / Passw0rd!</p>
+        <p>Editor: editor@vulnlaunch.io / Passw0rd!</p>
+        <p>Viewer: viewer@vulnlaunch.io / Passw0rd!</p>
       </div>
     </section>
   </div>
@@ -52,7 +52,7 @@ const authStore = useAuthStore()
 const { isLoading, error } = storeToRefs(authStore)
 
 const form = reactive({
-  email: 'lead@smallcompany.io',
+  email: 'lead@vulnlaunch.io',
   password: 'Passw0rd!'
 })
 

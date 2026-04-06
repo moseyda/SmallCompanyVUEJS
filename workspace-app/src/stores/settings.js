@@ -3,7 +3,7 @@ import { api } from '../api/client'
 
 const defaults = {
   name: 'Project Lead',
-  email: 'lead@smallcompany.io',
+  email: 'lead@vulnlaunch.io',
   cadence: 'Fortnightly',
   notifyEmail: true,
   notifyPush: true,

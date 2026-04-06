@@ -84,21 +84,21 @@ const demoUsers = [
   {
     id: 'user_project_lead',
     name: 'Project Lead',
-    email: 'lead@smallcompany.io',
+    email: 'lead@vulnlaunch.io',
     password: 'Passw0rd!',
     role: 'admin'
   },
   {
     id: 'user_product_editor',
     name: 'Product Editor',
-    email: 'editor@smallcompany.io',
+    email: 'editor@vulnlaunch.io',
     password: 'Passw0rd!',
     role: 'editor'
   },
   {
     id: 'user_project_viewer',
     name: 'Project Viewer',
-    email: 'viewer@smallcompany.io',
+    email: 'viewer@vulnlaunch.io',
     password: 'Passw0rd!',
     role: 'viewer'
   }
@@ -725,6 +725,6 @@ const isDirectExecution = process.argv[1] && fileURLToPath(import.meta.url) === 
 
 if (isDirectExecution) {
   app.listen(port, () => {
-    console.log(`SmallCompany API running on http://localhost:${port}`)
+    console.log(`VulnLaunch API running on http://localhost:${port}`)
   })
 }

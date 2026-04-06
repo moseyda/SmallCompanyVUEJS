@@ -5,7 +5,7 @@
 <img :src="logoURL" alt="Vue" />
 </div>
 <div class="brand-text" v-if="isSidebarExpanded">
-<p class="eyebrow">SmallCompany</p>
+<p class="eyebrow">VulnLaunch</p>
 <h2>Launch Console</h2>
 </div>
 </div>

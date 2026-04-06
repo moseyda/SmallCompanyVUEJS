@@ -42,7 +42,7 @@
 					</div>
 				</div>
 				<div class="meta">
-					<p><strong>Email:</strong> hello@smallcompany.io</p>
+					<p><strong>Email:</strong> hello@vulnlaunch.io</p>
 					<p><strong>Phone:</strong> +1 (415) 555-0138</p>
 				</div>
 			</article>

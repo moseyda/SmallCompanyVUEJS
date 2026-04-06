@@ -1,7 +1,7 @@
 <template>
 	<div class="page-wrap">
 		<section class="glass panel">
-			<p class="eyebrow">About SmallCompany</p>
+			<p class="eyebrow">About VulnLaunch</p>
 			<h1>We design ambitious digital systems for teams that move fast.</h1>
 			<p class="lead">
 				Our approach combines strategy, design, engineering, and analytics in one integrated

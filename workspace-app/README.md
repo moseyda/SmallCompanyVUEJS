@@ -1,4 +1,4 @@
-# SmallCompany Workspace
+# VulnLaunch Workspace
 
 Modern Vue 3 workspace app with a separate Express backend, Pinia state management, and Vitest test coverage.
 
@@ -91,9 +91,9 @@ From `workspace-app/`:
 
 ## Demo Sign-In
 
-- Admin: `lead@smallcompany.io` / `Passw0rd!`
-- Editor: `editor@smallcompany.io` / `Passw0rd!`
-- Viewer: `viewer@smallcompany.io` / `Passw0rd!`
+- Admin: `lead@vulnlaunch.io` / `Passw0rd!`
+- Editor: `editor@vulnlaunch.io` / `Passw0rd!`
+- Viewer: `viewer@vulnlaunch.io` / `Passw0rd!`
 
 Role capabilities:
 
