@@ -306,9 +306,9 @@ const scrollToPricing = () => {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--line-soft);
-  backdrop-filter: blur(10px);
+  background: transparent;
+  border-bottom: none;
+  backdrop-filter: none;
 }
 
 .navbar-container {
@@ -331,13 +331,13 @@ const scrollToPricing = () => {
 
 .brand-full-logo {
   display: block;
-  max-height: 14rem;
+  max-height: 4rem;
   width: auto;
 }
 
 .brand-icon {
-  width: 12rem;
-  height: 12rem;
+  width: 4rem;
+  height: 4rem;
   display: grid;
   place-items: center;
   border-radius: 24px;
