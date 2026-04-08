@@ -7,7 +7,7 @@ export const routes = [
         path: '/',
         name: 'landing',
         component: () => import('../views/Landing.vue'),
-        meta: { title: 'ScannerHub', publicOnly: true }
+        meta: { title: 'VulnLaunch', publicOnly: true }
     },
     {
         path: '/dashboard',
@@ -123,7 +123,7 @@ export function installAuthGuard(router, pinia) {
 }
 
 router.afterEach((to) => {
-    document.title = `${to.meta.title || 'ScannerHub'} | ScannerHub`
+    document.title = `${to.meta.title || 'VulnLaunch'} | VulnLaunch`
 })
 
 export default router

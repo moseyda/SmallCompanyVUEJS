@@ -146,7 +146,7 @@
     <!-- Comparison Section -->
     <section class="comparison-section">
       <div class="section-container">
-        <h2>Why Choose ScannerHub?</h2>
+        <h2>Why Choose VulnLaunch?</h2>
         <div class="comparison-grid">
           <div class="comparison-item">
             <div class="comparison-icon check">✓</div>
@@ -266,7 +266,7 @@
     <section class="final-cta">
       <div class="section-container center">
         <h2>Ready to secure your codebase?</h2>
-        <p>Join thousands of teams already using ScannerHub</p>
+        <p>Join thousands of teams already using VulnLaunch</p>
         <router-link class="btn btn-primary btn-large" to="/login">
           Start Your Free Trial
         </router-link>

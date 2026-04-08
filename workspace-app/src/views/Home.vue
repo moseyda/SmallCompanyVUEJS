@@ -5,7 +5,7 @@
 				<p class="eyebrow">Code Quality & Security Scanner</p>
 				<h1>Automated scanning for vulnerabilities, code quality, and compliance.</h1>
 				<p class="lead">
-					ScannerHub monitors your codebase 24/7, detecting security issues and quality problems before they reach production. 
+					VulnLaunch monitors your codebase 24/7, detecting security issues and quality problems before they reach production. 
 					Integrate with your CI/CD pipeline for automated protection.
 				</p>
 				<div class="hero-actions">
