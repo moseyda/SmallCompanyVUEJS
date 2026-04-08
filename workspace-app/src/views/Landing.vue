@@ -300,11 +300,15 @@ const scrollToPricing = () => {
   min-height: 100vh;
   background: var(--bg-primary);
   color: var(--ink-950);
+  margin-top: 0;
+  padding-top: calc(5rem + 1.3rem * var(--space-scale));
 }
 
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   background: transparent;
   border-bottom: none;
