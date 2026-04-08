@@ -310,9 +310,10 @@ const scrollToPricing = () => {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: transparent;
-  border-bottom: none;
-  backdrop-filter: none;
+  background: rgba(255, 255, 255, 0);
+  border-bottom: 1px solid rgba(255, 255, 255, 0);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 40px rgba(16, 24, 40, 0.03);
 }
 
 .navbar-container {
