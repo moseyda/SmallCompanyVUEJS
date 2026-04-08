@@ -4,8 +4,7 @@
     <nav class="navbar">
       <div class="navbar-container">
         <div class="navbar-brand">
-          <span class="brand-icon">◆</span>
-          <span class="brand-name">ScannerHub</span>
+          <img class="brand-full-logo" :src="fullLogo" alt="VulnLaunch" />
         </div>
         <div class="navbar-links">
           <button class="nav-link" @click="scrollToFeatures">Features</button>
@@ -278,6 +277,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import fullLogo from '../assets/logo.png'
 
 const featuresRef = ref(null)
 const pricingRef = ref(null)
@@ -329,12 +329,18 @@ const scrollToPricing = () => {
   color: var(--ink-950);
 }
 
+.brand-full-logo {
+  display: block;
+  max-height: 14rem;
+  width: auto;
+}
+
 .brand-icon {
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 12rem;
+  height: 12rem;
   display: grid;
   place-items: center;
-  border-radius: 12px;
+  border-radius: 24px;
   background: var(--brand-sky);
   color: white;
   font-size: 1rem;

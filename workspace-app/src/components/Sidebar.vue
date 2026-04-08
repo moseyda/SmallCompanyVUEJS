@@ -2,7 +2,7 @@
 <aside :class="['sidebar', { 'is-expanded': isSidebarExpanded, 'is-mobile-open': isMobileMenuOpen }]">
 <div class="brand">
 <div class="brand-icon">
-<img :src="logoURL" alt="Vue" />
+<img :src="logoURL" alt="VulnLaunch logo icon" />
 </div>
 <div class="brand-text" v-if="isSidebarExpanded">
 <p class="eyebrow">VulnLaunch</p>
@@ -196,7 +196,7 @@ class="sidebar-hover-tooltip"
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import logoURL from '../assets/vue.svg'
+import logoURL from '../assets/logo-icon.png'
 import { useUiStore } from '../stores/ui'
 import { useAuthStore } from '../stores/auth'
 // `navGroups` is computed below so it can reference `authStore`
@@ -387,14 +387,15 @@ margin-bottom: 1rem;
 }
 
 .brand-icon {
-min-width: 46px;
-width: 46px;
-height: 46px;
+min-width: 56px;
+width: 56px;
+height: 56px;
 display: grid;
 place-items: center;
 
 img {
-width: 1.7rem;
+width: 3.6rem;
+height: auto;
 }
 }
 
